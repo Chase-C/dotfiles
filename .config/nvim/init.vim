@@ -22,12 +22,6 @@ set splitright
 " Automatically read a file when it is modified from outside
 set autoread
 
-" Height of the command bar
-set cmdheight=2
-
-" Don't show '-- INSERT --' text in status when in insert mode
-set noshowmode
-
 " A buffer becomes hidden when it is abandoned
 set hidden
 
@@ -35,27 +29,14 @@ set hidden
 set ignorecase
 set smartcase
 
-" Highlight search results
-set hlsearch
-
 " Don't redraw while executing macros (performance increase)
 set lazyredraw
 
 " Allow special character matches in regexes
 set magic
 
-" Show matching bracket/brace/paren when cursor is over one
-set showmatch
-
-" No annoying sounds/visuals
-set noerrorbells
-set novisualbell
-
 " Map sequence timeout in ms
 set tm=500
-
-" Add small left margin
-set foldcolumn=1
 
 " No backups/swapfiles
 set nobackup
@@ -66,18 +47,37 @@ set noswapfile
 set undodir=~/.cache/vimdid
 set undofile
 
+if executable('rg')
+	set grepprg=rg\ --no-heading\ --vimgrep
+	set grepformat=%f:%l:%c:%m
+endif
+
 " =========
 "  Plugins
 " =========
 
 call plug#begin('~/.vim/plugged')
 
-" GUI
+" UI
 Plug 'itchyny/lightline.vim'
+Plug 'arcticicestudio/nord-vim'
 
 " Editor enhancements
+Plug 'tpope/vim-surround'
+Plug 'terryma/vim-expand-region'
+Plug 'tpope/vim-fugitive'
 
 " Completion/linting
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'dense-analysis/ale'
+
+" Languages
+Plug 'cespare/vim-toml'
+Plug 'dag/vim-fish'
+Plug 'HerringtonDarkholme/yats.vim' " Typescript
+Plug 'plasticboy/vim-markdown'
+Plug 'rust-lang/rust.vim'
+Plug 'stephpy/vim-yaml'
 
 call plug#end()
 
@@ -85,8 +85,12 @@ call plug#end()
 "  Plugin Options
 " ================
 
-" lightline config
+" -------------------------
+"  lightline configuration
+" -------------------------
+
 let g:lightline = {
+    \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
     \             [ 'readonly', 'filename', 'modified' ] ]
@@ -95,12 +99,59 @@ let g:lightline = {
     \   'filename': 'LightlineFilename',
     \ },
     \ }
-    "\ 'component': {
-    "\   'helloworld': 'Hello, world!'
-    "\ },
+
+let g:lightline.separator = { 'left': '', 'right': '' }
+let g:lightline.subseparator = { 'left': '', 'right': '' }
+
 function! LightlineFilename()
   return expand('%:t') !=# '' ? @% : '[No Name]'
 endfunction
+
+" -----------------------------------
+"  vim-surround-region configuration
+" -----------------------------------
+
+" Press 'v' or 'Ctrl-v' while in visual mode to expand or shrink selection
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+" ------------------------
+"  deoplete configuration
+" ------------------------
+
+let g:deoplete#enable_at_startup = 1
+
+" Use ALE as completion source
+call deoplete#custom#option('sources', {
+    \ '_': [ 'ale' ],
+    \})
+
+" -------------------
+"  ALE configuration
+" -------------------
+
+" Only lint on save
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_enter = 0
+let g:ale_virtualtext_cursor = 1
+let g:ale_linters = { 'rust': [ 'rls' ] }
+
+" Configure highlight colors
+highlight link ALEWarningSign Todo
+highlight link ALEErrorSign WarningMsg
+highlight link ALEVirtualTextWarning Todo
+highlight link ALEVirtualTextInfo Todo
+highlight link ALEVirtualTextError WarningMsg
+highlight ALEError guibg=None
+highlight ALEWarning guibg=None
+
+" Configure signs
+let g:ale_sign_error = "✖"
+let g:ale_sign_warning = "⚠"
+let g:ale_sign_info = "i"
+let g:ale_sign_hint = "➤"
 
 " =============
 "  UI & Colors
@@ -123,11 +174,38 @@ endif
 
 " Color scheme
 set background=dark
-"colorscheme base16-gruvbox-dark-hard
+colorscheme nord
 hi Normal ctermbg=NONE
 
 " Get syntax
 syntax on
+
+" Line numbers
+set number
+
+" Height of the command bar
+set cmdheight=2
+
+" Don't show '-- INSERT --' text in status when in insert mode
+set noshowmode
+
+" Show matching bracket/brace/paren when cursor is over one
+set showmatch
+
+" No annoying sounds/visuals
+set noerrorbells
+set novisualbell
+
+" Enable mouse support
+set mouse=a
+
+" Show hidden characters
+" Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
+set nolist
+set listchars=nbsp:¬,extends:»,precedes:«,trail:•
+
+" Highlight search results
+set hlsearch
 
 " ============
 "  Whitespace
@@ -146,6 +224,9 @@ set autoindent
 
 " Do some indenting based on C-style language semantics
 set smartindent
+
+" Wrap lines
+set wrap
 
 " ==========
 "  Commands
@@ -208,6 +289,12 @@ noremap <leader>y :w !xsel -ib<cr><cr>
 
 " Toggle between most recent buffers
 nnoremap <leader><leader> <c-^>
+
+" Buffer switching behavior
+set switchbuf=useopen,usetab
+
+" Cursor can be positioned anywhere
+set virtualedit=all
 
 " ==================
 "  Helper functions
