@@ -93,10 +93,17 @@ let g:lightline = {
     \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'readonly', 'filename', 'modified' ] ]
+    \             [ 'readonly', 'filename', 'modified' ] ],
+    \   'right': [ [ 'lineposition' ],
+    \              [ 'percent' ],
+    \              [ 'gitbranch', 'filetype' ] ]
+    \ },
+    \ 'component': {
+    \   'lineposition': '%3l:%-2v | %2L'
     \ },
     \ 'component_function': {
     \   'filename': 'LightlineFilename',
+    \   'gitbranch': 'fugitive#head',
     \ },
     \ }
 
@@ -251,6 +258,7 @@ nnoremap <silent> g* g*zz
 " Ctrl+c and Ctrl+f as Esc
 inoremap <C-f> <Esc>
 vnoremap <C-f> <Esc>
+cnoremap <C-f> <Esc>
 inoremap <C-c> <Esc>
 vnoremap <C-c> <Esc>
 
