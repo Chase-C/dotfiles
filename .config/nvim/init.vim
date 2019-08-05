@@ -167,9 +167,9 @@ nnoremap <silent> * *zz
 nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 
-" Ctrl+c and Ctrl+j as Esc
-inoremap <C-j> <Esc>
-vnoremap <C-j> <Esc>
+" Ctrl+c and Ctrl+f as Esc
+inoremap <C-f> <Esc>
+vnoremap <C-f> <Esc>
 inoremap <C-c> <Esc>
 vnoremap <C-c> <Esc>
 

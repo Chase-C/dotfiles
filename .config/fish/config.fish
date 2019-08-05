@@ -1,5 +1,6 @@
 abbr -a q exit
 abbr -a e nvim
+abbr -a vim nvim
 
 if command -v exa > /dev/null
     abbr -a l exa
