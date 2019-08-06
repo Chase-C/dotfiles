@@ -1,3 +1,5 @@
+source $__fish_config_dir/themes/nord.fish
+
 abbr -a q exit
 abbr -a e nvim
 abbr -a vim nvim
@@ -14,14 +16,7 @@ else
 end
 
 function fish_prompt
-    echo -n (whoami)
-    echo -n ' | '
-    if [ $PWD != $HOME ]
-        echo -n (basename $PWD)
-    else
-        echo -n '~'
-    end
-    echo ' ▶ '
+    echo -n (set_color $nord9)(prompt_pwd) (set_color $nord12)'❯'(set_color $nord13)'❯'(set_color $nord14)'❯ '
 end
 
 function fish_greeting
