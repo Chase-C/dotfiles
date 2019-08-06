@@ -16,7 +16,7 @@ else
 end
 
 function fish_prompt
-    echo -n (set_color $nord9)(prompt_pwd) (set_color $nord12)'❯'(set_color $nord13)'❯'(set_color $nord14)'❯ '
+    echo -n '' (set_color $nord9)(prompt_pwd) (set_color $nord12)'❯'(set_color $nord13)'❯'(set_color $nord14)'❯ '
 end
 
 function fish_greeting
