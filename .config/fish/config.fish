@@ -2,6 +2,9 @@ abbr -a q exit
 abbr -a e nvim
 abbr -a vim nvim
 
+# Set environment variables
+#set -g -x MOZ_ENABLE_WAYLAND 1
+
 if command -v exa > /dev/null
     abbr -a l exa
     abbr -a ls exa
