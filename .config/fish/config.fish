@@ -15,6 +15,10 @@ set -U fish_user_paths $fish_user_paths ~/bin
 #set -g -x MOZ_ENABLE_WAYLAND 1
 set -g -x EDITOR nvim
 
+if command -v bat > /dev/null
+    abbr -a cat bat
+end
+
 if command -v exa > /dev/null
     abbr -a l exa
     abbr -a ls exa
