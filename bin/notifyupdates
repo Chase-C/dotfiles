@@ -15,7 +15,11 @@ function notify() {
         return
     fi
 
-    if [ $1 -gt 0 ]
+    if [ $1 -eq 1 ]
+    then
+        notify-send -t 5000 "Updates Available" "$1 package is out of date"
+        LASTNOTIFY=$NOW
+    elif [ $1 -gt 1 ]
     then
         notify-send -t 5000 "Updates Available" "$1 packages are out of date"
         LASTNOTIFY=$NOW
@@ -23,7 +27,10 @@ function notify() {
 }
 
 function record() {
-    if [ $1 -gt 0 ]
+    if [ $1 -eq 1 ]
+    then
+        echo $1 Package >> $LOGFILE
+    elif [ $1 -gt 1 ]
     then
         echo $1 Packages >> $LOGFILE
     else
