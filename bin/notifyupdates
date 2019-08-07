@@ -1,0 +1,47 @@
+#! /bin/bash
+
+# Do not notify more frequently than this
+TIMEOUT=5
+LOGFILE=~/.cache/package-updates
+
+LASTNOTIFY=0
+
+function notify() {
+    NOW=$(date +%s)
+    let diff=$NOW-$LASTNOTIFY
+
+    if [ $diff -lt $TIMEOUT ]
+    then
+        return
+    fi
+
+    if [ $1 -gt 0 ]
+    then
+        notify-send -t 5000 "Updates Available" "$1 packages are out of date"
+        LASTNOTIFY=$NOW
+    fi
+}
+
+function record() {
+    if [ $1 -gt 0 ]
+    then
+        echo $1 Packages >> $LOGFILE
+    else
+        echo System Updated >> $LOGFILE
+    fi
+}
+
+sudo pacman -Sy &> /dev/null
+OUTDATED=$(pacman -Qu | wc -l)
+
+notify $OUTDATED
+record $OUTDATED
+
+while [ true ]
+do
+    inotifywait -e delete /var/lib/pacman/
+
+    OUTDATED=$(pacman -Qu | wc -l)
+    notify $OUTDATED
+    record $OUTDATED
+done

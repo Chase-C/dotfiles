@@ -4,8 +4,16 @@ abbr -a q exit
 abbr -a e nvim
 abbr -a vim nvim
 
+abbr -a pac sudo pacman
+abbr -a pacman sudo pacman
+abbr -a aur pacaur
+
+# Add to PATH
+set -U fish_user_paths $fish_user_paths ~/bin
+
 # Set environment variables
 #set -g -x MOZ_ENABLE_WAYLAND 1
+set -g -x EDITOR nvim
 
 if command -v exa > /dev/null
     abbr -a l exa
@@ -19,6 +27,7 @@ else
 end
 
 function fish_prompt
+    # '❯' = \u276f
     echo -n '' (set_color $nord9)(prompt_pwd) (set_color $nord12)'❯'(set_color $nord13)'❯'(set_color $nord14)'❯ '
 end
 

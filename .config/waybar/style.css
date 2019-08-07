@@ -1,0 +1,106 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: DejaVu Sans Mono Nerd Font;
+    font-size: 13px;
+    min-height: 0;
+}
+
+#window {
+    padding: 0 10px;
+}
+
+window.#waybar.empty {
+    padding: 0 10px;
+}
+
+window#waybar {
+    color: #d8dee9;
+    background-color: #2e3440;
+    border-bottom: 3px solid #3b4252;
+    border-top: 2px transparent;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#workspaces button {
+    color: #4c566a;
+    background-color: transparent;
+    border-bottom: 3px solid transparent;
+    padding: 0 5px;
+}
+
+#workspaces button:hover {
+    color: #b48ead;
+    background: rgba(0, 0, 0, 0.2);
+    text-shadow: none;
+    box-shadow: none;
+    border-bottom: 3px solid #b48ead;
+}
+
+#workspaces button.visible {
+    color: #8fbcbb;
+}
+
+#workspaces button.focused {
+    background: rgba(0, 0, 0, 0.2);
+    color: #88c0d0;
+    border-bottom: 3px solid #88c0d0;
+}
+
+#workspaces button.urgent {
+    background-color: #d08770;
+}
+
+#mode {
+    color: #d08770;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid #d08770;
+    padding: 0 4px;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+#clock {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#cpu {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#memory {
+    background-color: #2e3440;
+    padding-right: 10px;
+}
+
+#network {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#network.disconnected {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#tray {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#custom-packages {
+    background-color: #2e3440;
+    padding: 0 10px;
+}
+
+#custom-separator {
+    background-color: #2e3440;
+}

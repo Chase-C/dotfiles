@@ -1,0 +1,65 @@
+{
+    // Position at top of screen
+    "layer": "top",
+
+    // Don't set height (will be automatic)
+    //"height": 20,
+
+    // Choose the order of the modules
+    "modules-left": [ "sway/window", "sway/mode" ],
+    "modules-center": [ "sway/workspaces" ],
+    "modules-right":
+        [ "custom/packages", "custom/separator"
+        , "network", "custom/separator"
+        , "cpu", "memory", "custom/separator"
+        , "clock"
+        ],
+
+    // Modules configuration
+    "sway/window": {
+        "format": "<span color=\"#a3be8c\">❮</span><span color=\"#ebcb8b\">❮</span><span color=\"#d08770\">❮</span> {} <span color=\"#d08770\">❯</span><span color=\"#ebcb8b\">❯</span><span color=\"#a3be8c\">❯</span>",
+        "tooltip": false
+    },
+
+    "sway/workspaces": {
+        "persistant_workspaces": {
+            "": [ "DP-2" ]
+        }
+    },
+
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+
+    "clock": {
+        "tooltip-format": "{:%Y-%m-%d | %H:%M}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": true
+    },
+
+    "memory": {
+        "format": "{}% "
+    },
+
+    "network": {
+        "format-wifi": "{ipaddr} ({signalStrength}%) ",
+        "format-ethernet": "{ipaddr}",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "Disconnected",
+        "format-alt": "{ipaddr}"
+    },
+
+    "custom/packages": {
+        "format": "{}",
+        "exec": "tail -f $HOME/.cache/package-updates",
+        "tooltip": false
+    },
+
+    "custom/separator": {
+        "format": "<span color=\"#a3be8c\">❮</span><span color=\"#ebcb8b\">❮</span><span color=\"#d08770\">❮</span>"
+    }
+}
