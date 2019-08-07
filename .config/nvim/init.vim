@@ -292,8 +292,8 @@ map H ^
 map L $
 
 " X clipboard integration
-noremap <leader>p :read !xsel --clipboard --output<cr>
-noremap <leader>y :w !xsel -ib<cr><cr>
+noremap <leader>p :read !wl-paster<cr>
+noremap <leader>y :w !wl-copy<cr><cr>
 
 " Toggle between most recent buffers
 nnoremap <leader><leader> <c-^>
