@@ -4,9 +4,9 @@ abbr -a q exit
 abbr -a e nvim
 abbr -a vim nvim
 
-abbr -a pac sudo pacman
-abbr -a pacman sudo pacman
-abbr -a aur pacaur
+abbr -a pac sudo pacman --color=auto
+abbr -a pacman sudo pacman --color=auto
+abbr -a aur pacaur --color=auto
 
 # Add to PATH
 set -U fish_user_paths $fish_user_paths ~/bin
