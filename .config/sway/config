@@ -64,7 +64,7 @@ output DP-1 {
 output DP-2 {
     position 1920 0
     resolution 1920 1200
-    bg ~/images/bg2.jpg fill
+    bg ~/images/bg3.jpg fill
 }
 
 exec swayidle -w \
