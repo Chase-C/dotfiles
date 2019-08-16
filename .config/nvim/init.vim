@@ -34,7 +34,6 @@ set lazyredraw
 
 " Allow special character matches in regexes
 set magic
-
 " Map sequence timeout in ms
 set tm=500
 
@@ -42,6 +41,9 @@ set tm=500
 set nobackup
 set nowb
 set noswapfile
+
+" Some autocompletion options
+set completeopt+=preview
 
 " Maintain undo list between restarts
 set undodir=~/.cache/vimdid
@@ -63,13 +65,14 @@ Plug 'itchyny/lightline.vim'
 Plug 'arcticicestudio/nord-vim'
 
 " Editor enhancements
-Plug 'tpope/vim-surround'
-Plug 'terryma/vim-expand-region'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf.vim'
 
 " Completion/linting
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'dense-analysis/ale'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
 
 " Languages
 Plug 'cespare/vim-toml'
@@ -93,7 +96,8 @@ let g:lightline = {
     \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'readonly', 'filename', 'modified' ] ],
+    \             [ 'readonly', 'filename', 'modified' ],
+    \             [ 'gutentags' ] ],
     \   'right': [ [ 'lineposition' ],
     \              [ 'percent' ],
     \              [ 'gitbranch', 'filetype' ] ]
@@ -104,6 +108,7 @@ let g:lightline = {
     \ 'component_function': {
     \   'filename': 'LightlineFilename',
     \   'gitbranch': 'fugitive#head',
+    \   'gutentags': 'gutentags#statusline',
     \ },
     \ }
 
@@ -114,24 +119,26 @@ function! LightlineFilename()
   return expand('%:t') !=# '' ? @% : '[No Name]'
 endfunction
 
-" -----------------------------------
-"  vim-surround-region configuration
-" -----------------------------------
+" -----------------------
+"  fzf.vim configuration
+" -----------------------
 
-" Press 'v' or 'Ctrl-v' while in visual mode to expand or shrink selection
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
+" fzf window may take up to 80% of the screen
+let g:fzf_layout = { 'down': '~80%' }
 
-" ------------------------
-"  deoplete configuration
-" ------------------------
+" Fuzzy-find and open files
+nmap <leader>f :GFiles<cr>
+nmap <leader>F :Files<cr>
 
-let g:deoplete#enable_at_startup = 1
+" Buffer selection
+map <leader>b :Buffers<cr>
 
-" Use ALE as completion source
-call deoplete#custom#option('sources', {
-    \ '_': [ 'ale' ],
-    \})
+" Line/Tag/Mark searching
+map <leader>l :BLines<cr>
+map <leader>L :Lines<cr>
+map <leader>t :BTags<cr>
+map <leader>T :Tags<cr>
+map <leader>m :Marks<cr>
 
 " -------------------
 "  ALE configuration
@@ -141,9 +148,12 @@ call deoplete#custom#option('sources', {
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_enter = 1
+
 let g:ale_virtualtext_cursor = 1
 let g:ale_linters = { 'rust': [ 'rls' ] }
+
+let g:ale_completion_max_suggestions = 100
 
 " Configure highlight colors
 highlight link ALEWarningSign Todo
@@ -159,6 +169,37 @@ let g:ale_sign_error = "✖"
 let g:ale_sign_warning = "⚠"
 let g:ale_sign_info = "i"
 let g:ale_sign_hint = "➤"
+
+" ------------------------
+"  deoplete configuration
+" ------------------------
+
+let g:deoplete#enable_at_startup = 1
+
+" Close preview window after completion
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+
+" Use tab to move around the autocompletion popup list
+inoremap <expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
+inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
+
+" Don't truncate completion items
+call deoplete#custom#source('_', 'max_abbr_width', 80)
+call deoplete#custom#source('_', 'max_kind_width', 50)
+call deoplete#custom#source('_', 'max_info_width', 300)
+call deoplete#custom#source('_', 'max_menu_width', 120)
+
+"" Use ALE as completion source
+call deoplete#custom#option('sources', {
+    \ '_': [ 'ale' ],
+    \})
+
+" -----------------------
+"  EchoDoc configuration
+" -----------------------
+
+let g:echodoc#enable_at_startup = 1
+"let g:echodoc#type = "virtual"
 
 " =============
 "  UI & Colors
@@ -188,7 +229,7 @@ hi Normal ctermbg=NONE
 syntax on
 
 " Line numbers
-set number
+"set number
 
 " Height of the command bar
 set cmdheight=2
@@ -285,15 +326,32 @@ map <leader>e :e<space>
 
 " Show/Select open buffers
 map <leader>ls :ls<cr>
-map <leader>b :buffers<cr>:b<space>
 
 " Move to start and end of line with 'H' and 'L'
 map H ^
 map L $
 
-" X clipboard integration
-noremap <leader>p :read !wl-paste<cr>
-noremap <leader>y :w !wl-copy<cr><cr>
+" Use <C-h/j/k/l> for directional movement in insert/visual modes
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
+vnoremap <C-j> <Down>
+vnoremap <C-k> <Up>
+vnoremap <C-h> <Left>
+vnoremap <C-l> <Right>
+
+" clipboard integration
+if executable('wl-copy')
+    noremap <leader>y :w !wl-copy<cr><cr>
+elseif executable('xsel')
+endif
+
+if executable('wl-paste')
+    noremap <leader>p :read !wl-paste<cr>
+elseif executable('xsel')
+endif
 
 " Toggle between most recent buffers
 nnoremap <leader><leader> <c-^>
