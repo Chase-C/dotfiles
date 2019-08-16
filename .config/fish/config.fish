@@ -14,6 +14,7 @@ set -U fish_user_paths $fish_user_paths ~/bin
 # Set environment variables
 #set -g -x MOZ_ENABLE_WAYLAND 1
 set -g -x EDITOR nvim
+set -g -x _JAVA_AWT_WM_NONREPARENTING 1
 
 if command -v bat > /dev/null
     abbr -a cat bat
