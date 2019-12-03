@@ -68,6 +68,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf.vim'
+Plug 'godlygeek/tabular'
 
 " Completion/linting
 Plug 'dense-analysis/ale'
@@ -184,10 +185,8 @@ inoremap <expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
 inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
 
 " Don't truncate completion items
-call deoplete#custom#source('_', 'max_abbr_width', 80)
-call deoplete#custom#source('_', 'max_kind_width', 50)
-call deoplete#custom#source('_', 'max_info_width', 300)
-call deoplete#custom#source('_', 'max_menu_width', 120)
+call deoplete#custom#source('_', 'max_info_width', 0)
+call deoplete#custom#source('_', 'max_menu_width', 0)
 
 "" Use ALE as completion source
 call deoplete#custom#option('sources', {
@@ -200,6 +199,12 @@ call deoplete#custom#option('sources', {
 
 let g:echodoc#enable_at_startup = 1
 "let g:echodoc#type = "virtual"
+
+" ----------------------------
+"  vim-markdown configuration
+" ----------------------------
+
+let g:vim_markdown_folding_disabled = 1
 
 " =============
 "  UI & Colors
@@ -330,6 +335,9 @@ map <leader>ls :ls<cr>
 " Move to start and end of line with 'H' and 'L'
 map H ^
 map L $
+
+" Ctrl-Backspace should act like a normal backspace
+inoremap <C-BS> <BS>
 
 " Use <C-h/j/k/l> for directional movement in insert/visual modes
 inoremap <C-j> <Down>
