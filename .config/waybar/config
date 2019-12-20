@@ -23,7 +23,7 @@
 
     "sway/workspaces": {
         "persistant_workspaces": {
-            "": [ "DP-2" ]
+            "": [ "DP-1" ]
         }
     },
 
