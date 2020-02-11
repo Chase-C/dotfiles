@@ -65,14 +65,13 @@ Plug 'itchyny/lightline.vim'
 Plug 'arcticicestudio/nord-vim'
 
 " Editor enhancements
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf.vim'
 Plug 'godlygeek/tabular'
 
 " Completion/linting
-Plug 'dense-analysis/ale'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'neoclide/coc-tsserver', { 'do': 'yarn install --frozen-lockfile' }
 Plug 'Shougo/echodoc.vim'
 
 " Languages
@@ -97,8 +96,7 @@ let g:lightline = {
     \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ],
-    \             [ 'readonly', 'filename', 'modified' ],
-    \             [ 'gutentags' ] ],
+    \             [ 'readonly', 'filename', 'modified' ] ],
     \   'right': [ [ 'lineposition' ],
     \              [ 'percent' ],
     \              [ 'gitbranch', 'filetype' ] ]
@@ -109,7 +107,6 @@ let g:lightline = {
     \ 'component_function': {
     \   'filename': 'LightlineFilename',
     \   'gitbranch': 'fugitive#head',
-    \   'gutentags': 'gutentags#statusline',
     \ },
     \ }
 
@@ -142,56 +139,26 @@ map <leader>T :Tags<cr>
 map <leader>m :Marks<cr>
 
 " -------------------
-"  ALE configuration
+"  Coc configuration
 " -------------------
 
-" Only lint on save
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 1
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h"
 
-let g:ale_virtualtext_cursor = 1
-let g:ale_linters = { 'rust': [ 'rls' ] }
+function s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~# '\s'
+endfunction
 
-let g:ale_completion_max_suggestions = 100
-
-" Configure highlight colors
-highlight link ALEWarningSign Todo
-highlight link ALEErrorSign WarningMsg
-highlight link ALEVirtualTextWarning Todo
-highlight link ALEVirtualTextInfo Todo
-highlight link ALEVirtualTextError WarningMsg
-highlight ALEError guibg=None
-highlight ALEWarning guibg=None
-
-" Configure signs
-let g:ale_sign_error = "✖"
-let g:ale_sign_warning = "⚠"
-let g:ale_sign_info = "i"
-let g:ale_sign_hint = "➤"
-
-" ------------------------
-"  deoplete configuration
-" ------------------------
-
-let g:deoplete#enable_at_startup = 1
-
-" Close preview window after completion
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
-
-" Use tab to move around the autocompletion popup list
-inoremap <expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
-inoremap <expr><S-tab> pumvisible() ? "\<C-p>" : "\<S-tab>"
-
-" Don't truncate completion items
-call deoplete#custom#source('_', 'max_info_width', 0)
-call deoplete#custom#source('_', 'max_menu_width', 0)
-
-"" Use ALE as completion source
-call deoplete#custom#option('sources', {
-    \ '_': [ 'ale' ],
-    \})
+inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+        
+" Navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " -----------------------
 "  EchoDoc configuration
