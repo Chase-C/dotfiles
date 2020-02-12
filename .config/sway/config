@@ -3,7 +3,7 @@
 # =========
 
 # Modifier: Alt
-set $mod Mod4
+set $mod Mod1
 
 font DejaVu Sans Mono Nerd Font 10
 
@@ -42,11 +42,14 @@ smart_gaps on
 gaps inner 2
 
 # Restart waybar
-exec_always killall waybar; waybar
+exec_always killall waybar; exec waybar
 
 # Start mako (notification daemon) and udiskie (automount usb devices)
 exec mako &
 exec udiskie -f '' &
+
+# Use redshift to adjust screen gamma at night
+exec redshift &
 
 # Start monitoring pacman
 exec ~/bin/notifyupdates &
@@ -58,7 +61,7 @@ exec ~/bin/notifyupdates &
 output DP-1 {
     position 0 0
     resolution 2560 1440
-    bg ~/images/bg2.jpg fill
+    bg ~/Pictures/Backgrounds\ 1440/wp1880369-1440p-wallpapers.png stretch
 }
 
 exec swayidle -w \
@@ -131,6 +134,7 @@ bindsym $mod+Shift+c reload
 
 # Exit sway (logs you out of your Wayland session)
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+Delete exec swaymsg exit
 
 # Dismiss first notification
 bindsym $mod+n exec makoctl dismiss
@@ -271,6 +275,9 @@ for_window [class="^firefox$" title="Options"] floating enable
 
 # Assign Firefox to special workspace 11
 assign [class="^firefox$"] workspace $wsff
+
+# For gamedev
+for_window [title="SUBSYMMETRY"] floating enable
 
 # ============
 #  Status Bar

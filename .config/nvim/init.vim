@@ -81,6 +81,7 @@ Plug 'HerringtonDarkholme/yats.vim' " Typescript
 Plug 'plasticboy/vim-markdown'
 Plug 'rust-lang/rust.vim'
 Plug 'stephpy/vim-yaml'
+Plug 'tikhomirov/vim-glsl'
 
 call plug#end()
 
