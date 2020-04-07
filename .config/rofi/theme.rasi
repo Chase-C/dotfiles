@@ -1,0 +1,154 @@
+// ❯ \u276f
+* {
+    font:   "DejaVu Sans Mono Nerd Font 10";
+    nord0:  #2E3440;
+    nord1:  #3B4252;
+    nord2:  #434C5E;
+    nord3:  #4C566A;
+    nord4:  #D8DEE9;
+    nord5:  #E5E9F0;
+    nord6:  #ECEFF4;
+    nord7:  #8FBCBB;
+    nord8:  #88C0D0;
+    nord9:  #81A1C1;
+    nord10: #5E81AC;
+    nord11: #BF616A;
+    nord12: #D08770;
+    nord13: #EBCB8B;
+    nord14: #A3BE8C;
+    nord15: #B48EAD;
+}
+
+window {
+    background-color: @nord0;
+    border:           5;
+    border-color:     @nord9;
+    padding:          4;
+}
+
+mainbox {
+    background-color: @nord0;
+}
+
+/*
+ * Prompt/Input area
+ */
+
+inputbar {
+    children:         [ prompt, textbox-prompt-sep-a, textbox-prompt-sep-b, textbox-prompt-sep-c, entry, case-indicator ];
+    background-color: @nord0;
+    padding:          2 0 2 0;
+    spacing:          0;
+}
+
+prompt {
+    background-color: @nord0;
+    text-color:       @nord9;
+}
+
+textbox-prompt-sep-a {
+    expand:           false;
+    str:              " ❯";
+    background-color: @nord0;
+    text-color:       @nord12;
+}
+
+textbox-prompt-sep-b {
+    expand:           false;
+    str:              "❯";
+    margin:           0em 0em 0em 0em;
+    background-color: @nord0;
+    text-color:       @nord13;
+}
+
+textbox-prompt-sep-c {
+    expand:           false;
+    str:              "❯ ";
+    background-color: @nord0;
+    text-color:       @nord14;
+}
+
+entry {
+    background-color: @nord0;
+    text-color:       @nord4;
+}
+
+case-indicator {
+    background-color: @nord0;
+}
+
+/*
+ * Message area
+ */
+
+message {
+    background-color: @nord0;
+    border:           0;
+    padding:          0;
+}
+
+textbox {
+    background-color: @nord0;
+    border:           0;
+    padding:          0;
+}
+
+/*
+ * List area
+ */
+
+listview {
+    background-color: @nord0;
+    border:           1 dash 0 0;
+    border-color:     @nord3;
+    padding:          4 0 2 0;
+}
+
+element {
+    background-color: @nord0;
+    border:           0;
+    padding:          1;
+}
+
+element normal.normal {
+    text-color: @nord3;
+}
+
+element normal.urgent {
+    background-color: @nord12;
+    text-color:       @nord3;
+}
+
+element normal.active {
+    text-color: @nord5;
+}
+
+element selected.normal {
+    background-color: rgba(0, 0, 0, 20%);
+    text-color:       @nord9;
+}
+
+element selected.urgent {
+    background-color: @nord12;
+    text-color:       @nord3;
+}
+
+element selected.active {
+    background-color: rgba(0, 0, 0, 20%);
+    text-color:       @nord5;
+}
+
+element alternate.normal {
+    //background-color: rgba(0, 0, 0, 20%);
+    text-color:       @nord3;
+}
+
+element alternate.urgent {
+    background-color: @nord12;
+    text-color:       @nord3;
+}
+
+element alternate.active {
+    //background-color: rgba(0, 0, 0, 20%);
+    text-color:       @nord5;
+}

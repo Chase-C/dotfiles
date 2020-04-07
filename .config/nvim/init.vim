@@ -72,6 +72,7 @@ Plug 'godlygeek/tabular'
 " Completion/linting
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'neoclide/coc-tsserver', { 'do': 'yarn install --frozen-lockfile' }
+"Plug 'fannheyward/coc-rust-analyzer', { 'do': 'yarn install --frozen-lockfile' }
 Plug 'Shougo/echodoc.vim'
 
 " Languages
