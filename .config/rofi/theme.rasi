@@ -83,14 +83,10 @@ case-indicator {
 
 message {
     background-color: @nord0;
-    border:           0;
-    padding:          0;
 }
 
 textbox {
     background-color: @nord0;
-    border:           0;
-    padding:          0;
 }
 
 /*
