@@ -12,7 +12,7 @@ abbr -a aur pacaur --color=auto
 set -U fish_user_paths $fish_user_paths ~/bin
 
 # Set environment variables
-#set -g -x MOZ_ENABLE_WAYLAND 1
+set -g -x MOZ_ENABLE_WAYLAND 1
 set -g -x EDITOR nvim
 set -g -x ECS_CLUSTER_PREFIX '^'
 set -g -x _JAVA_AWT_WM_NONREPARENTING 1

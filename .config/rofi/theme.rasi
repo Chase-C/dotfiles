@@ -56,7 +56,6 @@ textbox-prompt-sep-a {
 textbox-prompt-sep-b {
     expand:           false;
     str:              "❯";
-    margin:           0em 0em 0em 0em;
     background-color: @nord0;
     text-color:       @nord13;
 }

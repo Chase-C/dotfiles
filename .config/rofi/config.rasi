@@ -1,6 +1,7 @@
 configuration {
     // General Config
     lines: 12;
+    width: 40;
 
     // Keyboard control
     kb-accept-entry:     "Return,KP_Enter";
