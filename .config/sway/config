@@ -60,9 +60,9 @@ exec ~/bin/notifyupdates &
 #  Output configuration
 # ======================
 
-output DP-1 {
-    position 0 0
-    resolution 2560 1440
+output eDP-1 {
+    #position 0 0
+    #resolution 2560 1440
     bg ~/Pictures/Backgrounds\ 1440/wp1880369-1440p-wallpapers.png stretch
 }
 
