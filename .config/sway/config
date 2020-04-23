@@ -121,8 +121,8 @@ bindsym $mod+Shift+q kill
 
 # Start launcher
 bindsym $mod+o       exec --no-startup-id rofi -show run
-bindsym $mod+i       exec --no-startup-id rofi -show window
-bindsym $mod+Shift+s exec --no-startup-id rofi -show ssh
+bindsym $mod+w       exec --no-startup-id rofi -show window
+#bindsym $mod+Shift+s exec --no-startup-id rofi -show ssh
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -190,6 +190,9 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+f move container to workspace $wsff
+bindsym $mod+Shift+s move container to workspace $wssp
+bindsym $mod+Shift+g move container to workspace $wsst
 
 # --------
 #  Layout
@@ -207,7 +210,7 @@ bindsym $mod+v splitv
 bindsym $mod+e layout toggle split
 
 # Make the current focus fullscreen
-bindsym $mod+Shift+f fullscreen
+#bindsym $mod+Shift+f fullscreen
 
 # Toggle the current focus between tiling and floating mode
 bindsym $mod+Shift+space floating toggle
@@ -279,6 +282,8 @@ for_window [class="^firefox$" title="Options"] floating enable
 
 # Assign Firefox to special workspace 11
 assign [class="^firefox$"] workspace $wsff
+assign [class="^spotify$"] workspace $wssp
+assign [class="^steam$"] workspace $wsst
 
 # For gamedev
 for_window [title="SUBSYMMETRY"] floating enable
