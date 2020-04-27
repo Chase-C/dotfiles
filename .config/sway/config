@@ -63,7 +63,15 @@ exec ~/bin/notifyupdates &
 output eDP-1 {
     #position 0 0
     #resolution 2560 1440
-    bg ~/Pictures/Backgrounds\ 1440/wp1880369-1440p-wallpapers.png stretch
+    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+}
+
+# =====================
+#  Input configuration
+# =====================
+
+input type:keyboard {
+    xkb_options ctrl:nocaps
 }
 
 exec swayidle -w \
