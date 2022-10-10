@@ -2,8 +2,8 @@
 #  General
 # =========
 
-# Modifier: Alt
-set $mod Mod1
+# Modifier: LGUI
+set $mod Mod4
 
 font DejaVu Sans Mono Nerd Font 10
 
@@ -33,6 +33,7 @@ set $ws10 "10"
 set $wsff ""
 set $wssp ""
 set $wsst ""
+set $wsds "ﭮ"
 
 # Mouse doesn't affect focus
 focus_follows_mouse no
@@ -43,15 +44,12 @@ hide_edge_borders none
 smart_gaps on
 gaps inner 2
 
-# Restart waybar
-exec_always killall waybar; exec waybar
-
 # Start mako (notification daemon) and udiskie (automount usb devices)
 exec mako &
 exec udiskie -f '' &
 
 # Use redshift to adjust screen gamma at night
-exec redshift &
+exec redshift -l 36.982628:-122.023484 &
 
 # Start monitoring pacman
 exec ~/bin/notifyupdates &
@@ -63,7 +61,7 @@ exec ~/bin/notifyupdates &
 output DP-1 {
     position 0 0
     resolution 2560 1440
-    bg ~/Pictures/Backgrounds\ 1440/wp1880369-1440p-wallpapers.png stretch
+    bg ~/Pictures/Backgrounds\ 1440/spacecraft-paths.png center
 }
 
 exec swayidle -w \
@@ -103,7 +101,7 @@ client.background                  $nord0
 
 # Borders
 default_border pixel 1
-default_floating_border normal 4
+default_floating_border normal 5
 
 # ==============
 #  Key bindings
@@ -120,8 +118,8 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 
 # Start launcher
-bindsym $mod+o       exec --no-startup-id rofi -show run
-bindsym $mod+w       exec --no-startup-id rofi -show window
+bindsym $mod+o exec --no-startup-id rofi -show run
+bindsym $mod+w exec --no-startup-id rofi -show window
 #bindsym $mod+Shift+s exec --no-startup-id rofi -show ssh
 
 # Drag floating windows by holding down $mod and left mouse button.
@@ -175,6 +173,7 @@ bindsym $mod+0 workspace $ws10
 bindsym $mod+f workspace $wsff
 bindsym $mod+s workspace $wssp
 bindsym $mod+g workspace $wsst
+bindsym $mod+d workspace $wsds
 
 # Firefox workspace is always on DP-2
 #workspace $wsff output DP-2
@@ -193,6 +192,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+Shift+f move container to workspace $wsff
 bindsym $mod+Shift+s move container to workspace $wssp
 bindsym $mod+Shift+g move container to workspace $wsst
+bindsym $mod+Shift+d move container to workspace $wsds
 
 # --------
 #  Layout
@@ -280,46 +280,32 @@ for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down 34px
 
 for_window [class="^firefox$" title="Options"] floating enable
 
-# Assign Firefox to special workspace 11
+for_window [app_id="floating_term"] floating enable
+
+# Special application workspaces
 assign [class="^firefox$"] workspace $wsff
 assign [class="^spotify$"] workspace $wssp
 assign [class="^steam$"] workspace $wsst
 
 # For gamedev
 for_window [title="SUBSYMMETRY"] floating enable
+for_window [title="VOIDWALKERS"] floating enable
+for_window [title="METASEED"] floating enable
 
 # ============
 #  Status Bar
 # ============
 
 # Read `man 5 sway-bar` for more information about this section.
-#bar {
-#    # Placed bar at top of screen
-#    position top
-#
-#    # Section separator
-#    separator_symbol "|"
-#
-#    # System tray settings
-#    tray_output DP-2
-#
-#    # When the status_command prints a new line to stdout, swaybar updates.
-#    # The default just shows the current date and time.
-#    status_command while date +'%m-%d-%Y %l:%M %p '; do sleep 5; done
-#
-#    colors {
-#        background $nord1
-#        statusline $nord6
-#        separator  $nord8
-#
-#        #                  BORDER     BACKGROUND  TEXT
-#        focused_workspace  $nord14    $nord1      $nord14
-#        active_workspace   $nord1     $nord1      $nord15
-#        inactive_workspace $nord1     $nord1      $nord8
-#        urgent_workspace   $nord1     $nord1      $nord8
-#        binding_mode       $nord1     $nord1      $nord8
-#    }
-#}
+bar {
+    swaybar_command waybar
+}
+
+# ===================================
+#  Create floating terminal with VPN
+# ===================================
+
+exec alacritty --class floating_term -d 172 64 -e fish -C 'expressvpn connect'
 
 # ==================
 #  Whatever this is

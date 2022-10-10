@@ -147,3 +147,8 @@ element alternate.active {
     //background-color: rgba(0, 0, 0, 20%);
     text-color:       @nord5;
 }
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+}
