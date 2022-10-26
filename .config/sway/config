@@ -34,6 +34,7 @@ set $wsff ""
 set $wssp ""
 set $wsst ""
 set $wsds "ﭮ"
+set $wsmg ""
 
 # Mouse doesn't affect focus
 focus_follows_mouse no
@@ -61,11 +62,47 @@ exec ~/bin/notifyupdates &
 #  Output configuration
 # ======================
 
+# Desktop Output
 output DP-3 {
-    position 0 0
-    resolution 2560 1440
-    bg ~/Pictures/wallpaper/wavy-hexagons.png center
+    background ~/Pictures/wallpaper/wavy-hexagons.png center
 }
+
+# Laptop Outputs
+output eDP-1 {
+    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+}
+
+output DP-4 {
+    background ~/Pictures/Backgrounds/abstract_squares.jpg fill
+}
+
+output DP-5 {
+    background ~/Pictures/Backgrounds/abstract_desert.jpg fill
+}
+
+# =====================
+#  Input configuration
+# =====================
+
+input type:keyboard {
+    xkb_options ctrl:nocaps
+}
+
+input type:touchpad {
+    accel_profile       adaptive
+    drag                enabled
+    dwt                 enabled
+    middle_emulation    enabled
+    natural_scroll      enabled
+    pointer_accel       0.25
+    scroll_factor       0.5
+    tap                 enabled
+    tap_button_map      lmr
+}
+
+# ====================
+#  Idle configuration
+# ====================
 
 exec swayidle -w \
     timeout 1800 'swaylock -f -c 000000' \
@@ -177,6 +214,7 @@ bindsym $mod+f workspace $wsff
 bindsym $mod+s workspace $wssp
 bindsym $mod+g workspace $wsst
 bindsym $mod+d workspace $wsds
+bindsym $mod+t workspace $wsmg
 
 # Firefox workspace is always on DP-2
 #workspace $wsff output DP-2
@@ -196,6 +234,7 @@ bindsym $mod+Shift+f move container to workspace $wsff
 bindsym $mod+Shift+s move container to workspace $wssp
 bindsym $mod+Shift+g move container to workspace $wsst
 bindsym $mod+Shift+d move container to workspace $wsds
+bindsym $mod+Shift+t move container to workspace $wsmg
 
 # --------
 #  Layout

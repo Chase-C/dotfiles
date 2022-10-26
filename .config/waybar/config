@@ -11,6 +11,7 @@
     "modules-right":
         [ "custom/packages", "custom/separator"
         , "network", "custom/separator"
+        , "battery", "custom/separator"
         , "cpu", "memory", "custom/separator"
         , "clock"
         ],
@@ -46,11 +47,23 @@
     },
 
     "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-wifi": "{essid} ({signalStrength}%)  ",
         "format-ethernet": "{ipaddr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "Disconnected",
         "format-alt": "{ipaddr}"
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "interval": 60,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": " {capacity}% {icon}  ",
+        "format-icons": ["", "", "", "", ""],
+        "max-length": 25
     },
 
     "custom/packages": {
