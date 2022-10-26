@@ -79,10 +79,13 @@ Plug 'Shougo/echodoc.vim'
 Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 Plug 'HerringtonDarkholme/yats.vim' " Typescript
+Plug 'dart-lang/dart-vim-plugin'
 Plug 'plasticboy/vim-markdown'
 Plug 'rust-lang/rust.vim'
 Plug 'stephpy/vim-yaml'
-Plug 'tikhomirov/vim-glsl'
+"Plug 'tikhomirov/vim-glsl'
+Plug 'jparise/vim-graphql'
+"Plug 'https://github.com/keith/swift.vim'
 
 call plug#end()
 

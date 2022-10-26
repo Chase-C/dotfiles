@@ -4,14 +4,15 @@ configuration {
     width: 40;
 
     // Keyboard control
-    kb-accept-entry:     "Return,KP_Enter";
-    kb-row-down:         "Down,Control+j";
-    kb-row-up:           "Up,Control+k";
-    kb-mode-next:        "Control+l";
-    kb-mode-previous:    "Control+h";
-    kb-remove-char-back: "BackSpace";
-    kb-remove-to-eol:    "";
-
-    // Theme
-    theme: "theme";
+    kb-accept-entry:      "Return,KP_Enter";
+    kb-row-down:          "Down,Control+j";
+    kb-row-up:            "Up,Control+k";
+    kb-mode-next:         "Control+l";
+    kb-mode-previous:     "Control+h";
+    kb-remove-char-back:  "BackSpace";
+    kb-remove-to-eol:     "";
+    kb-mode-complete:     "Control+f";
+    kb-move-char-forward: "Right";
 }
+
+@theme "theme"
