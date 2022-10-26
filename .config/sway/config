@@ -44,6 +44,9 @@ hide_edge_borders none
 smart_gaps on
 gaps inner 2
 
+# Start graphical authentication agent
+exec /usr/bin/lxqt-policykit-agent
+
 # Start mako (notification daemon) and udiskie (automount usb devices)
 exec mako &
 exec udiskie -f '' &
@@ -58,10 +61,10 @@ exec ~/bin/notifyupdates &
 #  Output configuration
 # ======================
 
-output DP-1 {
+output DP-3 {
     position 0 0
     resolution 2560 1440
-    bg ~/Pictures/Backgrounds\ 1440/spacecraft-paths.png center
+    bg ~/Pictures/wallpaper/wavy-hexagons.png center
 }
 
 exec swayidle -w \
