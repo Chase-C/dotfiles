@@ -66,41 +66,55 @@ window#waybar {
     }
 }
 
-#clock {
+#battery {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0 4px;
+}
+
+#clock {
+    color: #d8dee9;
+    background-color: #2e3440;
+    padding: 0 8px;
 }
 
 #cpu {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #memory {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding-right: 10px;
+    padding: 0 8px;
 }
 
 #network {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #network.disconnected {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #tray {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0;
 }
 
 #custom-packages {
+    color: #d8dee9;
     background-color: #2e3440;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #custom-separator {
     background-color: #2e3440;
+    padding: 0 4px;
 }

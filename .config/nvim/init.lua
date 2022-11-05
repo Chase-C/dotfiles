@@ -14,7 +14,7 @@ local api = vim.api -- vim APIs
 --  General
 -- =========
 
-opt.shell = '/bin/bash'
+opt.shell = '/bin/fish'
 
 --Remap space as leader key
 g.mapleader = ' '
@@ -62,7 +62,6 @@ bo.shiftwidth = 4
 bo.tabstop = 4
 
 -- Save undo history
-opt.undodir = '~/.cache/vimdid'
 opt.undofile = true
 
 -- Decrease update time
@@ -130,6 +129,9 @@ require('packer').startup(function()
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
 
+  -- Github copilot (duh!)
+  use 'github/copilot.vim'
+
   -- Displays function signatures from completions in the command line
   use 'Shougo/echodoc.vim'
 
@@ -191,10 +193,10 @@ map('', 'H', '^', { noremap = false })
 map('', 'L', '$', { noremap = false })
 
 -- Easy directional movement in insert/visual modes
-map('i', '<C-j>', '<Down>')
-map('i', '<C-k>', '<Up>')
-map('i', '<C-h>', '<Left>')
-map('i', '<C-l>', '<Right>')
+--map('i', '<C-j>', '<Down>')
+--map('i', '<C-k>', '<Up>')
+--map('i', '<C-h>', '<Left>')
+--map('i', '<C-l>', '<Right>')
 
 map('v', '<C-j>', '<Down>')
 map('v', '<C-k>', '<Up>')
@@ -311,7 +313,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
   indent = {
-    enable = true,
+    enable = false,
   },
   textobjects = {
     select = {
@@ -379,7 +381,7 @@ end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable the following language servers
 local servers = { 'clangd', 'rust_analyzer', 'tsserver' }
@@ -399,8 +401,8 @@ local has_words_before = function()
 end
 
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+local cmp = require('cmp')
+local luasnip = require('luasnip')
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -419,29 +421,47 @@ cmp.setup {
       select = true,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
-    if cmp.visible() then
-        local entry = cmp.get_selected_entry()
-	if not entry then
-	  cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-	else
-	  cmp.confirm()
-	end
-      else
-        fallback()
-      end
+        if cmp.visible() then
+            cmp.select_next_item()
+        else
+            fallback()
+        end
     end, {"i","s"}),
     ['<S-Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
+        if cmp.visible() then
+            cmp.select_prev_item()
+        elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+        else
+            fallback()
+        end
     end,
+    ["<C-g>"] = cmp.mapping(function(fallback)
+        vim.api.nvim_feedkeys(vim.fn["copilot#Accept"](""), "n", true)
+    end),
   },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
+  expirimental = {
+      ghost_text = false -- This conflicts with copilot.vim's preview
+  },
 }
+
+-- ==================
+--  Copilot Settings
+-- ==================
+
+g.copilot_node_command = '/home/chase/.local/share/nvm/v16.18.0/bin/node'
+vim.g.copilot_no_tab_map = true
+vim.keymap.set(
+    "i",
+    "<Plug>(vimrc:copilot-dummy-map)",
+    'copilot#Accept("")',
+    { silent = true, expr = true, desc = "Copilot dummy accept" }
+)
+
+map('i', '<C-j>', '<Plug>(copilot-next)', { silent = true })
+map('i', '<C-k>', '<Plug>(copilot-previous)', { silent = true })
+map('i', '<C-\\>', '<Plug>(copilot-dismiss)', { silent = true })

@@ -5,16 +5,19 @@
     // Don't set height (will be automatic)
     //"height": 20,
 
+    "spacing": 0,
+    "margin": 0,
+
     // Choose the order of the modules
     "modules-left": [ "sway/window", "sway/mode" ],
     "modules-center": [ "sway/workspaces" ],
-    "modules-right":
-        [ "custom/packages", "custom/separator"
-        , "network", "custom/separator"
-        , "battery", "custom/separator"
-        , "cpu", "memory", "custom/separator"
-        , "clock"
-        ],
+    "modules-right": [
+        "custom/packages", "custom/separator",
+        "network", "custom/separator",
+        "battery", "custom/separator",
+        "cpu", "memory", "custom/separator",
+        "clock"
+    ],
 
     // Modules configuration
     "sway/window": {

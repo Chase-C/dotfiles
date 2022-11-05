@@ -3,7 +3,8 @@
 # =========
 
 # Modifier: LGUI
-set $mod Mod4
+#set $mod Mod4
+set $mod Mod1
 
 font DejaVu Sans Mono Nerd Font 10
 
@@ -64,7 +65,7 @@ exec ~/bin/notifyupdates &
 
 # Desktop Output
 output DP-3 {
-    background ~/Pictures/wallpaper/wavy-hexagons.png center
+    #background ~/Pictures/wallpaper/wavy-hexagons.png center
 }
 
 # Laptop Outputs
