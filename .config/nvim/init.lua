@@ -54,12 +54,18 @@ opt.mouse = 'a'
 wo.breakindent = true
 
 -- Use spaces instead of tabs
-bo.expandtab = true
+opt.expandtab = true
 opt.smarttab = true
 
+-- Indenting options
+opt.autoindent = true
+
 -- 1 tab = 4 spaces
-bo.shiftwidth = 4
-bo.tabstop = 4
+opt.shiftwidth = 4
+opt.tabstop = 4
+
+-- Unless in TypeScript, JavaScript, or JSON, then 2 spaces
+cmd [[autocmd FileType typescript,javascript,json setlocal shiftwidth=2 tabstop=2]]
 
 -- Save undo history
 opt.undofile = true
@@ -136,7 +142,13 @@ require('packer').startup(function()
   use 'Shougo/echodoc.vim'
 
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  use 'nvim-treesitter/nvim-treesitter'
+  use {
+      'nvim-treesitter/nvim-treesitter',
+      run = function()
+          local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+          ts_update()
+      end,
+  }
   -- Additional textobjects for treesitter
   --use 'nvim-treesitter/nvim-treesitter-textobjects'
 
