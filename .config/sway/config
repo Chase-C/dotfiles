@@ -3,8 +3,8 @@
 # =========
 
 # Modifier: LGUI
-#set $mod Mod4
-set $mod Mod1
+set $mod Mod4
+#set $mod Mod1
 
 font DejaVu Sans Mono Nerd Font 10
 
@@ -64,21 +64,21 @@ exec ~/bin/notifyupdates &
 # ======================
 
 # Desktop Output
-output DP-3 {
-    #background ~/Pictures/wallpaper/wavy-hexagons.png center
+output DP-4 {
+    background ~/Pictures/wallpaper/wavy-hexagons.png center
 }
 
 # Laptop Outputs
 output eDP-1 {
-    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+    #background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
 }
 
 output DP-4 {
-    background ~/Pictures/Backgrounds/abstract_squares.jpg fill
+    #background ~/Pictures/Backgrounds/abstract_squares.jpg fill
 }
 
 output DP-5 {
-    background ~/Pictures/Backgrounds/abstract_desert.jpg fill
+    #background ~/Pictures/Backgrounds/abstract_desert.jpg fill
 }
 
 # =====================
@@ -105,11 +105,11 @@ input type:touchpad {
 #  Idle configuration
 # ====================
 
-exec swayidle -w \
-    timeout 1800 'swaylock -f -c 000000' \
-    timeout 2700 'swaymsg "output * dpms off"' \
-        resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -f -c 000000'
+#exec swayidle -w \
+#    timeout 1800 'swaylock -f -c 000000' \
+#    timeout 2700 'swaymsg "output * dpms off"' \
+#        resume 'swaymsg "output * dpms on"' \
+#    before-sleep 'swaylock -f -c 000000'
 
 # =============
 #  Colors + UI

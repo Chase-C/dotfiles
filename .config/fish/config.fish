@@ -21,6 +21,7 @@ set -g -x STUDIO_JDK /usr/lib/jvm/java-11-openjdk/
 set -g -x XDG_CURRENT_DESKTOP sway
 set -g -x NPM_CREDS_USER npm-deploy
 set -g -x NPM_CREDS_PW UGFzc3dvcmQ3Jg==
+set -g -x DOCKER_BUILDKIT 1
 
 if command -v bat > /dev/null
     abbr -a cat bat
