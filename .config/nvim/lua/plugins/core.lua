@@ -1,41 +1,35 @@
 return {
-  "nvim-lua/plenary.nvim",
+  'nvim-lua/plenary.nvim',
   'MunifTanjim/nui.nvim',
   {
-    "AstroNvim/astrotheme",
-    opts = {
-      plugins = { ["dashboard-nvim"] = true }
-    }
-  },
-  {
-    "NMAC427/guess-indent.nvim",
-    event = "User AstroFile",
+    'NMAC427/guess-indent.nvim',
+    event = 'User SushiFile',
     config = function(_, opts)
-      require("guess-indent").setup(opts)
+      require('guess-indent').setup(opts)
       vim.cmd.lua({
-	args = { "require('guess-indent').set_from_buffer('auto_cmd')" },
+	args = { 'require('guess-indent').set_from_buffer('auto_cmd')' },
 	mods = { silent = true },
       })
     end
   },
   {
-    "stevearc/resession.nvim",
+    'stevearc/resession.nvim',
     enabled = vim.g.resession_enabled == true,
     opts = {
-      buf_filter = function(bufnr) return require("utils.buffer").is_valid(bufnr) end,
+      buf_filter = function(bufnr) return require('utils.buffer').is_valid(bufnr) end,
       tab_buf_filter = function(tabpage, bufnr) return vim.tbl_contains(vim.t[tabpage].bufs, bufnr) end,
     },
   },
   {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
     opts = {
-      icons = { group = vim.g.icons_enabled and "" or "+", separator = "" },
-      disable = { filetypes = { "TelescopePrompt" } },
+      icons = { group = vim.g.icons_enabled and '' or '+', separator = '' },
+      disable = { filetypes = { 'TelescopePrompt' } },
     },
     config = function(_, opts)
-      require("which-key").setup(opts)
-      require("utils").which_key_register()
+      require('which-key').setup(opts)
+      require('utils').which_key_register()
     end
   },
   {
@@ -47,7 +41,7 @@ return {
       g.indent_blankline_show_trailing_blankline_indent = false
 
       return {
-        space_char_blankline = " ",
+        space_char_blankline = ' ',
         show_current_context = true,
         show_current_context_start = true,
       }
@@ -77,56 +71,56 @@ return {
     }
   },
   {
-    "kevinhwang91/nvim-ufo",
-    event = { "User AstroFile", "InsertEnter" },
-    dependencies = { "kevinhwang91/promise-async" },
+    'kevinhwang91/nvim-ufo',
+    event = { 'User SushiFile', 'InsertEnter' },
+    dependencies = { 'kevinhwang91/promise-async' },
     opts = {
       preview = {
         mappings = {
-          scrollB = "<C-b>",
-          scrollF = "<C-f>",
-          scrollU = "<C-u>",
-          scrollD = "<C-d>",
+          scrollB = '<C-b>',
+          scrollF = '<C-f>',
+          scrollU = '<C-u>',
+          scrollD = '<C-d>',
         },
       },
       provider_selector = function(_, filetype, buftype)
         local function handleFallbackException(bufnr, err, providerName)
-          if type(err) == "string" and err:match "UfoFallbackException" then
-            return require("ufo").getFolds(bufnr, providerName)
+          if type(err) == 'string' and err:match 'UfoFallbackException' then
+            return require('ufo').getFolds(bufnr, providerName)
           else
-            return require("promise").reject(err)
+            return require('promise').reject(err)
           end
         end
 
-        return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
+        return (filetype == '' or buftype == 'nofile') and 'indent' -- only use indent until a file is opened
           or function(bufnr)
-            return require("ufo")
-              .getFolds(bufnr, "lsp")
-              :catch(function(err) return handleFallbackException(bufnr, err, "treesitter") end)
-              :catch(function(err) return handleFallbackException(bufnr, err, "indent") end)
+            return require('ufo')
+              .getFolds(bufnr, 'lsp')
+              :catch(function(err) return handleFallbackException(bufnr, err, 'treesitter') end)
+              :catch(function(err) return handleFallbackException(bufnr, err, 'indent') end)
           end
       end,
     },
   },
   {
-    "numToStr/Comment.nvim",
+    'numToStr/Comment.nvim',
     keys = {
-      { "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
-      { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
+      { 'gc', mode = { 'n', 'v' }, desc = 'Comment toggle linewise' },
+      { 'gb', mode = { 'n', 'v' }, desc = 'Comment toggle blockwise' },
     },
     opts = function()
-      local commentstring_avail, commentstring = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+      local commentstring_avail, commentstring = pcall(require, 'ts_context_commentstring.integrations.comment_nvim')
       return commentstring_avail and commentstring and { pre_hook = commentstring.create_pre_hook() } or {}
     end,
   },
   {
-    "akinsho/toggleterm.nvim",
-    cmd = { "ToggleTerm", "TermExec" },
+    'akinsho/toggleterm.nvim',
+    cmd = { 'ToggleTerm', 'TermExec' },
     opts = {
       size = 10,
       on_create = function()
-        vim.opt.foldcolumn = "0"
-        vim.opt.signcolumn = "no"
+        vim.opt.foldcolumn = '0'
+        vim.opt.signcolumn = 'no'
       end,
       open_mapping = '<C-\\>',
       shade_terminals = true,
@@ -144,7 +138,6 @@ return {
         },
       },
       close_on_exit = true,
-      shell = sushi.shell,
     },
   },
 }

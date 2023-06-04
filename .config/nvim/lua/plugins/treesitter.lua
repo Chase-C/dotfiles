@@ -1,30 +1,30 @@
 return {
-  "nvim-treesitter/nvim-treesitter",
+  'nvim-treesitter/nvim-treesitter',
   dependencies = {
-    "windwp/nvim-ts-autotag",
-    "JoosepAlviste/nvim-ts-context-commentstring",
+    'windwp/nvim-ts-autotag',
+    'JoosepAlviste/nvim-ts-context-commentstring',
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make',
     },
   },
-  event = "User AstroFile",
+  event = 'User SushiFile',
   cmd = {
-    "TSBufDisable",
-    "TSBufEnable",
-    "TSBufToggle",
-    "TSDisable",
-    "TSEnable",
-    "TSToggle",
-    "TSInstall",
-    "TSInstallInfo",
-    "TSInstallSync",
-    "TSModuleInfo",
-    "TSUninstall",
-    "TSUpdate",
-    "TSUpdateSync",
+    'TSBufDisable',
+    'TSBufEnable',
+    'TSBufToggle',
+    'TSDisable',
+    'TSEnable',
+    'TSToggle',
+    'TSInstall',
+    'TSInstallInfo',
+    'TSInstallSync',
+    'TSModuleInfo',
+    'TSUninstall',
+    'TSUpdate',
+    'TSUpdateSync',
   },
-  build = ":TSUpdate",
+  build = ':TSUpdate',
   opts = {
     highlight = {
       enable = true,
@@ -69,6 +69,6 @@ return {
     context_commentstring = { enable = true, enable_autocmd = false },
   },
   config = function(_, opts)
-    require("nvim-treesitter.configs").setup(opts)
+    require('nvim-treesitter.configs').setup(opts)
   end,
 }
