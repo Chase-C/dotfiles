@@ -1,7 +1,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: DejaVu Sans Mono Nerd Font;
+    font-family: FontAwesome, "DejaVu Sans Mono Nerd Font";
     font-size: 13px;
     min-height: 0;
 }
@@ -15,47 +15,41 @@ window.#waybar.empty {
 }
 
 window#waybar {
-    color: #d8dee9;
-    background-color: #2e3440;
-    border-bottom: 3px solid #3b4252;
-    border-top: 2px transparent;
+    color: #c0caf5;
+    background-color: #1a1b26;
     transition-property: background-color;
     transition-duration: .5s;
+    border-bottom: 1px solid #24283b;
 }
 
 #workspaces button {
-    color: #4c566a;
+    color: #565f89;
     background-color: transparent;
     border-bottom: 3px solid transparent;
     padding: 0 5px;
 }
 
 #workspaces button:hover {
-    color: #b48ead;
-    background: rgba(0, 0, 0, 0.2);
+    color: #bb9af7;
+    background: #24283b;
     text-shadow: none;
     box-shadow: none;
-    border-bottom: 3px solid #b48ead;
-}
-
-#workspaces button.visible {
-    color: #8fbcbb;
+    border-bottom: 3px solid #bb9af7;
 }
 
 #workspaces button.focused {
-    background: rgba(0, 0, 0, 0.2);
-    color: #88c0d0;
-    border-bottom: 3px solid #88c0d0;
+    background: #24283b;
+    color: #7aa2f7;
+    border-bottom: 3px solid #7aa2f7;
 }
 
 #workspaces button.urgent {
-    background-color: #d08770;
+    background-color: #ff9e64;
 }
 
 #mode {
-    color: #d08770;
-    background: rgba(0, 0, 0, 0.2);
-    border-bottom: 3px solid #d08770;
+    color: #bb9af7;
+    background: #24283b;
     padding: 0 4px;
 }
 
@@ -67,54 +61,37 @@ window#waybar {
 }
 
 #battery {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 4px;
 }
 
 #clock {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #cpu {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #memory {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #network {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #network.disconnected {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #tray {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0;
 }
 
 #custom-packages {
-    color: #d8dee9;
-    background-color: #2e3440;
     padding: 0 8px;
 }
 
 #custom-separator {
-    background-color: #2e3440;
     padding: 0 4px;
 }

@@ -2,19 +2,28 @@ return {
   'nvim-lua/plenary.nvim',
   'MunifTanjim/nui.nvim',
   {
+    'folke/tokyonight.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
+    'norcalli/nvim-colorizer.lua',
+    lazy = false,
+  },
+  {
     'NMAC427/guess-indent.nvim',
     event = 'User SushiFile',
     config = function(_, opts)
       require('guess-indent').setup(opts)
       vim.cmd.lua({
-	args = { 'require('guess-indent').set_from_buffer('auto_cmd')' },
-	mods = { silent = true },
+	    args = { 'require(\'guess-indent\').set_from_buffer(\'auto_cmd\')' },
+	    mods = { silent = true },
       })
     end
   },
   {
     'stevearc/resession.nvim',
-    enabled = vim.g.resession_enabled == true,
     opts = {
       buf_filter = function(bufnr) return require('utils.buffer').is_valid(bufnr) end,
       tab_buf_filter = function(tabpage, bufnr) return vim.tbl_contains(vim.t[tabpage].bufs, bufnr) end,
@@ -36,7 +45,7 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     opts = function()
       g.indent_blankline_char = '┊'
-      g.indent_blankline_filetype_exclude = { 'help', 'packer' }
+      g.indent_blankline_filetype_exclude = { 'help' }
       g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
       g.indent_blankline_show_trailing_blankline_indent = false
 
@@ -49,7 +58,7 @@ return {
   },
   {
     'mehalter/nvim-window-picker',
-    version = '2.*'
+    version = '2.*',
     opts = {
       show_prompt = false,
       prompt_message = '',
@@ -57,7 +66,7 @@ return {
       selection_chars = 'FJDKSLA;CMRUEIWOQP',
       picker_config = {
         floating_big_letter = {
-          font = 'ansi-shadow', -- ansi-shadow |
+          font = 'ansi-shadow',
         },
       },
       filter_rules = {
@@ -94,8 +103,7 @@ return {
 
         return (filetype == '' or buftype == 'nofile') and 'indent' -- only use indent until a file is opened
           or function(bufnr)
-            return require('ufo')
-              .getFolds(bufnr, 'lsp')
+            return require('ufo').getFolds(bufnr, 'lsp')
               :catch(function(err) return handleFallbackException(bufnr, err, 'treesitter') end)
               :catch(function(err) return handleFallbackException(bufnr, err, 'indent') end)
           end

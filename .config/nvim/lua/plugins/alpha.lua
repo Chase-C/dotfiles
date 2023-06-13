@@ -31,7 +31,6 @@ return {
       '                                                        ████▒▒▒▒▒▒░░░░░░▒▒▒▒██                  ',
       '                                                            ████▒▒▒▒▒▒▒▒████                    ',
       '                                                                ████████                        ',
-
     }
     dashboard.section.header.opts.hl = 'DashboardHeader'
 

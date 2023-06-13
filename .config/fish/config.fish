@@ -1,4 +1,4 @@
-source $__fish_config_dir/themes/nord.fish
+theme_tokyonight night
 
 abbr -a q exit
 abbr -a e nvim
@@ -6,7 +6,7 @@ abbr -a vim nvim
 
 abbr -a pac sudo pacman --color=auto
 abbr -a pacman sudo pacman --color=auto
-abbr -a aur pacaur --color=auto
+abbr -a yay yay --color=auto
 
 # Add to PATH
 set -U fish_user_paths $fish_user_paths ~/bin ~/flutter/bin ~/.cargo/bin
@@ -40,7 +40,11 @@ end
 
 function fish_prompt
     # '❯' = \u276f
-    echo -n '' (set_color $nord9)(prompt_pwd) (set_color $nord12)'❯'(set_color $nord13)'❯'(set_color $nord14)'❯ '
+    set -l directory a9b1d6
+    set -l red f7768e
+    set -l yellow e0af68
+    set -l green 9ece6a
+    echo -n '' (set_color $directory)(prompt_pwd) (set_color $red)'❯'(set_color $yellow)'❯'(set_color $green)'❯ '
 end
 
 function fish_greeting

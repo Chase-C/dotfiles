@@ -3,5 +3,6 @@
 -- ==================================
 
 _G.sushi = {
-  terminal = { }
+  colorscheme = 'tokyonight-night',
+  terminal = { },
 }

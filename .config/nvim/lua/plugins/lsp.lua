@@ -26,6 +26,7 @@ return {
     'neovim/nvim-lspconfig',
     event = 'User SushiFile',
     config = function(_, _)
+      local lsp = require('utils.lsp')
       local get_icon = require('utils').get_icon
       local signs = {
         { name = 'DiagnosticSignError', text = get_icon('DiagnosticError'), texthl = 'DiagnosticSignError' },
@@ -90,6 +91,9 @@ return {
       },
     },
     enabled = vim.g.icons_enabled,
+    config = function(_, opts)
+      require('lspkind').init(opts)
+    end,
   },
   --{
   --  'ray-x/lsp_signature.nvim',
@@ -110,7 +114,6 @@ return {
     event = 'User SushiFile',
     opts = {
       tools = {
-        executor = require('rust-tools.executors').termopen,
         reload_workspace_from_cargo_toml = true,
         inlay_hints = {
           auto = true,

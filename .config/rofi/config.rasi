@@ -1,9 +1,4 @@
 configuration {
-    // General Config
-    //lines: 12;
-    //width: 40;
-
-    // Keyboard control
     kb-accept-entry:      "Return,KP_Enter";
     kb-row-down:          "Down,Control+j";
     kb-row-up:            "Up,Control+k";
@@ -11,7 +6,8 @@ configuration {
     kb-mode-previous:     "Control+h";
     kb-remove-char-back:  "BackSpace";
     kb-remove-to-eol:     "";
-    kb-mode-complete:     "Control+f";
+    kb-cancel:            "Escape,Control+f";
+    kb-mode-complete:     "";
     kb-move-char-forward: "Right";
 }
 

@@ -24,14 +24,14 @@ M.setup_diagnostics = function(signs)
 
   M.diagnostics = {
     -- diagnostics off
-    [0] = extend_tbl(
+    [0] = utils.extend_tbl(
       default_diagnostics,
       { underline = false, virtual_text = false, signs = false, update_in_insert = false }
     ),
     -- status only
-    extend_tbl(default_diagnostics, { virtual_text = false, signs = false }),
+    utils.extend_tbl(default_diagnostics, { virtual_text = false, signs = false }),
     -- virtual text off, signs on
-    extend_tbl(default_diagnostics, { virtual_text = false }),
+    utils.extend_tbl(default_diagnostics, { virtual_text = false }),
     -- all diagnostics on
     default_diagnostics,
   }
@@ -63,7 +63,7 @@ end
 
 function M.has_capability(capability, filter)
   local clients = vim.lsp.get_active_clients(filter)
-  return not tbl_isempty(vim.tbl_map(function(client) return client.supports_method(capability) end, clients))
+  return not vim.tbl_isempty(vim.tbl_map(function(client) return client.supports_method(capability) end, clients))
 end
 
 local function add_buffer_autocmd(augroup, bufnr, autocmds)
@@ -171,7 +171,7 @@ M.on_attach = function(client, bufnr)
     }
   end
 
-  if client.supports_method 'textDocument/formatting' and not tbl_contains(M.formatting.disabled, client.name) then
+  if client.supports_method 'textDocument/formatting' and not vim.tbl_contains(M.formatting.disabled, client.name) then
     lsp_mappings.n['<leader>lf'] = {
       function() vim.lsp.buf.format(M.format_opts) end,
       desc = 'Format buffer',
@@ -188,8 +188,8 @@ M.on_attach = function(client, bufnr)
     local filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
     if
       autoformat.enabled
-      and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
-      and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
+      and (vim.tbl_isempty(autoformat.allow_filetypes or {}) or vim.tbl_contains(autoformat.allow_filetypes, filetype))
+      and (vim.tbl_isempty(autoformat.ignore_filetypes or {}) or not vim.tbl_contains(autoformat.ignore_filetypes, filetype))
     then
       add_buffer_autocmd('lsp_auto_format', bufnr, {
         events = 'BufWritePre',
@@ -202,7 +202,7 @@ M.on_attach = function(client, bufnr)
           local autoformat_enabled = vim.b.autoformat_enabled
           if autoformat_enabled == nil then autoformat_enabled = vim.g.autoformat_enabled end
           if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
-            vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
+            vim.lsp.buf.format(utils.extend_tbl(M.format_opts, { bufnr = bufnr }))
           end
         end,
       })
@@ -339,8 +339,8 @@ M.capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFo
 ---@return table # The table of LSP options used when setting up the given language server
 function M.config(server_name)
   local server = require('lspconfig')[server_name]
-  local lsp_opts = extend_tbl(
-    extend_tbl(server.document_config.default_config, server),
+  local lsp_opts = utils.extend_tbl(
+    utils.extend_tbl(server.document_config.default_config, server),
     { capabilities = M.capabilities, flags = M.flags }
   )
   if server_name == 'jsonls' then -- by default add json schemas
@@ -364,9 +364,9 @@ function M.config(server_name)
   end
 
   lsp_opts.on_attach = function(client, bufnr)
-    conditional_func(server.on_attach, true, client, bufnr)
+    utils.conditional_func(server.on_attach, true, client, bufnr)
     M.on_attach(client, bufnr)
-    conditional_func(lsp_opts.on_attach, true, client, bufnr)
+    utils.conditional_func(lsp_opts.on_attach, true, client, bufnr)
   end
 
   return lsp_opts

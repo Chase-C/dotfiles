@@ -37,10 +37,10 @@ maps.i['<C-f>'] = { '<Esc>', desc = 'Exit insert mode' }
 maps.v['<C-f>'] = { '<Esc>', desc = 'Exit visual mode' }
 maps.t['<C-f>'] = { '<C-\\><C-n>', desc = 'Exit terminal mode' }
 
-maps.n['<leader><cr>'] = { ':noh<cr>', { silent = true }, desc = 'Clear highlights' }
+maps.n['<leader><cr>'] = { ':noh<cr>', silent = true, desc = 'Clear highlights' }
 
-maps.n['H'] = { '^', { noremap = false }, desc = 'Move to beginning of line' }
-maps.n['L'] = { '$', { noremap = false }, desc = 'Move to end of line' }
+maps.n['H'] = { '^', noremap = false, desc = 'Move to beginning of line' }
+maps.n['L'] = { '$', noremap = false, desc = 'Move to end of line' }
 
 maps.i['<C-h>'] = { '<Left>', desc = 'Move left' }
 maps.i['<C-j>'] = { '<Down>', desc = 'Move down' }
@@ -52,15 +52,7 @@ maps.v['<C-j>'] = { '<Down>', desc = 'Move down' }
 maps.v['<C-k>'] = { '<Up>', desc = 'Move up' }
 maps.v['<C-l>'] = { '<Right>', desc = 'Move right' }
 
-maps.n['<leader><leader>'] = { function()
-  local last_buffer = fn.bufnr('#')
-  local previous_buffer = fn.bufnr(fn.expand('#') .. '#')
-  if previous_buffer ~= -1 then
-    fn.execute('buffer ' .. previous_buffer)
-  else
-    fn.execute('buffer ' .. last_buffer)
-  end
-end, desc = 'Switch between last two buffers' }
+maps.n['<leader><leader>'] = { '<C-^>', desc = 'Switch between last two buffers' }
 
 -- Clipboard integration
 --if fn.executable('wl-copy') then
@@ -107,8 +99,7 @@ maps.n['<leader>pM'] = { '<cmd>MasonUpdateAll<cr>', desc = 'Mason Update' }
 -- =================
 
 maps.n['<leader>pa'] = { '<cmd>SushiUpdatePackages<cr>', desc = 'Update Plugins and Mason Packages' }
-maps.n['<leader>pA'] = { '<cmd>SushiUpdate<cr>', desc = 'SushiNvim Update' }
-maps.n['<leader>pv'] = { '<cmd>SushiVersion<cr>', desc = 'SushiNvim Version' }
+maps.n['<leader>pr'] = { '<cmd>SushiReload<cr>', desc = 'Reload NeoVim' }
 
 -- ====================
 --  Buffers Management
@@ -210,7 +201,7 @@ maps.n['<leader>/'] = {
   desc = 'Toggle comment line',
 }
 maps.v['<leader>/'] = {
-  '<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>',
+  '<esc><cmd>lua require(\'Comment.api\').toggle.linewise(vim.fn.visualmode())<cr>',
   desc = 'Toggle comment for selection',
 }
 
@@ -239,9 +230,9 @@ maps.n['<leader>e'] = { '<cmd>Neotree toggle<cr>', desc = 'Toggle Explorer' }
 maps.n['<leader>o'] = {
   function()
     if vim.bo.filetype == 'neo-tree' then
-      vim.cmd.wincmd 'p'
+      vim.cmd.wincmd('p')
     else
-      vim.cmd.Neotree 'focus'
+      vim.cmd.Neotree('focus')
     end
   end,
   desc = 'Toggle Explorer Focus',
@@ -357,8 +348,8 @@ maps.n['<leader>th'] = { '<cmd>ToggleTerm size=10 direction=horizontal<cr>', des
 maps.n['<leader>tv'] = { '<cmd>ToggleTerm size=80 direction=vertical<cr>', desc = 'ToggleTerm vertical split' }
 maps.n['<F7>'] = { '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' }
 maps.t['<F7>'] = maps.n['<F7>']
-maps.n['<C-'>'] = maps.n['<F7>'] -- requires terminal that supports binding <C-'>
-maps.t['<C-'>'] = maps.n['<F7>'] -- requires terminal that supports binding <C-'>
+maps.n['<C-\'>'] = maps.n['<F7>'] -- requires terminal that supports binding <C-'>
+maps.t['<C-\'>'] = maps.n['<F7>'] -- requires terminal that supports binding <C-'>
 
 -- ==========
 --  Nvim DAP
@@ -368,33 +359,33 @@ maps.n['<leader>d'] = sections.d
 maps.v['<leader>d'] = sections.d
 -- modified function keys found with `showkey -a` in the terminal to get key code
 -- run `nvim -V3log +quit` and search through the 'Terminal info' in the `log` file for the correct keyname
-maps.n['<F5>'] = { function() require('dap').continue() end, desc = 'Debugger: Start' }
-maps.n['<F17>'] = { function() require('dap').terminate() end, desc = 'Debugger: Stop' } -- Shift+F5
-maps.n['<F21>'] = {
-  function()
-    vim.ui.input({ prompt = 'Condition: ' }, function(condition)
-      if condition then require('dap').set_breakpoint(condition) end
-    end)
-  end,
-  desc = 'Debugger: Conditional Breakpoint',
-}
-maps.n['<F29>'] = { function() require('dap').restart_frame() end, desc = 'Debugger: Restart' } -- Control+F5
-maps.n['<F6>'] = { function() require('dap').pause() end, desc = 'Debugger: Pause' }
-maps.n['<F9>'] = { function() require('dap').toggle_breakpoint() end, desc = 'Debugger: Toggle Breakpoint' }
-maps.n['<F10>'] = { function() require('dap').step_over() end, desc = 'Debugger: Step Over' }
-maps.n['<F11>'] = { function() require('dap').step_into() end, desc = 'Debugger: Step Into' }
-maps.n['<F23>'] = { function() require('dap').step_out() end, desc = 'Debugger: Step Out' } -- Shift+F11
-maps.n['<leader>db'] = { function() require('dap').toggle_breakpoint() end, desc = 'Toggle Breakpoint (F9)' }
-maps.n['<leader>dB'] = { function() require('dap').clear_breakpoints() end, desc = 'Clear Breakpoints' }
-maps.n['<leader>dc'] = { function() require('dap').continue() end, desc = 'Start/Continue (F5)' }
-maps.n['<leader>dC'] = {
-  function()
-    vim.ui.input({ prompt = 'Condition: ' }, function(condition)
-      if condition then require('dap').set_breakpoint(condition) end
-    end)
-  end,
-  desc = 'Conditional Breakpoint (S-F9)',
-}
+--maps.n['<F5>'] = { function() require('dap').continue() end, desc = 'Debugger: Start' }
+--maps.n['<F17>'] = { function() require('dap').terminate() end, desc = 'Debugger: Stop' } -- Shift+F5
+--maps.n['<F21>'] = {
+--  function()
+--    vim.ui.input({ prompt = 'Condition: ' }, function(condition)
+--      if condition then require('dap').set_breakpoint(condition) end
+--    end)
+--  end,
+--  desc = 'Debugger: Conditional Breakpoint',
+--}
+--maps.n['<F29>'] = { function() require('dap').restart_frame() end, desc = 'Debugger: Restart' } -- Control+F5
+--maps.n['<F6>'] = { function() require('dap').pause() end, desc = 'Debugger: Pause' }
+--maps.n['<F9>'] = { function() require('dap').toggle_breakpoint() end, desc = 'Debugger: Toggle Breakpoint' }
+--maps.n['<F10>'] = { function() require('dap').step_over() end, desc = 'Debugger: Step Over' }
+--maps.n['<F11>'] = { function() require('dap').step_into() end, desc = 'Debugger: Step Into' }
+--maps.n['<F23>'] = { function() require('dap').step_out() end, desc = 'Debugger: Step Out' } -- Shift+F11
+--maps.n['<leader>db'] = { function() require('dap').toggle_breakpoint() end, desc = 'Toggle Breakpoint (F9)' }
+--maps.n['<leader>dB'] = { function() require('dap').clear_breakpoints() end, desc = 'Clear Breakpoints' }
+--maps.n['<leader>dc'] = { function() require('dap').continue() end, desc = 'Start/Continue (F5)' }
+--maps.n['<leader>dC'] = {
+--  function()
+--    vim.ui.input({ prompt = 'Condition: ' }, function(condition)
+--      if condition then require('dap').set_breakpoint(condition) end
+--    end)
+--  end,
+--  desc = 'Conditional Breakpoint (S-F9)',
+--}
 maps.n['<leader>di'] = { function() require('dap').step_into() end, desc = 'Step Into (F11)' }
 maps.n['<leader>do'] = { function() require('dap').step_over() end, desc = 'Step Over (F10)' }
 maps.n['<leader>dO'] = { function() require('dap').step_out() end, desc = 'Step Out (S-F11)' }
@@ -443,10 +434,10 @@ maps.t['<C-l>'] = { '<cmd>wincmd l<cr>', desc = 'Terminal right window navigatio
 
 maps.n['<leader>u'] = sections.u
 -- Custom menu for modification of the user experience
-if is_available 'nvim-autopairs' then maps.n['<leader>ua'] = { ui.toggle_autopairs, desc = 'Toggle autopairs' } end
+if is_available('nvim-autopairs') then maps.n['<leader>ua'] = { ui.toggle_autopairs, desc = 'Toggle autopairs' } end
 maps.n['<leader>ub'] = { ui.toggle_background, desc = 'Toggle background' }
-if is_available 'nvim-cmp' then maps.n['<leader>uc'] = { ui.toggle_cmp, desc = 'Toggle autocompletion' } end
-if is_available 'nvim-colorizer.lua' then
+if is_available('nvim-cmp') then maps.n['<leader>uc'] = { ui.toggle_cmp, desc = 'Toggle autocompletion' } end
+if is_available('nvim-colorizer.lua') then
   maps.n['<leader>uC'] = { '<cmd>ColorizerToggle<cr>', desc = 'Toggle color highlight' }
 end
 maps.n['<leader>ud'] = { ui.toggle_diagnostics, desc = 'Toggle diagnostics' }

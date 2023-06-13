@@ -8,13 +8,17 @@ max-icon-size=96
 # Styling options
 font=DejaVu Sans Mono Nerd Font 10
 
-background-color=#2E3440
-text-color=#D8DEE9
+background-color=#1a1b26
+text-color=#a9b1d6
 
-border-size=10
-border-color=#81A1C1
+width=400
+height=180
 
-progress-color=over #3B4252
+padding=6
+border-size=6
+border-color=#7aa2f7
+
+progress-color=over #73daca
 
 # Spotify specific settings
 [app-name="Spotify"]

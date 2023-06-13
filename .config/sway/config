@@ -42,9 +42,9 @@ focus_follows_mouse no
 mouse_warping none
 
 # Hide edge borders
-hide_edge_borders none
+smart_borders on
 smart_gaps on
-gaps inner 2
+gaps inner 1
 
 # Start graphical authentication agent
 exec /usr/bin/lxqt-policykit-agent
@@ -65,7 +65,7 @@ exec ~/bin/notifyupdates &
 
 # Desktop Output
 output DP-4 {
-    background ~/Pictures/wallpaper/wavy-hexagons.png center
+    background ~/Pictures/wallpaper/neon-liminal.jpg fit
 }
 
 # Laptop Outputs
@@ -115,34 +115,28 @@ input type:touchpad {
 #  Colors + UI
 # =============
 
-set $nord0  #2E3440
-set $nord1  #3B4252
-set $nord2  #434C5E
-set $nord3  #4C566A
-set $nord4  #D8DEE9
-set $nord5  #E5E9F0
-set $nord6  #ECEFF4
-set $nord7  #8FBCBB
-set $nord8  #88C0D0
-set $nord9  #81A1C1
-set $nord10 #5E81AC
-set $nord11 #BF616A
-set $nord12 #D08770
-set $nord13 #EBCB8B
-set $nord14 #A3BE8C
-set $nord15 #B48EAD
+set $background #1a1b26
+set $bgstorm    #24283b
+set $foreground #a9b1d6
+set $red        #f7768e
+set $orange     #ff9e64
+set $yellow     #e0af68
+set $green      #9ece6a
+set $cyan1      #73daca
+set $cyan2      #2ac3de
+set $lightblue  #7dcfff
+set $blue       #7aa2f7
+set $purple     #bb9af7
 
-#                       BORDER     BACKGROUND  TEXT     INDICATOR  CHILD_BORDER
-client.focused          $nord8     $nord1      $nord6   $nord8     $nord8
-#client.focused_inactive $nord15    $nord1      $nord5   $nord15    $nord15
-client.focused_inactive $nord0     $nord1      $nord5   $nord0     $nord0
-client.unfocused        $nord0     $nord1      $nord5   $nord0     $nord0
-client.urgent           $nord11    $nord11     $nord3   $nord11    $nord11
-client.background                  $nord0
+#                       BORDER   BACKGROUND  TEXT     INDICATOR CHILD_BORDER
+client.focused          $blue    $background $blue    $purple   $blue 
+client.focused_inactive $bgstorm $bgstorm    $bgstorm $purple   $bgstorm
+client.unfocused        $bgstorm $bgstorm    $bgstorm $purple   $bgstorm
+client.urgent           $red     $purple     $red     $red      $red   
 
 # Borders
 default_border pixel 1
-default_floating_border normal 5
+default_floating_border pixel 6
 
 # ==============
 #  Key bindings
@@ -272,7 +266,7 @@ bindsym $mod+a focus parent
 # You can send windows there and get them back later.
 
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+Shift+minus border pixel 6; move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
@@ -348,7 +342,7 @@ bar {
 #  Create floating terminal with VPN
 # ===================================
 
-exec alacritty --class floating_term -d 172 64 -e fish -C 'expressvpn connect'
+exec sleep 1 && alacritty --class floating_term -d 172 64 -e fish -C 'expressvpn connect'
 
 # ==================
 #  Whatever this is

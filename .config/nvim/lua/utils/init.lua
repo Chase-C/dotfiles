@@ -28,7 +28,7 @@ function M.reload()
   else
     M.notify('Error reloading config...', vim.log.levels.ERROR)
   end
-  vim.cmd.doautocmd 'ColorScheme'
+  vim.cmd.doautocmd('ColorScheme')
   return success
 end
 
@@ -94,11 +94,11 @@ end
 --- Open a URL under the cursor with the current operating system
 function M.system_open(path)
   local cmd
-  if vim.fn.has 'win32' == 1 and vim.fn.executable 'explorer' == 1 then
+  if vim.fn.has('win32') == 1 and vim.fn.executable('explorer') == 1 then
     cmd = { 'cmd.exe', '/K', 'explorer' }
-  elseif vim.fn.has 'unix' == 1 and vim.fn.executable 'xdg-open' == 1 then
+  elseif vim.fn.has('unix') == 1 and vim.fn.executable('xdg-open') == 1 then
     cmd = { 'xdg-open' }
-  elseif (vim.fn.has 'mac' == 1 or vim.fn.has 'unix' == 1) and vim.fn.executable 'open' == 1 then
+  elseif (vim.fn.has('mac') == 1 or vim.fn.has('unix') == 1) and vim.fn.executable('open') == 1 then
     cmd = { 'open' }
   end
   if not cmd then M.notify('Available system opening tool not found!', vim.log.levels.ERROR) end
@@ -244,9 +244,9 @@ end
 --- Run a shell command and capture the output and if the command succeeded or failed
 function M.cmd(cmd, show_error)
   local wind32_cmd
-  if vim.fn.has 'win32' == 1 then wind32_cmd = { 'cmd.exe', '/C', cmd } end
+  if vim.fn.has('win32') == 1 then wind32_cmd = { 'cmd.exe', '/C', cmd } end
   local result = vim.fn.system(wind32_cmd or cmd)
-  local success = vim.api.nvim_get_vvar 'shell_error' == 0
+  local success = vim.api.nvim_get_vvar('shell_error') == 0
   if not success and (show_error == nil or show_error) then
     vim.api.nvim_err_writeln('Error running command: ' .. cmd .. '\nError message:\n' .. result)
   end

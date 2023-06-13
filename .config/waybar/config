@@ -14,14 +14,23 @@
     "modules-right": [
         "custom/packages", "custom/separator",
         "network", "custom/separator",
-        "battery", "custom/separator",
+        //"battery", "custom/separator",
         "cpu", "memory", "custom/separator",
-        "clock"
+        "clock", "idle_inhibitor", "custom/spacer4"
     ],
+
+    "idle_inhibitor": {
+        "format": "  {icon}",
+        "format-icons": {
+            "activated": "󰷛",
+            "deactivated": "󰍹"
+        },
+        "timeout": 30
+    },
 
     // Modules configuration
     "sway/window": {
-        "format": "<span color=\"#a3be8c\">❮</span><span color=\"#ebcb8b\">❮</span><span color=\"#d08770\">❮</span> {} <span color=\"#d08770\">❯</span><span color=\"#ebcb8b\">❯</span><span color=\"#a3be8c\">❯</span>",
+        "format": "<span color=\"#9ece6a\">❮</span><span color=\"#e0af68\">❮</span><span color=\"#f7768e\">❮</span> {} <span color=\"#f7768e\">❯</span><span color=\"#e0af68\">❯</span><span color=\"#8ece6a\">❯</span>",
         "tooltip": false
     },
 
@@ -36,17 +45,19 @@
     },
 
     "clock": {
-        "tooltip-format": "{:%Y-%m-%d | %H:%M}",
-        "format-alt": "{:%Y-%m-%d}"
+        "format": "{:%H:%M  %m-%d}",
+        "tooltip": false
     },
 
     "cpu": {
         "format": "{usage}% ",
-        "tooltip": true
+        "tooltip": true,
+        "interval": 2,
     },
 
     "memory": {
-        "format": "{}% "
+        "format": "{}% ",
+        "interval": 10,
     },
 
     "network": {
@@ -64,7 +75,7 @@
             "warning": 30,
             "critical": 15
         },
-        "format": " {capacity}% {icon}  ",
+        "format": "{capacity}% {icon} ",
         "format-icons": ["", "", "", "", ""],
         "max-length": 25
     },
@@ -76,6 +87,17 @@
     },
 
     "custom/separator": {
-        "format": "<span color=\"#a3be8c\">❮</span><span color=\"#ebcb8b\">❮</span><span color=\"#d08770\">❮</span>"
+        "format": "<span color=\"#9ece6a\">❮</span><span color=\"#e0af68\">❮</span><span color=\"#f7768e\">❮</span>",
+        "tooltip": false
+    },
+
+    "custom/spacer2": {
+        "format": "  ",
+        "tooltip": false
+    },
+
+    "custom/spacer4": {
+        "format": "    ",
+        "tooltip": false
     }
 }

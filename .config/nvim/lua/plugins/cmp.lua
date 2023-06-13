@@ -6,17 +6,18 @@ return {
     config = function(_, opts)
       if opts then require('luasnip').config.setup(opts) end
       vim.tbl_map(function(type) require('luasnip.loaders.from_' .. type).lazy_load() end, { 'vscode', 'snipmate', 'lua' })
-    end
+    end,
   },
   {
     'hrsh7th/nvim-cmp',
     dependencies = {
       'saadparwaiz1/cmp_luasnip',
+      'chrisgrieser/cmp-nerdfont',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-nerdfont',
       'hrsh7th/cmp-nvim-lsp',
+      'onsails/lspkind.nvim',
     },
     event = 'InsertEnter',
     opts = function()
@@ -37,11 +38,10 @@ return {
 
       return {
         enabled = function()
-	  -- add interoperability with cmp-dap
           local dap_prompt = vim.tbl_contains(
-	    { 'dap-repl', 'dapui_watches', 'dapui_hover' },
-	    vim.api.nvim_get_option_value('filetype', { buf = 0 })
-	  )
+	        { 'dap-repl', 'dapui_watches', 'dapui_hover' },
+	        vim.api.nvim_get_option_value('filetype', { buf = 0 })
+	      )
 
           if vim.api.nvim_get_option_value('buftype', { buf = 0 }) == 'prompt' and not dap_prompt then return false end
           return vim.g.cmp_enabled
@@ -86,7 +86,7 @@ return {
               fallback()
             end
           end, {'i','s'}),
-          ['<S-Tab>'] = cmd.mapping(function(fallback)
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then

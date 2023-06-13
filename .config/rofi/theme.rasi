@@ -1,33 +1,27 @@
 // ❯ \u276f
 * {
-    font:   "DejaVu Sans Mono Nerd Font 10";
-    nord0:  #2E3440;
-    nord1:  #3B4252;
-    nord2:  #434C5E;
-    nord3:  #4C566A;
-    nord4:  #D8DEE9;
-    nord5:  #E5E9F0;
-    nord6:  #ECEFF4;
-    nord7:  #8FBCBB;
-    nord8:  #88C0D0;
-    nord9:  #81A1C1;
-    nord10: #5E81AC;
-    nord11: #BF616A;
-    nord12: #D08770;
-    nord13: #EBCB8B;
-    nord14: #A3BE8C;
-    nord15: #B48EAD;
+    font:       "DejaVu Sans Mono Nerd Font 10";
+    background: #1a1b26;
+    selectedbg: #24283b;
+    urgentbg:   #414868;
+    border:     #bb9af7;
+    highlight:  #bb9af7;
+    chevron1:   #f7768e;
+    chevron2:   #e0af68;
+    chevron3:   #9ece6a;
+    textdim:    #565f89;
+    textactive: #a9b1d6;
 }
 
 window {
-    background-color: @nord0;
-    border:           5;
-    border-color:     @nord9;
-    padding:          4;
+    background-color: @background;
+    border:           6;
+    border-color:     @border;
+    padding:          8;
 }
 
 mainbox {
-    background-color: @nord0;
+    background-color: @background;
 }
 
 /*
@@ -36,44 +30,44 @@ mainbox {
 
 inputbar {
     children:         [ prompt, textbox-prompt-sep-a, textbox-prompt-sep-b, textbox-prompt-sep-c, entry, case-indicator ];
-    background-color: @nord0;
-    padding:          2 0 2 0;
+    background-color: @background;
+    padding:          0 0 4 0;
     spacing:          0;
 }
 
 prompt {
-    background-color: @nord0;
-    text-color:       @nord9;
+    background-color: @background;
+    text-color:       @highlight;
 }
 
 textbox-prompt-sep-a {
     expand:           false;
     str:              " ❯";
-    background-color: @nord0;
-    text-color:       @nord12;
+    background-color: @background;
+    text-color:       @chevron1;
 }
 
 textbox-prompt-sep-b {
     expand:           false;
     str:              "❯";
-    background-color: @nord0;
-    text-color:       @nord13;
+    background-color: @background;
+    text-color:       @chevron2;
 }
 
 textbox-prompt-sep-c {
     expand:           false;
     str:              "❯ ";
-    background-color: @nord0;
-    text-color:       @nord14;
+    background-color: @background;
+    text-color:       @chevron3;
 }
 
 entry {
-    background-color: @nord0;
-    text-color:       @nord4;
+    background-color: @background;
+    text-color:       @textactive;
 }
 
 case-indicator {
-    background-color: @nord0;
+    background-color: @background;
 }
 
 /*
@@ -81,11 +75,11 @@ case-indicator {
  */
 
 message {
-    background-color: @nord0;
+    background-color: @background;
 }
 
 textbox {
-    background-color: @nord0;
+    background-color: @background;
 }
 
 /*
@@ -93,59 +87,57 @@ textbox {
  */
 
 listview {
-    background-color: @nord0;
+    background-color: @background;
     border:           1 dash 0 0;
-    border-color:     @nord3;
+    border-color:     @textdim;
     padding:          4 0 2 0;
 }
 
 element {
-    background-color: @nord0;
+    background-color: @background;
     border:           0;
     padding:          1;
 }
 
 element normal.normal {
-    text-color: @nord3;
+    text-color: @textdim;
 }
 
 element normal.urgent {
-    background-color: @nord12;
-    text-color:       @nord3;
+    background-color: @urgentbg;
+    text-color:       @textdim;
 }
 
 element normal.active {
-    text-color: @nord5;
+    text-color: @textactive;
 }
 
 element selected.normal {
-    background-color: rgba(0, 0, 0, 20%);
-    text-color:       @nord9;
+    background-color: @selectedbg;
+    text-color:       @highlight;
 }
 
 element selected.urgent {
-    background-color: @nord12;
-    text-color:       @nord3;
+    background-color: @urgentbg;
+    text-color:       @textdim;
 }
 
 element selected.active {
-    background-color: rgba(0, 0, 0, 20%);
-    text-color:       @nord5;
+    background-color: @selectedbg;
+    text-color:       @textactive;
 }
 
 element alternate.normal {
-    //background-color: rgba(0, 0, 0, 20%);
-    text-color:       @nord3;
+    text-color:       @textdim;
 }
 
 element alternate.urgent {
-    background-color: @nord12;
-    text-color:       @nord3;
+    background-color: @urgentbg;
+    text-color:       @textdim;
 }
 
 element alternate.active {
-    //background-color: rgba(0, 0, 0, 20%);
-    text-color:       @nord5;
+    text-color:       @textactive;
 }
 
 element-text {

@@ -1,7 +1,7 @@
 local get_icon = require('utils').get_icon
 return {
   'lewis6991/gitsigns.nvim',
-  enabled = vim.fn.executable 'git' == 1,
+  enabled = vim.fn.executable('git') == 1,
   event = 'User SushiGitFile',
   opts = {
     signs = {

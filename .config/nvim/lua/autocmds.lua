@@ -225,7 +225,7 @@ autocmd('BufEnter', {
       local stats = vim.loop.fs_stat(vim.api.nvim_buf_get_name(0))
       if stats and stats.type == 'directory' then
         vim.api.nvim_del_augroup_by_name 'neotree_start'
-        require 'neo-tree'
+        require('neo-tree')
       end
     end
   end,
@@ -248,18 +248,23 @@ autocmd({ 'BufReadPost', 'BufNewFile' }, {
   group = augroup('file_user_events', { clear = true }),
   callback = function(args)
     if not (vim.fn.expand '%' == '' or vim.api.nvim_get_option_value('buftype', { buf = args.buf }) == 'nofile') then
-      sushievent 'File'
-      if utils.cmd('git -C '' .. vim.fn.expand '%:p:h' .. '' rev-parse', false) then sushievent 'GitFile' end
+      sushievent('File')
+      if utils.cmd('git -C \'' .. vim.fn.expand '%:p:h' .. '\' rev-parse', false) then sushievent('GitFile') end
     end
   end,
 })
 
 cmd(
   'SushiUpdatePackages',
-  function() require('utils.updater').update_packages() end,
+  function()
+    require('lazy').sync({ wait = true })
+    require('utils.mason').update_all()
+  end,
   { desc = 'Update Plugins and Mason' }
 )
-cmd('SushiRollback', function() require('utils.updater').rollback() end, { desc = 'Rollback Neovim' })
-cmd('SushiUpdate', function() require('utils.updater').update() end, { desc = 'Update Neovim' })
-cmd('SushiVersion', function() require('utils.updater').version() end, { desc = 'Check Neovim Version' })
-cmd('SushiReload', function() require('utils').reload() end, { desc = 'Reload Neovim (Experimental)' })
+
+cmd(
+  'SushiReload',
+  function() require('utils').reload() end,
+  { desc = 'Reload NeoVim (Experimental)' }
+)
