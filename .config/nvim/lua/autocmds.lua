@@ -1,55 +1,8 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
-local cmd = vim.api.nvim_create_user_command
-local namespace = vim.api.nvim_create_namespace
 
 local utils = require('utils')
-local is_available = utils.is_available
 local sushievent = utils.event
-
-vim.on_key(function(char)
-  if vim.fn.mode() == 'n' then
-    local new_hlsearch = vim.tbl_contains({ '<CR>', 'n', 'N', '*', '#', '?', '/' }, vim.fn.keytrans(char))
-    if vim.opt.hlsearch:get() ~= new_hlsearch then vim.opt.hlsearch = new_hlsearch end
-  end
-end, namespace 'auto_hlsearch')
-
-local bufferline_group = augroup('bufferline', { clear = true })
-autocmd({ 'BufAdd', 'BufEnter', 'TabNewEntered' }, {
-  desc = 'Update buffers when adding new buffers',
-  group = bufferline_group,
-  callback = function(args)
-    if not vim.t.bufs then vim.t.bufs = {} end
-    local bufs = vim.t.bufs
-    if not vim.tbl_contains(bufs, args.buf) then
-      table.insert(bufs, args.buf)
-      vim.t.bufs = bufs
-    end
-    vim.t.bufs = vim.tbl_filter(require('utils.buffer').is_valid, vim.t.bufs)
-    sushievent 'BufsUpdated'
-  end,
-})
-autocmd('BufDelete', {
-  desc = 'Update buffers when deleting buffers',
-  group = bufferline_group,
-  callback = function(args)
-    for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
-      local bufs = vim.t[tab].bufs
-      if bufs then
-        for i, bufnr in ipairs(bufs) do
-          if bufnr == args.buf then
-            table.remove(bufs, i)
-            vim.t[tab].bufs = bufs
-            break
-          end
-        end
-      end
-    end
-    vim.t.bufs = vim.tbl_filter(require('utils.buffer').is_valid, vim.t.bufs)
-    sushievent 'BufsUpdated'
-    vim.cmd.redrawtabline()
-  end,
-})
 
 autocmd({ 'VimEnter', 'FileType', 'BufEnter', 'WinEnter' }, {
   desc = 'URL Highlighting',
@@ -65,6 +18,7 @@ autocmd({ 'BufWinLeave', 'BufWritePost', 'WinLeave' }, {
     if vim.b[event.buf].view_activated then vim.cmd.mkview { mods = { emsg_silent = true } } end
   end,
 })
+
 autocmd('BufWinEnter', {
   desc = 'Try to load file view if available and enable view saving for real files',
   group = view_group,
@@ -115,8 +69,11 @@ autocmd('FileType', {
 autocmd('FileType', {
   desc = 'Set tab spaces for certain filetypes',
   group = augroup('tab_spaces', { clear = true }),
-  pattern = 'typescript,javascript,json',
-  callback = 'setlocal shiftwidth=2 tabstop=2'
+  pattern = 'typescript,javascript,json,lua',
+  callback = function()
+    vim.api.nvim_buf_set_option(0, 'shiftwidth', 2)
+    vim.api.nvim_buf_set_option(0, 'tabstop', 2)
+  end,
 })
 
 autocmd('BufEnter', {
@@ -175,6 +132,7 @@ autocmd({ 'User', 'BufEnter' }, {
     end
   end,
 })
+
 autocmd('VimEnter', {
   desc = 'Start Alpha when vim is opened with no arguments',
   group = augroup('alpha_autostart', { clear = true }),
@@ -195,7 +153,7 @@ autocmd('VimEnter', {
 })
 
 -- ===========
---  Recession
+--  Resession
 -- ===========
 
 autocmd('VimLeavePre', {
@@ -220,22 +178,14 @@ autocmd('BufEnter', {
   group = augroup('neotree_start', { clear = true }),
   callback = function()
     if package.loaded['neo-tree'] then
-      vim.api.nvim_del_augroup_by_name 'neotree_start'
+      vim.api.nvim_del_augroup_by_name('neotree_start')
     else
       local stats = vim.loop.fs_stat(vim.api.nvim_buf_get_name(0))
       if stats and stats.type == 'directory' then
-        vim.api.nvim_del_augroup_by_name 'neotree_start'
+        vim.api.nvim_del_augroup_by_name('neotree_start')
         require('neo-tree')
       end
     end
-  end,
-})
-autocmd('TermClose', {
-  pattern = '*lazygit',
-  desc = 'Refresh Neo-Tree git when closing lazygit',
-  group = augroup('neotree_git_refresh', { clear = true }),
-  callback = function()
-    if package.loaded['neo-tree.sources.git_status'] then require('neo-tree.sources.git_status').refresh() end
   end,
 })
 
@@ -253,18 +203,3 @@ autocmd({ 'BufReadPost', 'BufNewFile' }, {
     end
   end,
 })
-
-cmd(
-  'SushiUpdatePackages',
-  function()
-    require('lazy').sync({ wait = true })
-    require('utils.mason').update_all()
-  end,
-  { desc = 'Update Plugins and Mason' }
-)
-
-cmd(
-  'SushiReload',
-  function() require('utils').reload() end,
-  { desc = 'Reload NeoVim (Experimental)' }
-)

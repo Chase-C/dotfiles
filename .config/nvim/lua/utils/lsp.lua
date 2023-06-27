@@ -5,7 +5,7 @@ local utils = require('utils')
 
 M.diagnostics = { [0] = {}, {}, {}, {} }
 
-M.setup_diagnostics = function(signs)
+function M.setup_diagnostics(signs)
   local default_diagnostics = {
     virtual_text = true,
     signs = { active = signs },
@@ -54,10 +54,36 @@ M.format_opts.filter = function(client)
   return not (vim.tbl_contains(disabled, client.name) or (type(filter) == 'function' and not filter(client)))
 end
 
---- Helper function to set up a given server with the Neovim LSP client
----@param server string The name of the server to be setup
-M.setup = function(server)
-  local opts = M.config(server)
+function M.setup(server, default_opts)
+  local opts = vim.tbl_deep_extend('force',
+    {
+      on_attach    = M.on_attach,
+      capabilities = M.capabilities,
+      flags        = M.flags,
+    },
+    default_opts or { }
+  )
+
+  if server == 'jsonls' then -- by default add json schemas
+    local schemastore_avail, schemastore = pcall(require, 'schemastore')
+    if schemastore_avail then
+      opts.settings = { json = { schemas = schemastore.json.schemas(), validate = { enable = true } } }
+    end
+  end
+  if server == 'yamlls' then -- by default add yaml schemas
+    local schemastore_avail, schemastore = pcall(require, 'schemastore')
+    if schemastore_avail then opts.settings = { yaml = { schemas = schemastore.yaml.schemas() } } end
+  end
+  if server == 'lua_ls' then -- by default initialize neodev and disable third party checking
+    pcall(require, 'neodev')
+    opts.before_init = function(_, config)
+      if vim.b.neodev_enabled then
+        table.insert(config.settings.Lua.workspace.library, vim.fn.stdpath('config') .. '/lua')
+      end
+    end
+    opts.settings = { Lua = { workspace = { checkThirdParty = false } } }
+  end
+
   require('lspconfig')[server].setup(opts)
 end
 
@@ -94,23 +120,11 @@ M.on_attach = function(client, bufnr)
         function() vim.diagnostic.open_float() end,
         desc = 'Hover diagnostics',
       },
-      ['<leader>['] = {
+      ['<leader>l['] = {
         function() vim.diagnostic.goto_prev() end,
         desc = 'Previous diagnostic',
       },
-      ['<leader>]'] = {
-        function() vim.diagnostic.goto_next() end,
-        desc = 'Next diagnostic',
-      },
-      ['gl'] = {
-        function() vim.diagnostic.open_float() end,
-        desc = 'Hover diagnostics',
-      },
-      ['[d'] = {
-        function() vim.diagnostic.goto_prev() end,
-        desc = 'Previous diagnostic',
-      },
-      [']d'] = {
+      ['<leader>l]'] = {
         function() vim.diagnostic.goto_next() end,
         desc = 'Next diagnostic',
       },
@@ -184,6 +198,7 @@ M.on_attach = function(client, bufnr)
       function() vim.lsp.buf.format(M.format_opts) end,
       { desc = 'Format file with LSP' }
     )
+
     local autoformat = M.formatting.format_on_save
     local filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
     if
@@ -314,9 +329,6 @@ M.on_attach = function(client, bufnr)
     end
   end
 
-  if not vim.tbl_isempty(lsp_mappings.v) then
-    lsp_mappings.v['<leader>l'] = { desc = (vim.g.icons_enabled and ' ' or '') .. 'LSP' }
-  end
   utils.set_mappings(lsp_mappings, { buffer = bufnr })
 end
 
@@ -330,46 +342,9 @@ M.capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
 M.capabilities.textDocument.completion.completionItem.deprecatedSupport = true
 M.capabilities.textDocument.completion.completionItem.commitCharactersSupport = true
 M.capabilities.textDocument.completion.completionItem.tagSupport = { valueSet = { 1 } }
-M.capabilities.textDocument.completion.completionItem.resolveSupport =
-  { properties = { 'documentation', 'detail', 'additionalTextEdits' } }
+M.capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = { 'documentation', 'detail', 'additionalTextEdits' }
+}
 M.capabilities.textDocument.foldingRange = { dynamicRegistration = false, lineFoldingOnly = true }
-
---- Get the server configuration for a given language server to be provided to the server's `setup()` call
----@param server_name string The name of the server
----@return table # The table of LSP options used when setting up the given language server
-function M.config(server_name)
-  local server = require('lspconfig')[server_name]
-  local lsp_opts = utils.extend_tbl(
-    utils.extend_tbl(server.document_config.default_config, server),
-    { capabilities = M.capabilities, flags = M.flags }
-  )
-  if server_name == 'jsonls' then -- by default add json schemas
-    local schemastore_avail, schemastore = pcall(require, 'schemastore')
-    if schemastore_avail then
-      lsp_opts.settings = { json = { schemas = schemastore.json.schemas(), validate = { enable = true } } }
-    end
-  end
-  if server_name == 'yamlls' then -- by default add yaml schemas
-    local schemastore_avail, schemastore = pcall(require, 'schemastore')
-    if schemastore_avail then lsp_opts.settings = { yaml = { schemas = schemastore.yaml.schemas() } } end
-  end
-  if server_name == 'lua_ls' then -- by default initialize neodev and disable third party checking
-    pcall(require, 'neodev')
-    lsp_opts.before_init = function(param, config)
-      if vim.b.neodev_enabled then
-        table.insert(config.settings.Lua.workspace.library, vim.fn.stdpath('config') .. '/lua')
-      end
-    end
-    lsp_opts.settings = { Lua = { workspace = { checkThirdParty = false } } }
-  end
-
-  lsp_opts.on_attach = function(client, bufnr)
-    utils.conditional_func(server.on_attach, true, client, bufnr)
-    M.on_attach(client, bufnr)
-    utils.conditional_func(lsp_opts.on_attach, true, client, bufnr)
-  end
-
-  return lsp_opts
-end
 
 return M

@@ -25,7 +25,7 @@ return {
   {
     'stevearc/resession.nvim',
     opts = {
-      buf_filter = function(bufnr) return require('utils.buffer').is_valid(bufnr) end,
+      buf_filter = function(bufnr) return require('utils').buffer_is_valid(bufnr) end,
       tab_buf_filter = function(tabpage, bufnr) return vim.tbl_contains(vim.t[tabpage].bufs, bufnr) end,
     },
   },
@@ -33,8 +33,11 @@ return {
     'folke/which-key.nvim',
     event = 'VeryLazy',
     opts = {
-      icons = { group = vim.g.icons_enabled and '' or '+', separator = '' },
+      icons = { group = '', separator = '' },
       disable = { filetypes = { 'TelescopePrompt' } },
+      layout = {
+        align = 'center',
+      },
     },
     config = function(_, opts)
       require('which-key').setup(opts)
@@ -42,17 +45,28 @@ return {
     end
   },
   {
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    opts = {
+      modes = {
+        char = {
+          highlight = { backdrop = false },
+        },
+      },
+    },
+  },
+  {
     'lukas-reineke/indent-blankline.nvim',
+    event = 'BufEnter',
     opts = function()
-      g.indent_blankline_char = '┊'
-      g.indent_blankline_filetype_exclude = { 'help' }
-      g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
-      g.indent_blankline_show_trailing_blankline_indent = false
+      vim.g.indent_blankline_char = '┊'
+      vim.g.indent_blankline_filetype_exclude = { 'help' }
+      vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
+      vim.g.indent_blankline_show_trailing_blankline_indent = false
 
       return {
         space_char_blankline = ' ',
         show_current_context = true,
-        show_current_context_start = true,
       }
     end,
   },
@@ -80,37 +94,6 @@ return {
     }
   },
   {
-    'kevinhwang91/nvim-ufo',
-    event = { 'User SushiFile', 'InsertEnter' },
-    dependencies = { 'kevinhwang91/promise-async' },
-    opts = {
-      preview = {
-        mappings = {
-          scrollB = '<C-b>',
-          scrollF = '<C-f>',
-          scrollU = '<C-u>',
-          scrollD = '<C-d>',
-        },
-      },
-      provider_selector = function(_, filetype, buftype)
-        local function handleFallbackException(bufnr, err, providerName)
-          if type(err) == 'string' and err:match 'UfoFallbackException' then
-            return require('ufo').getFolds(bufnr, providerName)
-          else
-            return require('promise').reject(err)
-          end
-        end
-
-        return (filetype == '' or buftype == 'nofile') and 'indent' -- only use indent until a file is opened
-          or function(bufnr)
-            return require('ufo').getFolds(bufnr, 'lsp')
-              :catch(function(err) return handleFallbackException(bufnr, err, 'treesitter') end)
-              :catch(function(err) return handleFallbackException(bufnr, err, 'indent') end)
-          end
-      end,
-    },
-  },
-  {
     'numToStr/Comment.nvim',
     keys = {
       { 'gc', mode = { 'n', 'v' }, desc = 'Comment toggle linewise' },
@@ -125,12 +108,12 @@ return {
     'akinsho/toggleterm.nvim',
     cmd = { 'ToggleTerm', 'TermExec' },
     opts = {
+      shell = '/usr/bin/fish',
       size = 10,
       on_create = function()
         vim.opt.foldcolumn = '0'
         vim.opt.signcolumn = 'no'
       end,
-      open_mapping = '<C-\\>',
       shade_terminals = true,
       start_in_insert = true,
       insert_mappings = false,

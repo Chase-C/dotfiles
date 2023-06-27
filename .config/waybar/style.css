@@ -1,7 +1,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: FontAwesome, "DejaVu Sans Mono Nerd Font";
+    font-family: FontAwesome, "MesloLGS Nerd Font Propo";
     font-size: 13px;
     min-height: 0;
 }
@@ -10,7 +10,7 @@
     padding: 0 10px;
 }
 
-window.#waybar.empty {
+window#waybar.empty {
     padding: 0 10px;
 }
 

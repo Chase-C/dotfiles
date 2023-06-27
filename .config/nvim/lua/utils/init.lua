@@ -1,5 +1,5 @@
 --- ### Utilities
---
+
 local M = { }
 
 --- Merge extended options with a default table of options
@@ -8,48 +8,9 @@ function M.extend_tbl(default, opts)
   return default and vim.tbl_deep_extend('force', default, opts) or opts
 end
 
-function M.reload()
-  local core_modules = { 'bootstrap', 'mappings' }
-  local modules = vim.tbl_filter(function(module) return module:find '^user%.' end, vim.tbl_keys(package.loaded))
-
-  vim.tbl_map(require('plenary.reload').reload_module, vim.list_extend(modules, core_modules))
-
-  local success = true
-  for _, module in ipairs(core_modules) do
-    local status_ok, fault = pcall(require, module)
-    if not status_ok then
-      vim.api.nvim_err_writeln('Failed to load ' .. module .. '\n\n' .. fault)
-      success = false
-    end
-  end
-
-  if success then
-    M.notify('Config successfully reloaded', vim.log.levels.INFO)
-  else
-    M.notify('Error reloading config...', vim.log.levels.ERROR)
-  end
-  vim.cmd.doautocmd('ColorScheme')
-  return success
-end
-
---- Insert one or more values into a list like table and maintain that you do not insert non-unique values (THIS MODIFIES `lst`)
-function M.list_insert_unique(lst, vals)
-  if not lst then lst = {} end
-  assert(vim.tbl_islist(lst), 'Provided table is not a list like table')
-  if not vim.tbl_islist(vals) then vals = { vals } end
-  local added = {}
-  vim.tbl_map(function(v) added[v] = true end, lst)
-  for _, val in ipairs(vals) do
-    if not added[val] then
-      table.insert(lst, val)
-      added[val] = true
-    end
-  end
-  return lst
-end
-
-function M.conditional_func(func, condition, ...)
-  if condition and type(func) == 'function' then return func(...) end
+function M.buffer_is_valid(bufnr)
+  if not bufnr or bufnr < 1 then return false end
+  return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
 end
 
 function M.get_icon(kind)
@@ -60,25 +21,13 @@ function M.get_icon(kind)
   return M.icons and M.icons[kind]
 end
 
---- Get highlight properties for a given highlight name
-function M.get_hlgroup(name, fallback)
-  if vim.fn.hlexists(name) == 1 then
-    local hl
-    if vim.api.nvim_get_hl then -- check for new neovim 0.9 API
-      hl = vim.api.nvim_get_hl(0, { name = name, link = false })
-      if not hl.fg then hl.fg = 'NONE' end
-      if not hl.bg then hl.bg = 'NONE' end
-    else
-      hl = vim.api.nvim_get_hl_by_name(name, vim.o.termguicolors)
-      if not hl.foreground then hl.foreground = 'NONE' end
-      if not hl.background then hl.background = 'NONE' end
-      hl.fg, hl.bg = hl.foreground, hl.background
-      hl.ctermfg, hl.ctermbg = hl.fg, hl.bg
-      hl.sp = hl.special
-    end
-    return hl
-  end
-  return fallback or {}
+function M.get_spinner(kind)
+  local spinner = {}
+  repeat
+    local icon = M.get_icon(('%s%d'):format(kind, #spinner + 1))
+    if icon ~= '' then table.insert(spinner, icon) end
+  until not icon or icon == ''
+  if #spinner > 0 then return spinner end
 end
 
 --- Serve a notification with a title of 'Sushi'
@@ -153,31 +102,6 @@ end
 function M.is_available(plugin)
   local lazy_config_avail, lazy_config = pcall(require, 'lazy.core.config')
   return lazy_config_avail and lazy_config.plugins[plugin] ~= nil
-end
-
---- Resolve the options table for a given plugin with lazy
-function M.plugin_opts(plugin)
-  local lazy_config_avail, lazy_config = pcall(require, 'lazy.core.config')
-  local lazy_plugin_avail, lazy_plugin = pcall(require, 'lazy.core.plugin')
-  local opts = {}
-  if lazy_config_avail and lazy_plugin_avail then
-    local spec = lazy_config.plugins[plugin]
-    if spec then opts = lazy_plugin.values(spec, 'opts') end
-  end
-  return opts
-end
-
---- A helper function to wrap a module function to require a plugin before running
-function M.load_plugin_with_func(plugin, module, func_names)
-  if type(func_names) == 'string' then func_names = { func_names } end
-  for _, func in ipairs(func_names) do
-    local old_func = module[func]
-    module[func] = function(...)
-      module[func] = old_func
-      require('lazy').load { plugins = { plugin } }
-      module[func](...)
-    end
-  end
 end
 
 --- Register queued which-key mappings

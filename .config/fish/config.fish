@@ -40,7 +40,7 @@ end
 
 function fish_prompt
     # '❯' = \u276f
-    set -l directory a9b1d6
+    set -l directory 7aa2f7
     set -l red f7768e
     set -l yellow e0af68
     set -l green 9ece6a

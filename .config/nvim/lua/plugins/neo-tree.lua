@@ -11,7 +11,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',      
+      'MunifTanjim/nui.nvim',
     },
     cmd = 'Neotree',
     init = function() vim.g.neo_tree_remove_legacy_commands = true end,
@@ -24,22 +24,13 @@ return {
       --open_files_do_not_replace_types = { 'terminal', 'trouble', 'qf' },
       --sort_case_insensitive = false,
       --sort_function = nil,
-      sources = { 'filesystem', 'document_symbols', 'diagnostics', 'git_status' },
-      source_selector = {
-        winbar = true,
-        content_layout = 'center',
-        sources = {
-          { source = 'filesystem', display_name = get_icon('FolderClosed') .. ' File' },
-          { source = 'diagnostics', display_name = get_icon('Diagnostic') .. ' Diagnostic' },
-          { source = 'git_status', display_name = get_icon('Git') .. ' Git' },
-        },
-      },
+      sources = { 'filesystem', 'document_symbols', 'diagnostics' },
       default_component_configs = {
         container = {
           enable_character_fade = true
         },
         indent = {
-          indent_size = 1,
+          indent_size = 2,
           padding = 0,
         },
         icon = {
@@ -125,7 +116,7 @@ return {
         end,
       },
       window = {
-	position = 'left',
+	      position = 'left',
         width = 30,
         mappings = {
           ['<C-Space>'] = 'toggle_node',

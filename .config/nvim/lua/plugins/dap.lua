@@ -1,12 +1,7 @@
 return {
   'mfussenegger/nvim-dap',
+  event = 'User SushiFile',
   dependencies = {
-    {
-      'jay-babu/mason-nvim-dap.nvim',
-      dependencies = { 'nvim-dap' },
-      cmd = { 'DapInstall', 'DapUninstall' },
-      opts = { handlers = {} },
-    },
     {
       'rcarriga/nvim-dap-ui',
       opts = { floating = { border = 'rounded' } },
@@ -30,5 +25,4 @@ return {
       end,
     },
   },
-  event = 'User SushiFile',
 }

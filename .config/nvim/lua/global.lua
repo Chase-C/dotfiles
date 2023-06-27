@@ -4,5 +4,5 @@
 
 _G.sushi = {
   colorscheme = 'tokyonight-night',
-  terminal = { },
+  terminals = { },
 }

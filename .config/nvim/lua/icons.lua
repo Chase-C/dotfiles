@@ -1,4 +1,5 @@
 return {
+  Action = '󱐋',
   ActiveLSP = '',
   ActiveTS = '',
   ArrowLeft = '',

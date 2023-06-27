@@ -1,6 +1,6 @@
 // ❯ \u276f
 * {
-    font:       "DejaVu Sans Mono Nerd Font 10";
+    font:       "MesloLGS Nerd Font Propo 10";
     background: #1a1b26;
     selectedbg: #24283b;
     urgentbg:   #414868;

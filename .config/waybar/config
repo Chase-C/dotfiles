@@ -16,11 +16,11 @@
         "network", "custom/separator",
         //"battery", "custom/separator",
         "cpu", "memory", "custom/separator",
-        "clock", "idle_inhibitor", "custom/spacer4"
+        "clock", "idle_inhibitor", "custom/spacer"
     ],
 
     "idle_inhibitor": {
-        "format": "  {icon}",
+        "format": " {icon} ",
         "format-icons": {
             "activated": "󰷛",
             "deactivated": "󰍹"
@@ -45,12 +45,12 @@
     },
 
     "clock": {
-        "format": "{:%H:%M  %m-%d}",
+        "format": "{:%H:%M  %m-%d}",
         "tooltip": false
     },
 
     "cpu": {
-        "format": "{usage}% ",
+        "format": "{usage}% 󰍛",
         "tooltip": true,
         "interval": 2,
     },
@@ -91,13 +91,8 @@
         "tooltip": false
     },
 
-    "custom/spacer2": {
+    "custom/spacer": {
         "format": "  ",
         "tooltip": false
     },
-
-    "custom/spacer4": {
-        "format": "    ",
-        "tooltip": false
-    }
 }

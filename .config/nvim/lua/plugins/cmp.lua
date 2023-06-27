@@ -65,10 +65,10 @@ return {
           ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
           ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
           ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-    	  ['<C-e>'] = cmp.mapping(function(fallback)
+    	    ['<C-e>'] = cmp.mapping(function(fallback)
       	    cmp.abort()
       	    fallback()
-    	  end, {'i','s'}),
+    	    end, {'i','s'}),
           ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
@@ -99,7 +99,6 @@ return {
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
-        }, {
           {
             name = 'buffer',
             option = {
@@ -136,10 +135,6 @@ return {
             })
           }),
         },
-        --formatting = {
-          --fields = { 'kind', 'abbr', 'menu' },
-          --format = lspkind_status_ok and lspkind.cmp_format(utils.plugin_opts 'lspkind.nvim') or nil,
-        --},
         expirimental = {
           ghost_text = false -- This conflicts with Copilot's preview
         },

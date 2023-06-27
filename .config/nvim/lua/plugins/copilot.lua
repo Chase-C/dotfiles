@@ -1,5 +1,6 @@
 return {
   'zbirenbaum/copilot.lua',
+  event = 'BufReadPre',
   opts = {
     panel = {
       enabled = false,
@@ -18,8 +19,6 @@ return {
       },
     },
     filetypes = {
-      yaml = false,
-      markdown = false,
       help = false,
       gitcommit = false,
       gitrebase = false,
@@ -29,6 +28,6 @@ return {
       ['.'] = false,
     },
     copilot_node_command = 'node',
-    server_opts_overrides = {},
+    server_opts_overrides = { },
   },
 }

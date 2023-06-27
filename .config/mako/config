@@ -6,7 +6,7 @@ format=<b>%s</b>\n<span font="1">\n</span>%b
 max-icon-size=96
 
 # Styling options
-font=DejaVu Sans Mono Nerd Font 10
+font=MesloLGS Nerd Font Propo 10
 
 background-color=#1a1b26
 text-color=#a9b1d6

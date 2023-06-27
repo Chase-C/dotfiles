@@ -14,7 +14,7 @@ local options = {
     foldenable = true, -- enable fold for nvim-ufo
     foldlevel = 99, -- set high foldlevel for nvim-ufo
     foldlevelstart = 99, -- start with all code unfolded
-    foldcolumn = vim.fn.has 'nvim-0.9' == 1 and '1' or nil, -- show foldcolumn in nvim 0.9
+    foldcolumn = '1', -- show foldcolumn in nvim 0.9
     grepprg = 'rg --no-heading --vimgrep',
     grepformat = '%f:%l:%c:%m',
     history = 500, -- Number of commands to remember in a history table
@@ -30,12 +30,12 @@ local options = {
     pumheight = 10, -- Height of the pop up menu
     relativenumber = true, -- Show relative numberline
     scrolloff = 8, -- Number of lines to keep above and below the cursor
-    shell = '/usr/bin/fish', -- Shell used for open terminals
+    shell = '/usr/bin/bash', -- Shell used for open terminals
     shiftwidth = 4, -- Number of space inserted for indentation
     showmode = false, -- Disable showing modes in command line
     showtabline = 0, -- always display tabline
     sidescrolloff = 8, -- Number of columns to keep at the sides of the cursor
-    signcolumn = 'yes', -- Always show the sign column
+    signcolumn = 'no', -- Always show the sign column
     smartcase = true, -- Case sensitivie searching
     smartindent = true, -- Smarter autoindentation
     smarttab = true, -- Insert tab on the start of a line according to shiftwidth
@@ -56,7 +56,6 @@ local options = {
     mapleader = ' ', -- set leader key
     maplocalleader = ' ', -- set default local leader key
     autoformat_enabled = false, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
-    autopairs_enabled = false, -- enable autopairs at start
     cmp_enabled = true, -- enable completion at start
     codelens_enabled = true, -- enable or disable automatic codelens refreshing for lsp that support it
     diagnostics_mode = 3, -- set the visibility of diagnostics in the UI (0=off, 1=only show in status line, 2=virtual text off, 3=all on)
@@ -64,15 +63,12 @@ local options = {
     lsp_handlers_enabled = true, -- enable or disable default vim.lsp.handlers (hover and signatureHelp)
     ui_notifications_enabled = true, -- disable notifications when toggling UI elements
   },
-  t = vim.t.bufs and vim.t.bufs or { bufs = vim.api.nvim_list_bufs() }, -- initialize buffers for the current tab
 }
 
 vim.opt.viewoptions:remove 'curdir' -- disable saving current directory with views
 vim.opt.shortmess:append { s = true, I = true } -- disable startup message
 vim.opt.backspace:append { 'nostop' } -- Don't stop backspace at insert
-if vim.fn.has 'nvim-0.9' == 1 then
-  vim.opt.diffopt:append 'linematch:60' -- enable linematch diff algorithm
-end
+vim.opt.diffopt:append 'linematch:60' -- enable linematch diff algorithm
 
 for scope, table in pairs(options) do
   for setting, value in pairs(table) do
