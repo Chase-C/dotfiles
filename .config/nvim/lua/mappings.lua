@@ -39,7 +39,7 @@ maps.n['<leader>f'] = {
 -- Exit
 maps.i['<C-f>'] = { '<Esc>', desc = 'Exit insert mode' }
 maps.v['<C-f>'] = { '<Esc>', desc = 'Exit visual mode' }
-maps.t['<C-f>'] = { '<C-\\><C-n>', desc = 'Exit terminal mode' }
+--maps.t['<C-f>'] = { '<C-\\><C-n>', desc = 'Exit terminal mode' }
 -- Control-f should do nothing in normal mode
 maps.n['<C-f>'] = { function() require('commands').flash_line() end, desc = 'Highlight the current line' }
 --vim.keymap.disable('n', '<C-f>')

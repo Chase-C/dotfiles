@@ -14,7 +14,7 @@
     "modules-right": [
         "custom/packages", "custom/separator",
         "network", "custom/separator",
-        //"battery", "custom/separator",
+        "battery", "custom/separator",
         "cpu", "memory", "custom/separator",
         "clock", "idle_inhibitor", "custom/spacer"
     ],

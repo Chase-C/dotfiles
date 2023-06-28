@@ -3,8 +3,8 @@
 # =========
 
 # Modifier: LGUI
-set $mod Mod4
-#set $mod Mod1
+#set $mod Mod4
+set $mod Mod1
 
 #font DejaVu Sans Mono Nerd Font 10
 font MesloLGS Nerd Font Propo 10
@@ -66,12 +66,12 @@ exec ~/bin/notifyupdates &
 
 # Desktop Output
 output DP-4 {
-    background ~/Pictures/wallpaper/neon-liminal.jpg fit
+    #background ~/Pictures/wallpaper/neon-liminal.jpg fit
 }
 
 # Laptop Outputs
 output eDP-1 {
-    #background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
 }
 
 output DP-4 {
@@ -267,11 +267,13 @@ bindsym $mod+a focus parent
 # You can send windows there and get them back later.
 
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+backspace border pixel 6; move scratchpad
+#bindsym $mod+Shift+backspace border pixel 6; move scratchpad
+bindsym $mod+Shift+Minus border pixel 6; move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+backspace scratchpad show
+#bindsym $mod+backspace scratchpad show
+bindsym $mod+Minus scratchpad show
 
 # ---------------------
 #  Resizing containers
