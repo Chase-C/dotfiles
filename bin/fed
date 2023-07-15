@@ -1,0 +1,48 @@
+#! /bin/env bash
+
+#
+# fed - Find (by filetype) and Edit (with nvim)
+#
+
+OPTIND=1
+
+num_windows=1
+file_types=
+editor=nvim
+
+while getopts "w:t:e:" opt; do
+  case "$opt" in
+    w) num_windows=$OPTARG
+      ;;
+    t) file_types="$file_types $OPTARG"
+      ;;
+    e) editor=$OPTARG
+  esac
+done
+
+shift $((OPTIND-1))
+[ "${1:-}" = "--" ] && shift
+
+directories=$@
+if [[ -z $directories ]]
+then
+    directories="."
+fi
+
+name_string="-name ''"
+if [[ -z $file_types ]]
+then
+    name_string="-name '*'"
+fi
+
+for filetype in $file_types
+do
+    name_string="$name_string -o -name '*.$filetype'"
+done
+
+for d in $directories
+do
+    files="$files $(eval "find $d -not -path '*/.*' -type f \( $name_string \) -printf '%h %p\n'" | sort | sed 's/[^ ]* //g' | tr '\n' ' ')"
+done
+
+eval "$editor -O$num_windows $files"
