@@ -58,17 +58,16 @@ return {
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufEnter',
-    opts = function()
-      vim.g.indent_blankline_char = '┊'
-      vim.g.indent_blankline_filetype_exclude = { 'help' }
-      vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
-      vim.g.indent_blankline_show_trailing_blankline_indent = false
-
-      return {
-        space_char_blankline = ' ',
-        show_current_context = true,
-      }
-    end,
+    main = 'ibl',
+    opts = {
+      debounce = 100,
+      indent = { char = "┊" },
+      whitespace = { highlight = { "Whitespace", "NonText" } },
+      exclude = {
+        filetypes = { 'help' },
+        buftypes = { 'terminal', 'nofile' },
+      },
+    },
   },
   {
     'mehalter/nvim-window-picker',

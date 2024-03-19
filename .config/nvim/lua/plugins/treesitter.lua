@@ -2,7 +2,12 @@ return {
   'nvim-treesitter/nvim-treesitter',
   dependencies = {
     'windwp/nvim-ts-autotag',
-    'JoosepAlviste/nvim-ts-context-commentstring',
+    {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+      opts = {
+        enable_autocmd = false,
+      },
+    },
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make',
@@ -81,7 +86,6 @@ return {
         },
       },
     },
-    context_commentstring = { enable = true, enable_autocmd = false },
   },
   config = function(_, opts)
     require('nvim-treesitter.configs').setup(opts)
