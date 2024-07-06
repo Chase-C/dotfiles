@@ -94,22 +94,23 @@ return {
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
-          {
-            name = 'buffer',
-            option = {
-              -- Get completions from visible buffers, not just the current one
-              get_bufnrs = function()
-                local bufs = {}
-                for _, win in ipairs(vim.api.nvim_list_wins()) do
-                  bufs[vim.api.nvim_win_get_buf(win)] = true
+        }, {
+            {
+              name = 'buffer',
+              option = {
+                -- Get completions from visible buffers, not just the current one
+                get_bufnrs = function()
+                  local bufs = {}
+                  for _, win in ipairs(vim.api.nvim_list_wins()) do
+                    bufs[vim.api.nvim_win_get_buf(win)] = true
+                  end
+                  return vim.tbl_keys(bufs)
                 end
-                return vim.tbl_keys(bufs)
-              end
+              },
             },
-          },
-          { name = 'path' },
-          { name = 'nerdfont' },
-        }),
+            { name = 'path' },
+            { name = 'nerdfont' },
+          }),
         sorting = {
           comparators = {
             -- Sort completion results by distance from cursor

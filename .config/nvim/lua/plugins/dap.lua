@@ -3,8 +3,10 @@ return {
     'mfussenegger/nvim-dap',
     event = 'User SushiFile',
   },
+  { 'nvim-neotest/nvim-nio' },
   {
     'rcarriga/nvim-dap-ui',
+    requires = { 'nvim-neotest/nvim-nio' },
     event = 'User SushiFile',
     opts = { floating = { border = 'rounded' } },
     config = function(_, opts)

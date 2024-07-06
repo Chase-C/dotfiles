@@ -37,6 +37,7 @@ set $wssp ""
 set $wsst ""
 set $wsds "󰙯"
 set $wsmg "󰵅"
+set $wsob ""
 
 # Mouse doesn't affect focus
 focus_follows_mouse no
@@ -65,7 +66,7 @@ exec ~/bin/notifyupdates &
 # ======================
 
 # Desktop Output
-output DP-4 {
+output DP-3 {
     background ~/Pictures/wallpaper/neon-liminal.jpg fit
 }
 
@@ -211,6 +212,7 @@ bindsym $mod+s workspace $wssp
 bindsym $mod+g workspace $wsst
 bindsym $mod+d workspace $wsds
 bindsym $mod+t workspace $wsmg
+bindsym $mod+m workspace $wsob
 
 # Firefox workspace is always on DP-2
 #workspace $wsff output DP-2
@@ -231,6 +233,7 @@ bindsym $mod+Shift+s move container to workspace $wssp
 bindsym $mod+Shift+g move container to workspace $wsst
 bindsym $mod+Shift+d move container to workspace $wsds
 bindsym $mod+Shift+t move container to workspace $wsmg
+bindsym $mod+Shift+m move container to workspace $wsob
 
 # --------
 #  Layout
@@ -321,6 +324,8 @@ for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down 34px
 for_window [class="^firefox$" title="Options"] floating enable
 
 for_window [app_id="floating_term"] floating enable
+
+for_window [app_id="firefox" title="Picture-in-Picture"] floating enable
 
 # Special application workspaces
 assign [class="^firefox$"] workspace $wsff
