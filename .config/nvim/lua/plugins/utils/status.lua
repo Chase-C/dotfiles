@@ -117,46 +117,26 @@ M.component.position = {
   hl = { bg = M.colors.darkish },
 }
 
-M.component.lsp = {
-  {
-    update = {
-      'User',
-      pattern = { 'LspProgressUpdate', 'LspRequest', 'SushiLspProgressEnd' },
-      callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
-    },
-    provider = function()
-      local spinner = utils.get_spinner('LSPLoading')
-      local lsp = vim.lsp.util.get_progress_messages()[1]
+M.component.filename = {
+  provider = ' %f ',
+  --hl = { bg = M.colors.darkish },
+}
 
-      return lsp and (
-        lsp and (spinner[math.floor(vim.loop.hrtime() / 12e7) % #spinner + 1])
-        .. ' ' .. table.concat({
-          lsp.title or '',
-          lsp.message or '',
-          lsp.percentage and '(' .. lsp.percentage .. '%%)' or '',
-        }, ' ')
-      )
-    end,
+M.component.lsp = {
+  update = {
+    'User',
+    pattern = { 'LspProgressStatusUpdated' },
+    callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
   },
-  { provider = ' ' },
-  {
-    update = { 'LspAttach', 'LspDetach', 'BufEnter' },
-    provider = function(self)
-      local names = { }
-      for _, server in pairs(vim.lsp.get_active_clients { bufnr = self and self.bufnr or 0 }) do
-        table.insert(names, server.name)
-      end
-      return get_icon('ActiveLSP') .. ' [' .. table.concat(names, ' ') .. ']'
-    end,
-  },
-  condition = function(self)
-    return next(vim.lsp.get_active_clients({ bufnr = self and self.bufnr or 0 })) ~= nil
+  provider = function()
+    return require('lsp-progress').progress()
   end,
+  hl = { fg = M.colors.comment },
 }
 
 M.component.treesitter = {
   update = { 'OptionSet', pattern = 'syntax' },
-  provider = get_icon('ActiveTS') .. ' TS',
+  provider = get_icon('ActiveTS3'),
   hl = { fg = M.colors.green },
   condition = function(self)
     local parsers = require('nvim-treesitter.parsers')
@@ -309,6 +289,7 @@ M.component.git = {
     provider = ' '
   },
   { provider = ' ' },
+  hl = { fg = M.colors.comment },
 }
 
 local function build_diagnostic_child(severity, icon, color)

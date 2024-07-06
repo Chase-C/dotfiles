@@ -71,8 +71,8 @@ autocmd('FileType', {
   group = augroup('tab_spaces', { clear = true }),
   pattern = 'typescript,javascript,json,lua',
   callback = function()
-    vim.api.nvim_buf_set_option(0, 'shiftwidth', 2)
-    vim.api.nvim_buf_set_option(0, 'tabstop', 2)
+    vim.api.nvim_set_option_value('shiftwidth', 2, { buf = 0 })
+    vim.api.nvim_set_option_value('tabstop', 2, { buf = 0 })
   end,
 })
 

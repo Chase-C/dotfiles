@@ -1,7 +1,12 @@
 return {
   Action = '󱐋',
   ActiveLSP = '',
+  ActiveLSP2 = '',
+  ActiveLSP3 = '󰿘',
+  ActiveLSP4 = '',
   ActiveTS = '',
+  ActiveTS2 = '󰸱',
+  ActiveTS3 = '󰙒',
   ArrowLeft = '',
   ArrowRight = '',
   Bookmarks = '',

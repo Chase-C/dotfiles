@@ -8,6 +8,7 @@ return {
     'rcarriga/nvim-dap-ui',
     requires = { 'nvim-neotest/nvim-nio' },
     event = 'User SushiFile',
+    dependencies = { 'nvim-neotest/nvim-nio' },
     opts = { floating = { border = 'rounded' } },
     config = function(_, opts)
       local dap, dapui = require('dap'), require('dapui')
