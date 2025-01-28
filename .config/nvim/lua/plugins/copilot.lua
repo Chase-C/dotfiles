@@ -43,5 +43,6 @@ return {
     },
     disable_inline_completion = false,
     disable_keymaps = false,
+    log_level = 'off',
   },
 }

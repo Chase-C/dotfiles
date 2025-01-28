@@ -4,6 +4,8 @@ return {
     'neovim/nvim-lspconfig',
     --lazy = false,
     event = 'BufReadPre',
+    opts = {
+    },
     dependencies = {
       {
         'folke/neodev.nvim',
@@ -52,6 +54,17 @@ return {
           vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded', silent = true })
       end
 
+      local tsInlayHints = {
+	      includeInlayParameterNameHints = "all",
+	      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+	      includeInlayFunctionParameterTypeHints = true,
+	      includeInlayVariableTypeHints = true,
+	      includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+	      includeInlayPropertyDeclarationTypeHints = true,
+	      includeInlayFunctionLikeReturnTypeHints = true,
+	      includeInlayEnumMemberValueHints = true,
+      }
+
       local servers = {
         { server = 'clangd' },
         { server = 'glslls' },
@@ -60,16 +73,72 @@ return {
           opts = {
             settings = {
               Lua = {
-                completion = {
-                  callSnippet = 'Replace'
-                }
+                completion = { callSnippet = 'Replace' },
               }
             }
           },
         },
-        -- Taken care of by rust-tools plugin
-        --{ server = 'rust_analyzer' },
-        { server = 'tsserver' },
+        {
+          server = 'rust_analyzer',
+          opts = {
+            capabilities = {
+              serverStatusNotification = true,
+              commands = {
+                commands = {
+                  'rust-analyzer.runSingle',
+                  'rust-analyzer.debugSingle',
+                  'rust-analyzer.showReferences',
+                  'rust-analyzer.gotoLocation',
+                  'rust-analyzer.triggerParameterHints',
+                  'rust-analyzer.rename',
+                },
+              },
+            },
+            settings = {
+              ['rust-analyzer'] = {
+                lens = {
+                  enable = true,
+                  implementations = { enable = true },
+                  enumVariant     = { enable = true },
+                  references = {
+                    adt    = { enable = true },
+                    method = { enable = true },
+                    trait  = { enable = true },
+                  },
+                },
+                inlayHints = {
+                  bindingModeHints          = { enable = false },
+                  chainingHints             = { enable = true },
+                  closingBraceHints         = { enable = true },
+                  closureCaptureHints       = { enable = false },
+                  closureReturnTypeHints    = { enable = 'never' },
+                  discriminantHints         = { enable = true },
+                  expressionAdjustmentHints = { enable = 'never' },
+                  implicitDrops             = { enable = true },
+                  implicitSizedBoundHints   = { enable = true },
+                  lifetimeElisionHints      = { enable = 'never' },
+                  rangeExclusiveHints       = { enable = false },
+                  parameterHints            = { enable = true },
+                  typeHints                 = { enable = true },
+                  genericParameterHints = {
+                    const    = { enable = true },
+                    lifetime = { enable = false },
+                    type     = { enable = false },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          server = 'ts_ls',
+          opts = {
+            settings = {
+		          typescript = { inlayHints = tsInlayHints },
+		          javascript = { inlayHints = tsInlayHints },
+	          },
+          }
+        },
       }
 
       for _, server in ipairs(servers) do
@@ -78,41 +147,6 @@ return {
 
       require('utils').event('LspSetup')
     end,
-  },
-  {
-    'simrat39/rust-tools.nvim',
-    --lazy = false,
-    event = 'BufReadPre',
-    opts = {
-      server = {
-        on_attach    = require('utils.lsp').on_attach,
-        capabilities = require('utils.lsp').capabilities,
-        flags        = require('utils.lsp').flags,
-      },
-      tools = {
-        reload_workspace_from_cargo_toml = true,
-        inlay_hints = {
-          auto = true,
-          only_current_line = false,
-          show_parameter_hints = true,
-          parameter_hints_prefix = ' ',
-          other_hints_prefix = '󰧂 ',
-        },
-        --hover_actions = {
-        --  border = 'none',
-        --  max_width = nil,
-        --  max_height = nil,
-        --  auto_focus = true,
-        --},
-      },
-      dap = {
-        adapter = {
-          type = 'executable',
-          command = 'lldb-vscode',
-          name = 'rt_lldb',
-        },
-      },
-    },
   },
   {
     'onsails/lspkind.nvim',
@@ -160,6 +194,34 @@ return {
       require('lspkind').init(opts)
     end,
   },
+  {
+	  'chrisgrieser/nvim-lsp-endhints',
+	  event = 'LspAttach',
+	  opts = {
+      icons = {
+		    type = "󰧂 ",
+		    parameter = " ",
+		    offspec = " ", -- hint kind not defined in official LSP spec
+		  unknown = "󰍒 ", -- hint kind is nil
+	    },
+	    label = {
+		    truncateAtChars = 50, -- disable truncation
+		    padding = 1,
+		    marginLeft = 0,
+		    sameKindSeparator = ", ",
+	    },
+	    extmark = {
+		    priority = 50,
+	    },
+	    autoEnableHints = true,
+	  },
+  },
+  --{
+  --  'VidocqH/lsp-lens.nvim',
+	--  event = 'LspAttach',
+	--  opts = {
+	--  },
+  --},
   {
     'jose-elias-alvarez/null-ls.nvim',
     event = 'User SushiFile',

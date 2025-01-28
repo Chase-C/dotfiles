@@ -35,7 +35,7 @@ return {
     event = 'User SushiFile',
     dependencies = {
       'microsoft/vscode-js-debug',
-      build = 'npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out' 
+      build = 'git reset --hard HEAD && npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out'
     },
     config = function()
       require('dap-vscode-js').setup({

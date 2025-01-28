@@ -109,8 +109,8 @@ function M.which_key_register()
   if M.which_key_queue then
     local wk_avail, wk = pcall(require, 'which-key')
     if wk_avail then
-      for mode, registration in pairs(M.which_key_queue) do
-        wk.register(registration, { mode = mode })
+      for _, map in ipairs(M.which_key_queue) do
+        wk.add(map)
       end
       M.which_key_queue = nil
     end
@@ -118,34 +118,19 @@ function M.which_key_register()
 end
 
 --- Table based API for setting keybindings
-function M.set_mappings(map_table, base)
-  -- iterate over the first keys for each mode
-  base = base or {}
-  for mode, maps in pairs(map_table) do
-    -- iterate over each keybinding set in the current mode
-    for keymap, options in pairs(maps) do
-      -- build the options for the command accordingly
-      if options then
-        local cmd = options
-        local keymap_opts = base
-
-        if type(options) == 'table' then
-          cmd = options[1]
-          keymap_opts = vim.tbl_deep_extend('force', keymap_opts, options)
-          keymap_opts[1] = nil
-        end
-
-        if not cmd or keymap_opts.name then -- if which-key mapping, queue it
-          if not M.which_key_queue then M.which_key_queue = {} end
-          if not M.which_key_queue[mode] then M.which_key_queue[mode] = {} end
-          M.which_key_queue[mode][keymap] = keymap_opts
-        else -- if not which-key mapping, set it
-          vim.keymap.set(mode, keymap, cmd, keymap_opts)
-        end
-      end
-    end
+function M.set_mappings(mappings, options)
+  if not M.which_key_queue then
+    M.which_key_queue = {}
   end
-  if package.loaded['which-key'] then M.which_key_register() end -- if which-key is loaded already, register
+
+  for _, map in ipairs(mappings) do
+    local extended = vim.tbl_deep_extend('force', map, options or { })
+    table.insert(M.which_key_queue, extended)
+  end
+
+  if package.loaded['which-key'] then
+    M.which_key_register()
+  end -- if which-key is loaded already, register
 end
 
 --- regex used for matching a valid URL/URI string
