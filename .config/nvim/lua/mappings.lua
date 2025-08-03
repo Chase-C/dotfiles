@@ -3,15 +3,13 @@ local get_icon = utils.get_icon
 local ui = require('utils.ui')
 
 local sections = {
-  a = get_icon('Action')    .. ' Action',
-  s = get_icon('Search')    .. ' Search',
-  p = get_icon('Package')   .. ' Packages',
-  l = get_icon('ActiveLSP') .. ' LSP',
-  u = get_icon('Window')    .. ' UI',
-  d = get_icon('Debugger')  .. ' Debugger',
-  --g = get_icon('Git')       .. ' Git',
-  S = get_icon('Session')   .. ' Session',
-  T = get_icon('Terminal')  .. ' Terminal',
+  c = get_icon('Robot')     .. '  Copilot',
+  s = get_icon('Search')    .. '  Search',
+  p = get_icon('Package')   .. '  Packages',
+  l = get_icon('ActiveLSP') .. '  LSP',
+  u = get_icon('Window')    .. '  UI',
+  d = get_icon('Debugger')  .. '  Debugger',
+  S = get_icon('Session')   .. '  Session',
 }
 
 -- =====================
@@ -19,6 +17,8 @@ local sections = {
 -- =====================
 
 local std_map = {
+  -- New file
+  { '<leader>n', '<cmd>enew<cr>', desc = 'New File' },
   -- Movement
   { 'j',  'v:count == 0 ? \'gj\' : \'j\'', desc = 'Move cursor down', expr = true, silent = true },
   { 'k',  'v:count == 0 ? \'gk\' : \'k\'', desc = 'Move cursor up',   expr = true, silent = true },
@@ -44,6 +44,9 @@ local std_map = {
   { '<C-j>', '<C-w>j', desc = 'Move to below split', mode = 'n' },
   { '<C-k>', '<C-w>k', desc = 'Move to above split', mode = 'n' },
   { '<C-l>', '<C-w>l', desc = 'Move to right split', mode = 'n' },
+  -- Open/Close floating terminal
+  { '<C-Space>', '<cmd>ToggleTerm direction=float<cr>', desc = 'ToggleTerm float' },
+  { '<C-Space>', '<cmd>ToggleTerm direction=float<cr>', desc = 'ToggleTerm float', mode = 't' },
   --  Comment/Uncomment lines
   {
     '<C-/>',
@@ -79,22 +82,6 @@ local std_map = {
 }
 
 utils.set_mappings(std_map)
-
--- ================
---  Editor Actions
--- ================
-
-local act_map = {
-  { '<leader>a',                                              desc = sections.a },
-  { '<leader>an', '<cmd>enew<cr>',                            desc = 'New File' },
-  { '<leader>ae', '<cmd>Neotree toggle<cr>',                  desc = 'Toggle Explorer' },
-  { '<leader>ao', function() require('aerial').toggle() end,  desc = 'Symbols outline' },
-  { '<leader>af', function() require('resession').load() end, desc = 'Load a session' },
-  { '<leader>av', '<cmd>vsplit<cr>',                          desc = 'Vertical Split' },
-  { '<leader>ah', '<cmd>split<cr>',                           desc = 'Horizontal Split' },
-}
-
-utils.set_mappings(act_map)
 
 -- =================
 --  Session Manager
@@ -202,7 +189,6 @@ utils.set_mappings(tele_map)
 --  Terminal
 -- ==========
 
-local python = vim.fn.executable('python') == 1 and 'python' or vim.fn.executable('python3') == 1 and 'python3'
 local term_map = {
   { '<leader>T',                                                desc = sections.T },
   --{ '<leader>Tn', function() utils.toggle_term_cmd('node') end, desc = 'Floaterm node',   cond = vim.fn.executable('node') == 1 },
@@ -268,14 +254,37 @@ utils.set_mappings(dap_map)
 -- ==========
 
 local ui_map = {
-  { '<leader>u',                         desc = sections.u },
-  { '<leader>uc', ui.toggle_cmp,         desc = 'Toggle autocompletion' },
-  { '<leader>uC', ui.toggle_cmp,         desc = 'Toggle color highlight' },
-  { '<leader>ud', ui.toggle_diagnostics, desc = 'Toggle diagnostics' },
-  { '<leader>ui', ui.set_indent,         desc = 'Change indent setting' },
-  { '<leader>us', ui.toggle_spell,       desc = 'Toggle spellcheck' },
-  { '<leader>uw', ui.toggle_wrap,        desc = 'Toggle wrap' },
-  { '<leader>uy', ui.toggle_syntax,      desc = 'Toggle syntax highlight' },
+  { '<leader>u', desc = sections.u },
+  { '<leader>ue', '<cmd>Neotree toggle<cr>',                  desc = 'Toggle Explorer' },
+  { '<leader>us', function() require('aerial').toggle() end,  desc = 'Symbols outline' },
+  { '<leader>uv', '<cmd>vsplit<cr>',                          desc = 'Vertical Split' },
+  { '<leader>uh', '<cmd>split<cr>',                           desc = 'Horizontal Split' },
+  -- Deep options that are rarely changed
+  { '<leader>uo',                         desc = 'Options' },
+  { '<leader>uoc', ui.toggle_cmp,         desc = 'Toggle autocompletion' },
+  { '<leader>uoC', ui.toggle_cmp,         desc = 'Toggle color highlight' },
+  { '<leader>uod', ui.toggle_diagnostics, desc = 'Toggle diagnostics' },
+  { '<leader>uoi', ui.set_indent,         desc = 'Change indent setting' },
+  { '<leader>uos', ui.toggle_spell,       desc = 'Toggle spellcheck' },
+  { '<leader>uow', ui.toggle_wrap,        desc = 'Toggle wrap' },
+  { '<leader>uoy', ui.toggle_syntax,      desc = 'Toggle syntax highlight' },
 }
 
 utils.set_mappings(ui_map)
+
+-- =========
+--  Copilot
+-- =========
+
+local copilot_map = {
+  { '<leader>c',                                   desc = sections.c },
+  { '<leader>ca', '<cmd>CodeCompanionActions<cr>', desc = 'Open Copilot actions' },
+  -- Visual mode mappings
+  { '<leader>c',                                    desc = sections.c,                          mode = 'v' },
+  { '<leader>ca', '<cmd>CodeCompanionActions<cr>',  desc = 'Open Copilot actions',              mode = 'v' },
+  { '<leader>cb', '<cmd>CodeCompanionChat Add<cr>', desc = 'Add selected text to Copilot chat', mode = 'v' },
+  -- Toggle chat window
+  { '<C-g>', '<cmd>CodeCompanionChat Toggle<cr>', desc = 'Toggle Copilot chat window' },
+}
+
+utils.set_mappings(copilot_map)

@@ -4,8 +4,6 @@ return {
     'neovim/nvim-lspconfig',
     --lazy = false,
     event = 'BufReadPre',
-    opts = {
-    },
     dependencies = {
       {
         'folke/neodev.nvim',
@@ -54,15 +52,22 @@ return {
           vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded', silent = true })
       end
 
-      local tsInlayHints = {
-	      includeInlayParameterNameHints = "all",
-	      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-	      includeInlayFunctionParameterTypeHints = true,
-	      includeInlayVariableTypeHints = true,
-	      includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-	      includeInlayPropertyDeclarationTypeHints = true,
-	      includeInlayFunctionLikeReturnTypeHints = true,
-	      includeInlayEnumMemberValueHints = true,
+      local tsSettings = {
+        inlayHints = {
+	        includeInlayParameterNameHints                        = "all",
+	        includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+	        includeInlayFunctionParameterTypeHints                = true,
+	        includeInlayVariableTypeHints                         = true,
+	        includeInlayVariableTypeHintsWhenTypeMatchesName      = false,
+	        includeInlayPropertyDeclarationTypeHints              = true,
+	        includeInlayFunctionLikeReturnTypeHints               = true,
+	        includeInlayEnumMemberValueHints                      = true,
+	      },
+	      implementationsCodeLens = { enabled = true },
+		    referencesCodeLens = {
+		      enabled = true,
+		      showOnAllFunctions = true,
+		    },
       }
 
       local servers = {
@@ -134,8 +139,8 @@ return {
           server = 'ts_ls',
           opts = {
             settings = {
-		          typescript = { inlayHints = tsInlayHints },
-		          javascript = { inlayHints = tsInlayHints },
+		          typescript = tsSettings,
+		          javascript = tsSettings,
 	          },
           }
         },
@@ -202,7 +207,7 @@ return {
 		    type = "󰧂 ",
 		    parameter = " ",
 		    offspec = " ", -- hint kind not defined in official LSP spec
-		  unknown = "󰍒 ", -- hint kind is nil
+		    unknown = "󰍒 ", -- hint kind is nil
 	    },
 	    label = {
 		    truncateAtChars = 50, -- disable truncation

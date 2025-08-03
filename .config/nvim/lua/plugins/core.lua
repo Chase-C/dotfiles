@@ -40,7 +40,12 @@ return {
     'folke/which-key.nvim',
     event = 'VeryLazy',
     opts = {
-      icons = { group = '', separator = '' },
+      notify = false,
+      icons = {
+        group = '',
+        mappings = false,
+        rules = false,
+      },
       disable = { filetypes = { 'TelescopePrompt' } },
       layout = {
         align = 'center',

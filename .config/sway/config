@@ -3,8 +3,8 @@
 # =========
 
 # Modifier: LGUI
-set $mod Mod4
-#set $mod Mod1
+#set $mod Mod4
+set $mod Mod1
 
 #font DejaVu Sans Mono Nerd Font 10
 font MesloLGS Nerd Font Propo 10
@@ -16,7 +16,7 @@ set $up k
 set $right l
 
 # Preferred terminal emulator
-set $term alacritty
+set $term foot
 
 # Switching to active workspace moves to previous one
 workspace_auto_back_and_forth yes
@@ -70,22 +70,22 @@ exec ~/bin/notifyupdates &
 
 # Desktop Output
 output DP-3 {
-    background ~/Pictures/wallpaper/Alien Planet.png fit
+    #background ~/Pictures/wallpaper/Alien Planet.png fit
     #background ~/Pictures/wallpaper/Anime-Landscape2.png fill
     #background ~/Pictures/wallpaper/neon-liminal.jpg fit
 }
 
 # Laptop Outputs
 output eDP-1 {
-    #background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
 }
 
 output DP-4 {
-    #background ~/Pictures/Backgrounds/abstract_squares.jpg fill
+    background ~/Pictures/Backgrounds/abstract_squares.jpg fill
 }
 
 output DP-5 {
-    #background ~/Pictures/Backgrounds/abstract_desert.jpg fill
+    background ~/Pictures/Backgrounds/abstract_desert.jpg fill
 }
 
 # =====================
@@ -172,7 +172,7 @@ bindsym $mod+w exec --no-startup-id rofi -show window
 floating_modifier $mod normal
 
 # Reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r reload
 
 # Exit sway (logs you out of your Wayland session)
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -279,12 +279,12 @@ bindsym $mod+space focus mode_toggle
 # You can send windows there and get them back later.
 
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+backspace border pixel 8; move scratchpad
+bindsym $mod+Shift+Minus border pixel 8; move scratchpad
 #bindsym $mod+Shift+Minus border pixel 6; move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+backspace scratchpad show
+bindsym $mod+Minus scratchpad show
 #bindsym $mod+Minus scratchpad show
 
 # ---------------------
@@ -311,30 +311,45 @@ mode "resize" {
     # return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
+    bindsym Control+f mode "default"
+}
+
+# --------------
+#  Control Mode
+# --------------
+
+set $control_pane alacritty --class control_pane
+for_window [app_id="^control_pane$"] floating enable, border pixel 8
+
+bindsym $mod+c exec $control_pane; mode "control"
+mode "control" {
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Control+f mode "default"
 }
 
 # =================
 #  Special windows
 # =================
 
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="bubble"] floating enable
-for_window [window_role="task_dialog"] floating enable
-for_window [window_role="Preferences"] floating enable
+for_window [window_role="pop-up"]      floating enable, border pixel 8
+for_window [window_role="bubble"]      floating enable, border pixel 8
+for_window [window_role="task_dialog"] floating enable, border pixel 8
+for_window [window_role="Preferences"] floating enable, border pixel 8
 
-for_window [window_type="dialog"] floating enable
-for_window [window_type="menu"] floating enable
+for_window [window_type="dialog"] floating enable, border pixel 8
+for_window [window_type="menu"]   floating enable, border pixel 8
 
-for_window [instance="__scratchpad"] floating enable
+for_window [instance="__scratchpad"] floating enable, border pixel 8
 
-for_window [class="(?i)pavucontrol"] floating enable, move position mouse
+for_window [class="(?i)pavucontrol"] floating enable, move position mouse, border pixel 8
 for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down 34px
 
-for_window [class="^firefox$" title="Options"] floating enable
+for_window [class="^firefox$" title="Options"] floating enable, border pixel 8
 
-for_window [app_id="floating_term"] floating enable
+for_window [app_id="floating_term"] floating enable, border pixel 8
 
-for_window [title="Picture-in-Picture"] floating enable
+for_window [title="Picture-in-Picture"] floating enable, border pixel 8
 
 # Special application workspaces
 assign [app_id="^firefox$"] workspace $wsff
@@ -346,9 +361,9 @@ assign [class="^obsidian$"] workspace $wsob
 assign [app_id="^anki$"]    workspace $wsan
 
 # For gamedev
-for_window [title="SUBSYMMETRY"] floating enable
-for_window [title="VOIDWALKERS"] floating enable
-for_window [title="METASEED"]    floating enable
+for_window [title="SUBSYMMETRY"] floating enable, border pixel 8
+for_window [title="VOIDWALKERS"] floating enable, border pixel 8
+for_window [title="METASEED"]    floating enable, border pixel 8
 
 # ============
 #  Status Bar
@@ -359,11 +374,26 @@ bar {
     swaybar_command waybar
 }
 
+# ================
+#  Trackpad Stuff
+# ================
+
+input "1739:31251:SYNA2393:00_06CB:7A13_Touchpad" {
+    accel_profile adaptive
+    pointer_accel 0
+    natural_scroll enabled
+    tap disabled
+    #tap_and_drag enabled
+    dwt enabled  # disable while typing
+    scroll_method two_finger
+    click_method clickfinger
+}
+
 # ===================================
 #  Create floating terminal with VPN
 # ===================================
 
-exec sleep 1 && alacritty --class floating_term -d 172 64 -e fish -C 'expressvpn connect'
+exec sleep 1 && alacritty --class floating_term -e fish -C 'bat .ps | sudo openconnect --protocol=gp vpn-global-portal.poly.com --user=ccummings --authgroup=NALA-ENG --passwd-on-stdin'
 
 # ==================
 #  Whatever this is

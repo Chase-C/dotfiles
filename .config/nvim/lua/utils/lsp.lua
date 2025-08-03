@@ -188,9 +188,9 @@ M.on_attach = function(client, bufnr)
     { 'gr', function() telescope.lsp_references() end,       desc = 'Search references',                     cond = sup_ref },
     { 'gT', function() telescope.lsp_type_definitions() end, desc = 'Definition of current type',            cond = sup_typedef },
     -- UI group mappings
-    { '<leader>uf', function() ui.toggle_buffer_autoformat() end,           desc = 'Toggle autoformatting (buffer)',         cond = sup_format },
-    { '<leader>uF', function() ui.toggle_autoformat() end,                  desc = 'Toggle autoformatting (global)',         cond = sup_format },
-    { '<leader>uY', function() ui.toggle_buffer_semantic_tokens(bufnr) end, desc = 'Toggle LSP semantic highlight (buffer)', cond = sup_semantic },
+    { '<leader>uof', function() ui.toggle_buffer_autoformat() end,           desc = 'Toggle autoformatting (buffer)',         cond = sup_format },
+    { '<leader>uoF', function() ui.toggle_autoformat() end,                  desc = 'Toggle autoformatting (global)',         cond = sup_format },
+    { '<leader>uoY', function() ui.toggle_buffer_semantic_tokens(bufnr) end, desc = 'Toggle LSP semantic highlight (buffer)', cond = sup_semantic },
   }
 
   utils.set_mappings(lsp_map, { buffer = bufnr })

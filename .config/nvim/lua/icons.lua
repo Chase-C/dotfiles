@@ -53,6 +53,7 @@ return {
   Package = '󰏖',
   Paste = '󰅌',
   Refresh = '',
+  Robot = '󰚩',
   Search = '',
   Selected = '❯',
   Session = '󱂬',
