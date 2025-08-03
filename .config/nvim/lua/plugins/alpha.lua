@@ -37,7 +37,7 @@ return {
     local button = require('utils').alpha_button
     local get_icon = require('utils').get_icon
     dashboard.section.buttons.val = {
-      button('LDR a n', get_icon('FileNew') .. '  New File  '),
+      button('LDR n',   get_icon('FileNew') .. '  New File  '),
       button('LDR s f', get_icon('Search') .. '  Find File  '),
       button('LDR s o', get_icon('DefaultFile') .. '  Recents  '),
       button('LDR S l', get_icon('Refresh') .. '  Last Session  '),

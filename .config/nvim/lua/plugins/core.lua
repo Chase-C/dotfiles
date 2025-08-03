@@ -111,30 +111,49 @@ return {
     end,
   },
   {
-    'akinsho/toggleterm.nvim',
-    cmd = { 'ToggleTerm', 'TermExec' },
+    'nvzone/floaterm',
+    dependencies = 'nvzone/volt',
     opts = {
-      shell = '/usr/bin/fish',
-      size = 10,
-      on_create = function()
-        vim.opt.foldcolumn = '0'
-        vim.opt.signcolumn = 'no'
-      end,
-      shade_terminals = true,
-      start_in_insert = true,
-      insert_mappings = false,
-      terminal_mappings = true,
-      persist_size = true,
-      direction = 'float',
-      float_opts = {
-        border = 'curved',
-        winblend = 0,
-        highlights = {
-          border = 'Normal',
-          background = 'Normal',
-        },
+      border = true,
+      size = { h = 85, w = 90 },
+
+      -- to use, make this func(buf)
+      mappings = { sidebar = nil, term = nil},
+
+      -- Default sets of terminals you'd like to open
+      terminals = {
+        { name = 'General' },
+        { name = 'Build' },
+        { name = 'Claude Code' },
       },
-      close_on_exit = true,
     },
+    cmd = 'FloatermToggle',
   },
+  --{
+  --  'akinsho/toggleterm.nvim',
+  --  cmd = { 'ToggleTerm', 'TermExec' },
+  --  opts = {
+  --    shell = '/usr/bin/fish',
+  --    size = 10,
+  --    on_create = function()
+  --      vim.opt.foldcolumn = '0'
+  --      vim.opt.signcolumn = 'no'
+  --    end,
+  --    shade_terminals = true,
+  --    start_in_insert = true,
+  --    insert_mappings = false,
+  --    terminal_mappings = true,
+  --    persist_size = true,
+  --    direction = 'float',
+  --    float_opts = {
+  --      border = 'curved',
+  --      winblend = 0,
+  --      highlights = {
+  --        border = 'Normal',
+  --        background = 'Normal',
+  --      },
+  --    },
+  --    close_on_exit = true,
+  --  },
+  --},
 }

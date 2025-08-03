@@ -205,17 +205,17 @@ utils.set_mappings(tele_map)
 local python = vim.fn.executable('python') == 1 and 'python' or vim.fn.executable('python3') == 1 and 'python3'
 local term_map = {
   { '<leader>T',                                                desc = sections.T },
-  { '<leader>Tn', function() utils.toggle_term_cmd('node') end, desc = 'ToggleTerm node',   cond = vim.fn.executable('node') == 1 },
-  { '<leader>Tt', function() utils.toggle_term_cmd('btm') end,  desc = 'ToggleTerm btm',    cond = vim.fn.executable('btm') == 1 },
-  { '<leader>Tp', function() utils.toggle_term_cmd(python) end, desc = 'ToggleTerm python', cond = python },
-  { '<leader>Tf', '<cmd>ToggleTerm direction=float<cr>',        desc = 'ToggleTerm float' },
+  --{ '<leader>Tn', function() utils.toggle_term_cmd('node') end, desc = 'Floaterm node',   cond = vim.fn.executable('node') == 1 },
+  --{ '<leader>Tt', function() utils.toggle_term_cmd('btm') end,  desc = 'Floaterm btm',    cond = vim.fn.executable('btm') == 1 },
+  --{ '<leader>Tp', function() utils.toggle_term_cmd(python) end, desc = 'Floaterm python', cond = python },
+  { '<leader>Tf', '<cmd>FloatermToggle<cr>',                    desc = 'Floaterm Toggle' },
   -- Terminal Navigation
-  { '<C-Space>',  '<cmd>ToggleTerm direction=float<cr>',        desc = 'ToggleTerm float' },
-  { '<C-Space>',  '<cmd>ToggleTerm direction=float<cr>',        desc = 'ToggleTerm float', mode = 't' },
-  { '<C-h>',      '<cmd>wincmd h<cr>',                          desc = 'Terminal left window navigation',  mode = 't' },
-  { '<C-j>',      '<cmd>wincmd j<cr>',                          desc = 'Terminal down window navigation',  mode = 't' },
-  { '<C-k>',      '<cmd>wincmd k<cr>',                          desc = 'Terminal up window navigation',    mode = 't' },
-  { '<C-l>',      '<cmd>wincmd l<cr>',                          desc = 'Terminal right window navigation', mode = 't' },
+  { '<C-Space>',  '<cmd>FloatermToggle<cr>',                    desc = 'Floaterm Toggle' },
+  { '<C-Space>',  '<cmd>FloatermToggle<cr>',                    desc = 'Floaterm Toggle', mode = 't' },
+  --{ '<C-h>',      '<cmd>wincmd h<cr>',                          desc = 'Terminal left window navigation',  mode = 't' },
+  --{ '<C-j>',      '<cmd>wincmd j<cr>',                          desc = 'Terminal down window navigation',  mode = 't' },
+  --{ '<C-k>',      '<cmd>wincmd k<cr>',                          desc = 'Terminal up window navigation',    mode = 't' },
+  --{ '<C-l>',      '<cmd>wincmd l<cr>',                          desc = 'Terminal right window navigation', mode = 't' },
 }
 
 utils.set_mappings(term_map)

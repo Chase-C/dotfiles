@@ -189,6 +189,40 @@ autocmd('BufEnter', {
   end,
 })
 
+-- ================
+--  Auto File Read
+-- ================
+
+-- Create autocommand group
+local read_group = augroup('auto_read', { clear = true })
+
+-- Check on focus/enter
+autocmd({'FocusGained', 'BufEnter'}, {
+  group = read_group,
+  pattern = '*',
+  command = 'checktime',
+})
+
+-- More aggressive checking
+autocmd({'CursorHold', 'CursorHoldI'}, {
+  group = read_group,
+  pattern = '*',
+  callback = function()
+    if vim.fn.mode() == 'n' and vim.fn.getcmdwintype() == '' then
+      vim.cmd('checktime')
+    end
+  end,
+})
+
+-- Notify on file change
+autocmd('FileChangedShellPost', {
+  group = read_group,
+  pattern = '*',
+  callback = function()
+    vim.notify('File changed on disk. Buffer reloaded.', vim.log.levels.WARN)
+  end,
+})
+
 -- ========
 --  Others
 -- ========

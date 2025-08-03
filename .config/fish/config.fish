@@ -9,7 +9,7 @@ abbr -a pacman sudo pacman --color=auto
 abbr -a yay yay --color=auto
 
 # Add to PATH
-set -U fish_user_paths $fish_user_paths ~/bin ~/flutter/bin ~/.cargo/bin
+set -U fish_user_paths $fish_user_paths ~/bin ~/flutter/bin ~/.cargo/bin ~/.npm-global/bin
 
 # Set environment variables
 set -g -x EDITOR nvim
