@@ -72,42 +72,4 @@ return {
       },
     },
   },
-  {
-    "nvim-lualine/lualine.nvim",
-    opts = function(_, opts)
-      opts.options.section_separators = { left = "", right = "" }
-      opts.options.component_separators = { left = "", right = "" }
-
-      table.insert(opts.sections.lualine_x, 2, {
-        "lsp_status",
-        icon = "󱘖",
-        symbols = {
-          spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-          done = "",
-          separator = "⚫",
-        },
-        ignore_lsp = {},
-        show_name = true,
-        color = { fg = "#565f89" },
-      })
-
-      opts.winbar = {
-        lualine_a = {},
-        lualine_b = { "filename" },
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      }
-
-      opts.inactive_winbar = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      }
-    end,
-  },
 }
