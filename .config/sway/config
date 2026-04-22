@@ -7,7 +7,7 @@
 set $mod Mod1
 
 #font DejaVu Sans Mono Nerd Font 10
-font MesloLGS Nerd Font Propo 10
+font MesloLGS Nerd Font Propo 9
 
 # Home row direction keys, like vim
 set $left h
@@ -17,6 +17,9 @@ set $right l
 
 # Preferred terminal emulator
 set $term foot
+
+# Border width
+set $border_width 3
 
 # Switching to active workspace moves to previous one
 workspace_auto_back_and_forth yes
@@ -41,7 +44,6 @@ set $wsmg "󰵅"
 set $wsob ""
 set $wsan ""
 
-
 # Mouse doesn't affect focus
 focus_follows_mouse no
 mouse_warping none
@@ -49,7 +51,7 @@ mouse_warping none
 # Hide edge borders
 smart_borders on
 smart_gaps on
-gaps inner 1
+gaps inner $border_width
 
 # Start graphical authentication agent
 exec /usr/bin/lxqt-policykit-agent
@@ -57,9 +59,6 @@ exec /usr/bin/lxqt-policykit-agent
 # Start mako (notification daemon) and udiskie (automount usb devices)
 exec mako &
 exec udiskie -f '' &
-
-# Use redshift to adjust screen gamma at night
-exec redshift -l 36.982628:-122.023484 &
 
 # Start monitoring pacman
 exec ~/bin/notifyupdates &
@@ -77,15 +76,16 @@ output DP-3 {
 
 # Laptop Outputs
 output eDP-1 {
-    background ~/Pictures/Backgrounds/Small\ Memory.jpg fill
+    background ~/Pictures/Backgrounds/neon-landscape.jpg fit
+    scale 1.75
 }
 
 output DP-4 {
-    background ~/Pictures/Backgrounds/abstract_squares.jpg fill
+    #background ~/Pictures/Backgrounds/abstract_squares.jpg fill
 }
 
 output DP-5 {
-    background ~/Pictures/Backgrounds/abstract_desert.jpg fill
+    #background ~/Pictures/Backgrounds/abstract_desert.jpg fill
 }
 
 # =====================
@@ -108,6 +108,17 @@ input type:touchpad {
     tap_button_map      lmr
 }
 
+input "1267:13104:VEN_04F3:00_04F3:3330_Touchpad" {
+    accel_profile adaptive
+    pointer_accel 0
+    natural_scroll enabled
+    tap disabled
+    #tap_and_drag enabled
+    dwt enabled  # disable while typing
+    scroll_method two_finger
+    click_method clickfinger
+}
+
 # ====================
 #  Idle configuration
 # ====================
@@ -123,7 +134,7 @@ input type:touchpad {
 # =============
 
 set $background #1a1b26
-set $bgstorm    #24283b
+set $bgstorm    #32344a
 set $foreground #a9b1d6
 set $red        #f7768e
 set $orange     #ff9e64
@@ -142,8 +153,8 @@ client.unfocused        $bgstorm $bgstorm    $bgstorm $purple   $bgstorm
 client.urgent           $red     $purple     $red     $red      $red   
 
 # Borders
-default_border pixel 1
-default_floating_border pixel 8
+default_border pixel $border_width
+default_floating_border pixel $border_width
 
 # ==============
 #  Key bindings
@@ -166,9 +177,6 @@ bindsym $mod+w exec --no-startup-id rofi -show window
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
-# Despite the name, also works for non-floating windows.
-# Change normal to inverse to use left mouse button for resizing and right
-# mouse button for dragging.
 floating_modifier $mod normal
 
 # Reload the configuration file
@@ -180,6 +188,28 @@ bindsym $mod+Shift+Delete exec swaymsg exit
 
 # Dismiss first notification
 bindsym $mod+n exec makoctl dismiss
+
+# ---------
+#  Fn Keys
+# ---------
+
+set $wob_sock $XDG_RUNTIME_DIR/wob.sock
+
+# --- Volume Control (with WOB) ---
+# pamixer --get-volume returns a simple number like "55"
+bindsym --locked XF86AudioRaiseVolume exec pamixer -i 5 && pamixer --get-volume > $wob_sock
+bindsym --locked XF86AudioLowerVolume exec pamixer -d 5 && pamixer --get-volume > $wob_sock
+bindsym --locked XF86AudioMute exec pamixer -t && bash -c "pamixer --get-mute | grep -q true && echo 0 > $wob_sock || pamixer --get-volume > $wob_sock"
+
+# --- Brightness Control (with WOB) ---
+# brightnessctl -m (machine readable) output is comma-separated: device,class,current,max,percentage%
+# We use 'cut' to grab the 4th field (percentage) and 'tr' to remove the '%' sign
+# We wrap the command in 'sh -c' and use 'echo' to force a newline at the end.
+bindsym --locked XF86MonBrightnessUp exec sh -c "echo \$(brightnessctl set 5%+ -n -m | cut -d, -f4 | tr -d %) > $wob_sock"
+bindsym --locked XF86MonBrightnessDown exec sh -c "echo \$(brightnessctl set 5%- -n -m | cut -d, -f4 | tr -d %) > $wob_sock"
+
+# Screenshots with printscreen
+bindsym Print exec grim_screenshot
 
 # ----------
 #  Movement
@@ -275,17 +305,12 @@ bindsym $mod+space focus mode_toggle
 #  Scratchpad
 # ------------
 
-# Sway has a "scratchpad", which is a bag of holding for windows.
-# You can send windows there and get them back later.
-
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+Minus border pixel 8; move scratchpad
-#bindsym $mod+Shift+Minus border pixel 6; move scratchpad
+bindsym $mod+Shift+Minus border pixel $border_width; move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+Minus scratchpad show
-#bindsym $mod+Minus scratchpad show
 
 # ---------------------
 #  Resizing containers
@@ -319,7 +344,7 @@ mode "resize" {
 # --------------
 
 set $control_pane alacritty --class control_pane
-for_window [app_id="^control_pane$"] floating enable, border pixel 8
+for_window [app_id="^control_pane$"] floating enable, border pixel $border_width
 
 bindsym $mod+c exec $control_pane; mode "control"
 mode "control" {
@@ -331,25 +356,28 @@ mode "control" {
 # =================
 #  Special windows
 # =================
+for_window [app_id="eww"] border none
 
-for_window [window_role="pop-up"]      floating enable, border pixel 8
-for_window [window_role="bubble"]      floating enable, border pixel 8
-for_window [window_role="task_dialog"] floating enable, border pixel 8
-for_window [window_role="Preferences"] floating enable, border pixel 8
+for_window [window_role="pop-up"]      floating enable, border pixel $border_width
+for_window [window_role="bubble"]      floating enable, border pixel $border_width
+for_window [window_role="task_dialog"] floating enable, border pixel $border_width
+for_window [window_role="Preferences"] floating enable, border pixel $border_width
 
-for_window [window_type="dialog"] floating enable, border pixel 8
-for_window [window_type="menu"]   floating enable, border pixel 8
+for_window [window_type="dialog"] floating enable, border pixel $border_width
+for_window [window_type="menu"]   floating enable, border pixel $border_width
 
-for_window [instance="__scratchpad"] floating enable, border pixel 8
+for_window [instance="__scratchpad"] floating enable, border pixel $border_width
 
-for_window [class="(?i)pavucontrol"] floating enable, move position mouse, border pixel 8
+for_window [class="(?i)pavucontrol"] floating enable, move position mouse, border pixel $border_width
 for_window [class="(?i)pavucontrol" instance="pavucontrol-bar"] move down 34px
 
-for_window [class="^firefox$" title="Options"] floating enable, border pixel 8
+for_window [class="^firefox$" title="Options"] floating enable, border pixel $border_width
 
-for_window [app_id="floating_term"] floating enable, border pixel 8
+for_window [app_id="floating_term"] floating enable, border pixel $border_width
+for_window [app_id="foot-sys-update"] floating enable, border pixel $border_width, resize set 40 ppt 40 ppt, move absolute position 0 0, move position 60 ppt 0, move left 3 px, move down 3 px
+for_window [app_id="foot-calendar"] floating enable, border pixel $border_width, resize set 472 180, move position 100 ppt 0, move left 475 px, move down 3 px
 
-for_window [title="Picture-in-Picture"] floating enable, border pixel 8
+for_window [title="Picture-in-Picture"] floating enable, border pixel $border_width
 
 # Special application workspaces
 assign [app_id="^firefox$"] workspace $wsff
@@ -361,9 +389,10 @@ assign [class="^obsidian$"] workspace $wsob
 assign [app_id="^anki$"]    workspace $wsan
 
 # For gamedev
-for_window [title="SUBSYMMETRY"] floating enable, border pixel 8
-for_window [title="VOIDWALKERS"] floating enable, border pixel 8
-for_window [title="METASEED"]    floating enable, border pixel 8
+for_window [title="SUBSYMMETRY"] floating enable, border pixel $border_width
+for_window [title="VOIDWALKERS"] floating enable, border pixel $border_width
+for_window [title="METASEED"]    floating enable, border pixel $border_width
+for_window [title="SPONZA"]      floating enable, border pixel $border_width
 
 # ============
 #  Status Bar
@@ -374,26 +403,11 @@ bar {
     swaybar_command waybar
 }
 
-# ================
-#  Trackpad Stuff
-# ================
-
-input "1739:31251:SYNA2393:00_06CB:7A13_Touchpad" {
-    accel_profile adaptive
-    pointer_accel 0
-    natural_scroll enabled
-    tap disabled
-    #tap_and_drag enabled
-    dwt enabled  # disable while typing
-    scroll_method two_finger
-    click_method clickfinger
-}
-
 # ===================================
 #  Create floating terminal with VPN
 # ===================================
 
-exec sleep 1 && alacritty --class floating_term -e fish -C 'bat .ps | sudo openconnect --protocol=gp vpn-global-portal.poly.com --user=ccummings --authgroup=NALA-ENG --passwd-on-stdin'
+#exec sleep 1 && alacritty --class floating_term -e fish -C 'bat .ps | sudo openconnect --protocol=gp vpn-global-portal.poly.com --user=ccummings --authgroup=NALA-ENG --passwd-on-stdin'
 
 # ==================
 #  Whatever this is

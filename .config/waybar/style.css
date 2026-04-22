@@ -6,20 +6,29 @@
     min-height: 0;
 }
 
-#window {
-    padding: 0 10px;
-}
-
-window#waybar.empty {
-    padding: 0 10px;
-}
-
 window#waybar {
     color: #c0caf5;
     background-color: #1a1b26;
     transition-property: background-color;
     transition-duration: .5s;
-    border-bottom: 1px solid #24283b;
+    border-bottom: 3px solid #32344a;
+}
+
+tooltip {
+  background: #1a1b26;
+  border: 3px solid #32344a;
+}
+
+#window {
+    padding: 0 4px;
+    margin: 0 6px;
+    border-bottom: 3px solid #ad8ee6;
+}
+
+#custom-open-windows {
+    min-width: 28px;
+    margin: 0 -6px 0 0;
+    border-bottom: 3px solid #32344a;
 }
 
 #workspaces button {
@@ -31,14 +40,14 @@ window#waybar {
 
 #workspaces button:hover {
     color: #bb9af7;
-    background: #24283b;
+    background: #32344a;
     text-shadow: none;
     box-shadow: none;
     border-bottom: 3px solid #bb9af7;
 }
 
 #workspaces button.focused {
-    background: #24283b;
+    background: #32344a;
     color: #7aa2f7;
     border-bottom: 3px solid #7aa2f7;
 }
@@ -49,7 +58,7 @@ window#waybar {
 
 #mode {
     color: #bb9af7;
-    background: #24283b;
+    background: #32344a;
     padding: 0 4px;
 }
 
@@ -60,38 +69,88 @@ window#waybar {
     }
 }
 
-#battery {
-    padding: 0 4px;
+#power-drawer {
+    margin: 0 4px 0 0;
+    border-bottom: 3px solid #32344a;
+}
+
+#custom-power-menu,
+#custom-screenshot,
+#idle_inhibitor {
+    margin: 0 -2px;
+    min-width: 26px;
 }
 
 #clock {
-    padding: 0 8px;
-}
-
-#cpu {
-    padding: 0 8px;
-}
-
-#memory {
-    padding: 0 8px;
-}
-
-#network {
-    padding: 0 8px;
-}
-
-#network.disconnected {
-    padding: 0 8px;
-}
-
-#tray {
-    padding: 0;
-}
-
-#custom-packages {
-    padding: 0 8px;
-}
-
-#custom-separator {
     padding: 0 4px;
+    margin: 0 6px;
+    border-bottom: 3px solid #ff7a93;
+}
+
+#sys-info {
+    margin: 0 6px;
+    border-bottom: 3px solid #ff9e64;
+}
+
+#temperature.critical {
+  color: #ff9e64;
+}
+
+#cpu.crit {
+  color: #ff9e64;
+}
+
+#memory.critical {
+  color: #ff9e64;
+}
+
+#sys-control {
+    margin: 0 6px;
+    border-bottom: 3px solid #9ece6a;
+}
+
+#temperature,
+#cpu,
+#memory,
+#custom-packages-icon,
+#wireplumber,
+#backlight,
+#network,
+#battery {
+    min-width: 22px;
+}
+
+#backlight-slider,
+#pulseaudio-slider {
+    margin: 0 4px;
+    padding: 0 2px;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+    background: #32344a;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+    min-width: 80px;
+    min-height: 8px;
+    border-radius: 4px;
+    background: #32344a;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+    border-radius: 5px;
+    background-color: #9ece6a;
+}
+
+.text {
+    margin: 0 8px 0 4px;
+}
+
+.info {
+    margin: 0 4px;
 }

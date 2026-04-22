@@ -1,22 +1,61 @@
-#! /bin/env bash
+#!/usr/bin/env bash
 
 #
 # fed - Find (by filetype) and Edit (with nvim)
 #
 
-OPTIND=1
+# Function to display the help menu
+show_help() {
+    # ${0##*/} extracts just the script name (e.g., 'fed') removing the path
+    local cmd_name="${0##*/}"
 
+    cat << EOF
+Usage: $cmd_name [OPTIONS] [DIRECTORIES...]
+
+Find files by extension in specific directories and open them in an editor.
+
+Options:
+  -h, --help    Show this help message and exit.
+  -w <num>      Number of vertical splits/windows to open (default: 1).
+  -t <ext>      File extension to include. Can be repeated (e.g., -t js -t html).
+                If omitted, finds all file types.
+  -e <cmd>      Editor command to use (default: nvim).
+
+Examples:
+  $cmd_name -t py src/
+  $cmd_name -w 2 -t js -t ts -e vim .
+EOF
+}
+
+# Handle --help manually since getopts doesn't support long flags
+if [[ "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+OPTIND=1
 num_windows=1
 file_types=
 editor=nvim
 
-while getopts "w:t:e:" opt; do
+# Added 'h' to the valid options string
+while getopts "hw:t:e:" opt; do
   case "$opt" in
+    h)
+      show_help
+      exit 0
+      ;;
     w) num_windows=$OPTARG
       ;;
     t) file_types="$file_types $OPTARG"
       ;;
     e) editor=$OPTARG
+      ;;
+    \?) # Handle invalid options
+      echo "Invalid option: -$OPTARG" >&2
+      show_help
+      exit 1
+      ;;
   esac
 done
 
@@ -40,9 +79,16 @@ do
     name_string="$name_string -o -name '*.$filetype'"
 done
 
+# Note: Added a check to ensure files were actually found before launching editor
 for d in $directories
 do
-    files="$files $(eval "find $d -not -path '*/.*' -type f \( $name_string \) -printf '%h %p\n'" | sort | sed 's/[^ ]* //g' | tr '\n' ' ')"
+    found_files=$(eval "find $d -not -path '*/.*' -type f \( $name_string \) -printf '%h %p\n'" | sort | sed 's/[^ ]* //g' | tr '\n' ' ')
+    files="$files $found_files"
 done
 
-eval "$editor -O$num_windows $files"
+# Only run editor if files is not empty strings/spaces
+if [[ -n "${files// /}" ]]; then
+    eval "$editor -O$num_windows $files"
+else
+    echo "No files found."
+fi

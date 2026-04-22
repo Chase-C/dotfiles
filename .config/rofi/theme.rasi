@@ -14,8 +14,9 @@
 }
 
 window {
+    margin:           3;
     background-color: @background;
-    border:           6;
+    border:           3;
     border-color:     @border;
     padding:          8;
 }

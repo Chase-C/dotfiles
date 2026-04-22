@@ -15,7 +15,7 @@ width=400
 height=180
 
 padding=6
-border-size=6
+border-size=3
 border-color=#7aa2f7
 
 progress-color=over #73daca

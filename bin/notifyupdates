@@ -2,7 +2,8 @@
 
 # Do not notify more frequently than this
 TIMEOUT=5
-LOGFILE=~/.cache/package-updates
+ICONFILE=~/.cache/packages.icon
+LOGFILE=~/.cache/packages.log
 
 LASTNOTIFY=0
 
@@ -27,14 +28,39 @@ function notify() {
 }
 
 function record() {
+    > $ICONFILE
+    > $LOGFILE
+
+    if [ $1 -gt 299 ]
+    then
+        echo "󰋙" > $ICONFILE
+    elif [ $1 -gt 199 ]
+    then
+        echo "󰫃" > $ICONFILE
+    elif [ $1 -gt 99 ]
+    then
+        echo "󰫄" > $ICONFILE
+    elif [ $1 -gt 49 ]
+    then
+        echo "󰫅" > $ICONFILE
+    elif [ $1 -gt 9 ]
+    then
+        echo "󰫆" > $ICONFILE
+    elif [ $1 -gt 0 ]
+    then
+        echo "󰫇" > $ICONFILE
+    else
+        echo "󰫈" > $ICONFILE
+    fi
+
     if [ $1 -eq 1 ]
     then
-        echo $1 Package >> $LOGFILE
+        echo "$1 outdated package" > $LOGFILE
     elif [ $1 -gt 1 ]
     then
-        echo $1 Packages >> $LOGFILE
+        echo "$1 outdated packages" > $LOGFILE
     else
-        echo System Updated >> $LOGFILE
+        echo "System up to date" > $LOGFILE
     fi
 }
 
