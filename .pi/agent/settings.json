@@ -1,0 +1,37 @@
+{
+  "lastChangelogVersion": "0.68.0",
+  "editorPaddingX": 2,
+  "autocompleteMaxVisible": 15,
+  "quietStartup": true,
+  "doubleEscapeAction": "tree",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5.4",
+  "defaultThinkingLevel": "xhigh",
+  "enabledModels": [
+    "gpt-5.4",
+    "gemini-3.1-pro-preview",
+    "claude-opus-4.6",
+    "claude-sonnet-4.6",
+    "gpt-5.4-mini",
+    "gemini-3-flash-preview",
+    "gpt-5-mini"
+  ],
+  "packages": [
+    "npm:pi-extension-manager",
+    "npm:pi-skills-manager",
+    "npm:@e9n/pi-context",
+    "npm:pi-ask-user",
+    "npm:@ifi/oh-pi-themes",
+    "npm:@marckrenn/pi-sub-bar",
+    {
+      "source": "npm:pi-mcp-adapter",
+      "extensions": [
+        "+index.ts"
+      ]
+    },
+    "npm:pi-subagents",
+    "npm:pi-prompt-template-model"
+  ],
+  "theme": "tokyo-night",
+  "hideThinkingBlock": false
+}
