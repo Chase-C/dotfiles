@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Configuration
+# Power menu is often smaller/centered. 
+# Feel free to change width or location (e.g. -location 3 for right side).
+ROFI_CMD="rofi -dmenu -i -p "Power""
+
+# Options
+# Use icons if you have a Nerd Font installed (e.g., , , , )
+# If not, just remove the icons.
+OPT_LOCK="  Lock"
+OPT_LOGOUT="  Logout"
+OPT_SUSPEND="  Sleep"
+OPT_HIBERNATE="  Hibernate"
+OPT_REBOOT="  Reboot"
+OPT_OFF="  Power Off"
+
+# Generate options list
+OPTIONS="$OPT_LOCK\n$OPT_LOGOUT\n$OPT_SUSPEND\n$OPT_HIBERNATE\n$OPT_REBOOT\n$OPT_OFF"
+
+# Show Main Menu
+CHOICE=$(echo -e "$OPTIONS" | $ROFI_CMD)
+
+# Handle Selection
+case "$CHOICE" in
+    "$OPT_LOCK")
+        # -f = daemonize (detach), -c = color (black)
+        swaylock -f -c 000000
+        ;;
+    "$OPT_SUSPEND")
+        systemctl suspend
+        ;;
+    "$OPT_HIBERNATE")
+        systemctl hibernate
+        ;;
+    "$OPT_LOGOUT")
+        # Confirmation
+        CONFIRM=$(echo -e "No\nYes" | rofi -dmenu -p "Logout?" -lines 2 -width 10)
+        if [ "$CONFIRM" == "Yes" ]; then
+            swaymsg exit
+        fi
+        ;;
+    "$OPT_REBOOT")
+        CONFIRM=$(echo -e "No\nYes" | rofi -dmenu -p "Reboot?" -lines 2 -width 10)
+        if [ "$CONFIRM" == "Yes" ]; then
+            systemctl reboot
+        fi
+        ;;
+    "$OPT_OFF")
+        CONFIRM=$(echo -e "No\nYes" | rofi -dmenu -p "Power Off?" -lines 2 -width 10)
+        if [ "$CONFIRM" == "Yes" ]; then
+            systemctl poweroff
+        fi
+        ;;
+esac

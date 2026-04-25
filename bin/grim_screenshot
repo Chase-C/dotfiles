@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# --- Configuration ---
+ROFI_CMD="rofi -dmenu -i -p Screenshot"
+SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
+TIMESTAMP="$(date +%Y-%m-%d-%H%M%S)"
+
+# Ensure directory exists
+mkdir -p "$SCREENSHOT_DIR"
+
+# Options (Nerd Fonts recommended: , , , )
+OPT_AREA="  Area"
+OPT_WINDOW="  Window"
+OPT_OUTPUT="  Output"
+OPT_SCREEN="  Full Screen"
+OPT_OPEN="  Open Folder"
+
+# 1. Show Menu
+CHOICE=$(echo -e "$OPT_AREA\n$OPT_WINDOW\n$OPT_OUTPUT\n$OPT_SCREEN\n$OPT_OPEN" | $ROFI_CMD)
+
+# Exit if cancelled
+if [ -z "$CHOICE" ]; then
+    exit 0
+fi
+
+# 2. Handle Selection
+# We use 'grimshot savecopy' to do BOTH: Save to file AND Copy to clipboard.
+# If you only want one, change 'savecopy' to 'save' or 'copy'.
+
+case "$CHOICE" in
+    "$OPT_AREA")
+        # Interactive selection (slurp)
+        sleep 0.2 # Brief pause to let rofi fade
+        notify-send -t 2000 "Screenshot" "Select an area..."
+        grimshot savecopy area "$SCREENSHOT_DIR/Screenshot-${TIMESTAMP}.png"
+        ;;
+    "$OPT_WINDOW")
+        # Interactive window selection
+        sleep 0.2
+        notify-send -t 2000 "Screenshot" "Select a window..."
+        grimshot savecopy window "$SCREENSHOT_DIR/Screenshot-${TIMESTAMP}.png"
+        ;;
+    "$OPT_OUTPUT")
+        # Current monitor
+        grimshot savecopy output "$SCREENSHOT_DIR/Screenshot-${TIMESTAMP}.png"
+        ;;
+    "$OPT_SCREEN")
+        # All monitors
+        grimshot savecopy screen "$SCREENSHOT_DIR/Screenshot-${TIMESTAMP}.png"
+        ;;
+    "$OPT_OPEN")
+        xdg-open "$SCREENSHOT_DIR"
+        exit 0
+        ;;
+esac
+
+# 3. Notification
+# grimshot usually handles its own notification if you pass --notify, 
+# but since we are wrapping it, we can do it manually for consistency 
+# or rely on grimshot's exit code.
+
+if [ $? -eq 0 ]; then
+    notify-send -t 5000 "Screenshot Taken" "Saved to $SCREENSHOT_DIR and copied to clipboard." -i camera-photo
+else
+    notify-send -t 5000 "Screenshot" "Cancelled or Failed" -u low
+fi

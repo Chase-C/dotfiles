@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Get the Wireless Device Name
+# We look for a device in 'station' mode (usually wlan0)
+DEVICE=$(iwctl device list | awk '/station/ {print $2}' | head -n 1)
+
+if [ -z "$DEVICE" ]; then
+    notify-send "Wi-Fi Error" "No wireless device found in station mode."
+    exit 1
+fi
+
+# Trigger a Scan
+iwctl station "$DEVICE" scan
+
+# Get List of Networks
+# iwctl output usually looks like: "  SSID_Name    psk    **** "
+# We parse this to just get the SSID names.
+# sed explanation:
+#   - sed '1,4d': Delete the first 4 header lines (adjust if your version differs)
+#   - sed -r 's/\x1B\[[0-9;]*[mK]//g': Strip ANSI color codes
+#   - awk: Print the SSID (everything before the last two columns: Security & Signal)
+# Note: This is a "best effort" parser for spaces in SSIDs.
+RAW_LIST=$(iwctl station "$DEVICE" get-networks)
+SSID_LIST=$(echo "$RAW_LIST" | sed -r 's/\x1B\[[0-9;]*[mK]//g' | sed '1,4d' | awk '{print substr($0, 0, index($0, "  psk")-1) substr($0, 0, index($0, "  open")-1)}' | awk '{$1=$1;print}' | grep -v "^$")
+
+# If parsing fails or list is empty, handle gracefully
+if [ -z "$SSID_LIST" ]; then
+    notify-send -t 5000 "Wi-Fi" "No networks found. Scanning..."
+    exit 0
+fi
+
+# Select Network via Rofi
+CHOSEN_SSID=""
+if [[ "$1" == "--from-bar" ]]; then
+    CHOSEN_SSID=$(echo "$SSID_LIST" | rofi -dmenu -i -p Network -theme-str 'window { location: northeast; border-color: #9ece6a; } * { highlight: #9ece6a; }')
+else
+    CHOSEN_SSID=$(echo "$SSID_LIST" | rofi -dmenu -i -p Network)
+fi
+
+# Exit if user cancelled
+if [ -z "$CHOSEN_SSID" ]; then
+    exit 0
+fi
+
+# Strip the leading "> " and whitespace that iwctl adds to the connected network
+CHOSEN_SSID=$(echo "$CHOSEN_SSID" | sed 's/^>\s*//')
+
+# ... Script continues ...
+
+# Check if Network is Known (Saved)
+KNOWN=$(iwctl known-networks list | grep -w "$CHOSEN_SSID")
+
+if [ -n "$KNOWN" ]; then
+    # -- CASE A: Known Network --
+    notify-send -t 5000 "Wi-Fi" "Connecting to saved network: $CHOSEN_SSID..."
+    iwctl station "$DEVICE" connect "$CHOSEN_SSID"
+else
+    # -- CASE B: New / Unknown Network --
+    # Prompt for password
+    WIFI_PASS=$(rofi -dmenu -p "Password for '$CHOSEN_SSID'" -password -theme-str 'listview { enabled: false; }')
+
+    # Check the exit code of rofi immediately
+    if [ $? -ne 0 ]; then
+        notify-send -t 5000 "Wi-Fi" "Connection cancelled."
+        exit 0
+    fi
+    
+    # If user didn't enter a password (just hit enter), try connecting as Open network
+    if [ -z "$WIFI_PASS" ]; then
+        notify-send -t 5000 "Wi-Fi" "Connecting to open network: $CHOSEN_SSID..."
+        iwctl station "$DEVICE" connect "$CHOSEN_SSID"
+    else
+        notify-send -t 5000 "Wi-Fi" "Connecting to secure network: $CHOSEN_SSID..."
+        iwctl --passphrase "$WIFI_PASS" station "$DEVICE" connect "$CHOSEN_SSID"
+    fi
+fi
+
+# Optional: Check connection status after a delay
+sleep 4
+CURRENT_SSID=$(iwctl station "$DEVICE" show | grep "Connected network" | awk '{print $3}')
+
+if [ "$CURRENT_SSID" == "$CHOSEN_SSID" ]; then
+    notify-send -t 5000 "Wi-Fi" "Successfully connected to $CHOSEN_SSID"
+else
+    notify-send -t 5000 "Wi-Fi" "Connection failed or timed out."
+fi
