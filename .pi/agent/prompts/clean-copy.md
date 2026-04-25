@@ -3,11 +3,11 @@ name: clean-copy
 description: Reimplement the current git branch with a clean, narrative-quality commit history
 ---
 
-Reimplement the current git branch in a new branch with a clean, narrative-quality commit history. The end state of the new branch must be byte-identical to the source branch; only the commit history differs.
+Reimplement the current git branch in a new branch with a clean, narrative-quality commit history. The end state must be byte-identical to the source branch — narrative quality comes from commit structure and commit messages alone, not from changes to the destination tree. Don't improve, modernize, or clean up the final code, even things that look obviously wrong, unless those changes already exist on the source branch.
 
 ## Phase 1 — Preflight checks
 
-Before doing any real work, confirm the repo is in a state where this skill can run. Abort if any check fails.
+Before doing any real work, confirm the repo is in a state where this skill can run. Run all checks and report any failures together in a single response — don't stop at the first failure. Abort if any check fails.
 
 - **Clean working tree** — `git status --porcelain --untracked-files=no` must be empty, and `.git/MERGE_HEAD` must not exist. Abort if there are uncommitted changes or a merge in progress.
 - **On a named branch** — `git branch --show-current` must return a branch name. Abort on detached HEAD — there's no branch to clean up. Keep track of this as `<source_branch>` for use in later steps.
@@ -18,11 +18,12 @@ Before doing any real work, confirm the repo is in a state where this skill can 
 With preflight passed, gather the context needed to plan the commit sequence.
 
 - **Base branch** (`<base_branch>`) — detect using, in order:
-  1. `git symbolic-ref --short refs/remotes/origin/HEAD` — if it succeeds, use that (stripping the `origin/` prefix).
+  1. `git symbolic-ref --short refs/remotes/origin/HEAD` — if it succeeds, use the returned ref as `<base_branch>`.
   2. Otherwise, for each of `develop`, `main`, `master` that exists locally (`git rev-parse --verify <name>` succeeds), run `git rev-list --count <candidate>..HEAD` and pick the smallest — that's the nearest divergence point.
   3. If still ambiguous or none exist, ask the user which branch to target.
 - **Branch point** (`<branch_point>`) — `git merge-base <source_branch> <base_branch>`. All later work starts here, *not* at the tip of `<base_branch>` — this guarantees the clean branch can end up byte-identical to the source regardless of whether the base has advanced.
-- **Commits being replaced** — `git log <branch_point>..<source_branch> --oneline`.
+- **Merges** — if `git log --merges --oneline <branch_point>..<source_branch>` shows any, fold the merged work into the linear narrative along with everything else. The clean branch won't preserve merge structure.
+- **Commits being replaced** — `git log <branch_point>..<source_branch> --oneline`. If this is empty, there's nothing to rewrite — abort.
 - **Scope of changes** — `git diff <branch_point>..<source_branch> --stat`.
 
 ## Phase 3 — Plan the commit storyline
@@ -33,11 +34,11 @@ Read the full diff using `git --no-pager diff --no-ext-diff <branch_point>..<sou
 
 ### What makes a good commit storyline
 
-- **One coherent idea per commit.** Each subject line is a single imperative sentence ("Add retry logic to HTTP client"), not a mechanics description ("Update client.ts"). No "WIP," "fix typo," or "address review" messages — those are artifacts of the original history this skill is replacing.
+- **One coherent idea per commit.** Each subject line is a single imperative sentence ("Add retry logic to HTTP client"), not a mechanics description ("Update client.ts"). No "WIP," "fix typo," or "address review" messages — those are artifacts of the original history this skill is replacing. If a diff both moves code and changes what it does, split it.
 - **Foundation before use.** New types, interfaces, constants, and utilities land before the code that depends on them.
-- **Refactors separate from behavior changes.** If a diff both moves code and changes what it does, split it.
 - **No obvious half-states.** A commit may reference something introduced in the very next commit when unavoidable, but shouldn't leave the codebase visibly broken across multiple commits.
-- **Tests travel with their behavior.** Land each test in the same commit as the code it covers, or the commit  immediate after — not batched at the end.
+- **Tests and generated artifacts travel with their source.** Land each test with the code it covers (or the commit immediately after), unless it's an end-to-end test that only makes sense once the full feature is assembled. Land lockfiles, generated code, and build outputs with the manifest or source change that produced them — not batched at the end as "mechanics" commits, unless regenerating is itself the logical change.
+- **Shared wiring files may recur across commits.** Central bootstrap files, DI registries, and module barrels often need minimal additions across multiple commits. Don't contort the plan to make every file appear in exactly one commit.
 - **Commit bodies explain *why*.** The diff shows what changed; the body says why it's needed or what alternative was rejected.
 
 Write out the planned commit sequence before touching anything.
@@ -56,14 +57,18 @@ With the plan approved, create the clean branch at the shared divergence point �
 git checkout -b <source_branch>-clean <branch_point>
 ```
 
-Then build each planned commit in order. For each commit:
+From this point on, all commits and history-rewriting operations happen on `<source_branch>-clean`. Never modify `<source_branch>` — it's the reference for Phase 6's byte-identity check.
+
+Build each planned commit in order. If reimplementation reveals a materially better split — two commits want to be one, one is actually two distinct concepts, an intermediate state is uglier than anticipated — pause and re-present a revised plan before continuing. Minor file-list drift is fine.
+
+For each commit:
 
 1. **Reimplement the changes planned for this commit.** Get the working tree into the state this commit should land. For small, localized edits, typing the change directly is fine. For larger or more mechanical changes, prefer lifting content from the source branch rather than retyping it.
 
    - `git checkout <source_branch> -- path/to/file` pulls a file in its final state. If later planned commits also touch the file, edit it down to the intermediate state this commit should land before staging.
    - `git show <source_branch>:path/to/file` prints the final version for reference without modifying the working tree.
 
-   For example, if planned commit 3 adds a function `foo()` and planned commit 5 adds logging inside `foo()`, then when building commit 3 you'd `git checkout <source_branch> -- path/to/file` and remove the logging lines before staging.
+   For example, if planned commit 3 adds a function `foo()` and planned commit 5 adds logging inside `foo()`, then when building commit 3 you'd `git checkout <source_branch> -- path/to/file` and remove the logging lines that commit 5 will add.
 
 2. **Write the commit message.** Aim for a concise, imperative-mood subject line. When the subject doesn't fully capture the reasoning, add a body (separated from the subject by a blank line) explaining *why* — what alternative was rejected, what's subtle about the approach, what a future reader needs to know.
 
@@ -72,7 +77,10 @@ Then build each planned commit in order. For each commit:
    git commit --no-verify    # for intermediate commits
    git commit                # for the final commit only
    ```
-   Intermediate commits represent stages of development — hooks that check types, imports, or run tests may fail on those stages even though the finished work passes. The final commit runs hooks because the final state is what ships; if they fail there, there's a real problem to fix before Phase 6.
+
+   Pass each paragraph of the body as a separate `-m` flag and don't worry about line length; `\n` inside a quoted string isn't interpreted and lands as literal backslash-n.
+
+   Hooks may fail on intermediate stages (type checks, imports, tests) even though the finished work passes — the final state is what ships, so let its hooks run. If they fail for reasons clearly unrelated to the branch's content, stop and ask the user whether to fix the environment and retry, proceed with `--no-verify`, or stop without finishing.
 
 ## Phase 6 — Verify byte-identity
 
@@ -84,12 +92,10 @@ git diff <source_branch> <source_branch>-clean
 
 The output **must** be empty. This is a symmetric comparison that doesn't depend on which branch is checked out.
 
-If empty, verification has passed and the skill is complete.
+If empty, verification has passed and the skill is complete - the user will initiate any further action.
 If it's not empty:
 
 - `git diff --stat <source_branch> <source_branch>-clean` shows the scale.
 - `git diff <source_branch> <source_branch>-clean -- <path>` scopes to a single file.
 - Common causes: a file missed in some commit, an exploration artifact accidentally included, file-mode changes (`chmod +x`), line-ending drift, or content committed onto the wrong branch.
 - Fix the discrepancy on the clean branch (new commit or amend, whichever keeps the narrative clean) and re-run the diff. Do not declare success until it is empty.
-
-The clean branch stays local. The user decides when to push it or force-push it over the original — don't push on their behalf.

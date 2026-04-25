@@ -27,7 +27,7 @@ Do this yourself — no subagent. The goal is cheap, deterministic ground truth 
 
 ## Phase 2: Map
 
-Launch a `scout` subagent with its model *explicitly* set to `gpt-5.4` and its thinking level set to `xhigh`. Give it a briefing that includes the full Phase 1 inventory — stack, commands, pruned tree, notable files — and ask it to thoroughly explore the codebase with the following aims:
+Launch a `scout` subagent with its model *explicitly* set to `gpt-5.4` and its thinking level set to `xhigh`. Give it a briefing that includes the full Phase 1 inventory — stack, commands, pruned tree, notable files — and ask it to *quickly* explore the codebase with the following aims:
 
 - **Confirm or correct the stack inference** from Phase 1 by sampling real source files.
 - **Identify source roots and their responsibilities.** For each significant directory, a sentence on what lives there and why.
@@ -55,7 +55,7 @@ Reference docs come in two kinds; you will generate both:
 
 A pattern only belongs in a cross-cutting doc if it actually cuts across multiple subsystems. If scout's research surfaces a pattern that's really only used in one area of the codebase, it belongs in that area's deep-dive, not in `conventions.md` or `patterns.md`. The test: can you name at least three unrelated locations where the pattern shows up? If not, it's not cross-cutting.
 
-The bar for any reference doc — deep-dive or cross-cutting — is: *would an agent working in this area benefit from this doc existing, vs rediscovering it from scratch each time?* Prefer the smallest useful set; for most repos this lands around 4–10 docs total. If your candidate list is at 15, that's a signal to merge or cut, not a sign the repo is exceptional. Ten mediocre docs nobody reads is worse than three good ones.
+The bar for any reference doc — deep-dive or cross-cutting — is: *would an agent working in this area benefit from this doc existing, vs rediscovering it from scratch each time?* Prefer the smallest useful set; for most repos this lands around 3–10 docs total. If your candidate list is at 15, that's a signal to merge or cut, not a sign the repo is exceptional. Ten mediocre docs nobody reads is worse than three good ones.
 
 **Watch for overloaded scope.** A reference doc should answer one reusable question. If a proposed doc's scope statement names more than ~3 distinct owned concepts, or if its draft starts sounding like "how the whole repo works," it's a subsystem overview, not a reference doc — split it or cut it. Agents pull reference docs in for a single concern, and a doc covering seven concepts forces them to skim past six of them every time. Canonical ownership of shared primitives is fine and expected, but one doc owning a long list of independent primitives is a smell.
 
@@ -138,7 +138,7 @@ Write `AGENTS.md` at the repo root. Keep it minimal. The test for whether someth
 
 ## Layout
 
-{5–15 lines. Top-level directories only, one line each. Not a full tree.}
+{5–20 lines. Top-level directories primarily, one line each. Not a full tree. You may include important directories under src/}
 
 - `{dir}/` — {one-line purpose}
 - ...

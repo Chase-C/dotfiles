@@ -1,12 +1,12 @@
 {
-  "lastChangelogVersion": "0.68.0",
+  "lastChangelogVersion": "0.70.2",
   "editorPaddingX": 2,
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
   "defaultProvider": "github-copilot",
-  "defaultModel": "gpt-5.4",
-  "defaultThinkingLevel": "xhigh",
+  "defaultModel": "gpt-5-mini",
+  "defaultThinkingLevel": "high",
   "enabledModels": [
     "gpt-5.4",
     "gemini-3.1-pro-preview",
@@ -30,8 +30,12 @@
       ]
     },
     "npm:pi-subagents",
-    "npm:pi-prompt-template-model"
+    "npm:pi-prompt-template-model",
+    "npm:pi-intercom"
   ],
+  "subagents": {
+    "disableBuiltins": true
+  },
   "theme": "tokyo-night",
   "hideThinkingBlock": false
 }
