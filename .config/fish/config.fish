@@ -38,11 +38,13 @@ end
 
 function fish_prompt
     # '❯' = \u276f
+    # '' = \ue216
     set -l directory 7aa2f7
     set -l red f7768e
     set -l yellow e0af68
     set -l green 9ece6a
-    echo -n '' (set_color $directory)(prompt_pwd) (set_color $red)'❯'(set_color $yellow)'❯'(set_color $green)'❯ '
+    #echo -n '' (set_color $directory)(prompt_pwd) (set_color $red)'❯'(set_color $yellow)'❯'(set_color $green)'❯ '
+    echo -n '' (set_color $directory)(prompt_pwd) (set_color $red)''(set_color $yellow)''(set_color $green)' '
 end
 
 function fish_greeting
