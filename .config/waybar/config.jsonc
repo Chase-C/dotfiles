@@ -1,0 +1,269 @@
+{
+    "layer": "top",
+    "height": 22,
+    "spacing": 0,
+    "margin": 0,
+    "modules-left": [ "custom/open-windows", "sway/window", "sway/mode" ],
+    "modules-center": [ "sway/workspaces" ],
+    "modules-right": [
+        "group/sys-control",
+        "group/sys-info",
+        "clock",
+        "group/power-drawer"
+    ],
+
+    "group/sys-control": {
+        "orientation": "horizontal",
+        "modules": [
+            "group/packages-drawer",
+            "group/brightness-drawer",
+            "group/audio-drawer",
+            "group/network-drawer",
+            "group/battery-drawer"
+        ]
+    },
+
+    "group/packages-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "custom/packages-icon", "custom/packages#text" ]
+
+    },
+
+    "custom/packages-icon": {
+        "format": "{}",
+        "exec": "tail -f $HOME/.cache/packages.icon",
+        "on-click": "foot -a foot-sys-update fish -c \"sudo pacman --color=auto -Syu; sleep 2\"",
+        "tooltip": false
+    },
+
+    "custom/packages#text": {
+        "format": "{}",
+        "exec": "tail -f $HOME/.cache/packages.log",
+        "tooltip": false
+    },
+
+    "group/audio-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "wireplumber", "pulseaudio/slider" ]
+    },
+
+    "wireplumber": {
+        "format": "{icon}",
+        "format-muted": "", 
+        "format-icons": ["", "", ""],
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "pavucontrol",
+        "tooltip": false
+    },
+
+    "pulseaudio/slider": {
+        "min": 1,
+        "max": 100,
+    },
+
+    "group/brightness-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "backlight", "backlight/slider" ]
+    },
+
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon}",
+        "format-icons": [ "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨" ],
+    },
+
+    "backlight/slider": {
+        "min": 1,
+        "max": 100,
+    },
+
+    "group/network-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "network", "network#text" ]
+    },
+
+    "network": {
+        "format": "{icon}",
+        "format-ethernet": "󰈀",
+        "format-wifi": "{icon}",
+        "format-disconnected": "󰈂",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "select_network",
+        "tooltip": false
+    },
+
+    "network#text": {
+        "format": "{ipaddr}",
+        "format-wifi": "{essid} ({signalStrength}%) {ipaddr}",
+        "format-ethernet": "Ethernet {ipaddr}",
+        "format-disconnected": "No Network",
+        "tooltip": false
+    },
+
+    "group/battery-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "battery", "battery#text" ]
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "interval": 60,
+        "format": "{icon}",
+        "format-charging": "⚡{icon}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "max-length": 25,
+        "tooltip": false
+    },
+
+    "battery#text": {
+        "format": "Empty in {time}, {capacity}%",
+        "format-charging": "Full in {time}, {capacity}%"
+    },
+
+    "sway/window": {
+        "max-length": 80
+    },
+
+    "sway/workspaces": {
+        "persistant_workspaces": {
+            "": [ "DP-1" ]
+        }
+    },
+
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+
+    "clock": {
+        "format": "{:%H:%M  %m-%d}",
+        "on-click": "eww close calendar || eww open calendar",
+        "tooltip": false
+    },
+
+    "group/sys-info": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "group/sys-icons",
+            "temperature#info",
+            "cpu#info",
+            "memory#info",
+            "disk#info"
+        ]
+    },
+
+    "group/sys-icons": {
+        "orientation": "horizontal",
+        "modules": [ "temperature", "cpu", "memory" ]
+    },
+
+    "temperature": {
+		"critical-threshold": 75,
+		"interval": 10,
+		"format": "{icon}",
+		"format-icons": [ "", "", "", "", "", "" ],
+		"tooltip-format": "Temp: {temperatureC}°C"
+	},
+
+    "cpu": {
+        "states": {
+            "low": 5,
+            "med": 10,
+            "high": 20,
+            "warn": 50,
+            "critical": 90
+        },
+        "format": "󰡳",
+        "format-low": "󰡵",
+        "format-med": "󰊚",
+        "format-high": "󰡴",
+        "format-warn": "",
+        "format-critical": "",
+        "interval": 2,
+    },
+
+    "memory": {
+        "states": {
+            "critical": 95
+        },
+        "format": "{icon}",
+        "format-icons": [ "󰝦", "󰪞", "󰪟", "󰪠", "󰪡", "󰪢", "󰪣", "󰪤", "󰪥" ],
+        "tooltip-format": "Memory: {used}/{total} GB ({percentage}%)",
+        "interval": 10,
+    },
+
+    "cpu#info": {
+		    "format": "󰍛 {usage}%",
+    },
+
+    "temperature#info": {
+		    "format": "󰔐 {temperatureC}°C",
+    },
+
+    "memory#info": {
+        "format": "󰴘 {percentage}%",
+    },
+
+    "disk#info": {
+        "format": "󰋊 {percentage_used}%",
+    },
+
+    "custom/open-windows": {
+        "format": "",
+        "on-click": "rofi -show window",
+        "tooltip": false
+    },
+
+    "group/power-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 500,
+            "transition-left-to-right": false
+        },
+        "modules": [ "custom/power-menu", "idle_inhibitor", "custom/screenshot" ]
+    },
+
+    "custom/power-menu": {
+        "format": "",
+        "on-click": "power_options",
+        "tooltip-format": "Power Options"
+    },
+
+    "idle_inhibitor": {
+        "format": " {icon} ",
+        "format-icons": {
+            "activated": "󰷛",
+            "deactivated": "󰍹"
+        },
+        "timeout": 30
+    },
+
+    "custom/screenshot": {
+        "format": "󰻜",
+        "on-click": "grim_screenshot",
+        "tooltip-format": "Screenshot"
+    }
+}
