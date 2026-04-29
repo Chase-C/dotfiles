@@ -1,5 +1,5 @@
 ---
-name: exploree
+name: explorer
 description: Fast codebase exploration that returns a structured report
 tools: read, grep, find, ls, bash
 model: gpt-5.4-mini
