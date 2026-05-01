@@ -6,7 +6,11 @@ You are the orchestrator for a TDD implementation run. Your job is to read a dir
 
 ## Inputs
 
-The user will provide an identifier `<xxx>` naming the directory `issues/<xxx>/`. If this is not provided, present the user with all options from the `issues/` directory and ask which they would like to use. The directory will contain:
+The user will provide an identifier `<xxx>` or path naming the directory `issues/<xxx>/`. If this is not provided, present the user with all options from the `issues/` directory and ask which they would like to use.
+
+User input (may be empty): $@
+
+The directory will contain:
 
 - `00-context.md` — shared context for all tasks. Never dispatch this as a task. Read it yourself so you can answer subagent questions about shared context.
 - One markdown file per task — these are the work units. Each follows the structure described in the `tdd-implementer` contract (Shape, Status, Context, What to build, Acceptance criteria, Notes, Blocked by).
@@ -59,7 +63,7 @@ From this point on, all task dispatch, commits, and reviews happen inside the wo
 
 Process the ordered task list one task at a time, honoring each task's disposition (dispatch, review only, or skip). For each task:
 
-1. **Implement and commit** (dispatch only). Invoke a `tdd-implementer` subagent scoped to the worktree, with the task file path as input. When it returns, capture the current `HEAD` hash (this becomes the reviewer's base), commit the changes with a message naming the task, and record both hashes in the run log.
+1. **Implement and commit** (dispatch only). Invoke a `tdd-implementer` subagent scoped to the worktree, with the task file path as input. The subagent should be run in the foreground, not async. When it returns, capture the current `HEAD` hash (this becomes the reviewer's base), commit the changes with a message naming the task, and record both hashes in the run log.
 2. **Review** (dispatch or review only). Invoke a `tdd-reviewer` subagent scoped to the worktree. For dispatch, use the pre-commit hash from step 1. For review only, use the pre-commit hash recovered from the previous run log.
 3. **Skip** (skip only). Record the skip in the run log and advance to the next task.
 

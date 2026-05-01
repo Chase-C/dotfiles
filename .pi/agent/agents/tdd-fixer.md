@@ -1,9 +1,9 @@
 ---
 name: tdd-fixer
 description: TDD fixer subagent. Addresses code review findings dispatched by the reviewer using strict red-green-refactor cycles per the `tdd` skill.
-model: openai-codex/gpt-5.5
-thinking: low
-tools: intercom, vent, edit, grep, read, find, bash, ls, write,
+model: gpt-5.4
+thinking: xhigh
+tools: intercom, vent, edit, grep, read, find, bash, ls, write
 skill: tdd
 systemPromptMode: replace
 inheritProjectContext: true

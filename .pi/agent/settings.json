@@ -1,15 +1,14 @@
 {
-  "lastChangelogVersion": "0.71.0",
+  "lastChangelogVersion": "0.71.1",
   "editorPaddingX": 2,
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5-mini",
-  "defaultThinkingLevel": "low",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5.4",
+  "defaultThinkingLevel": "xhigh",
   "enabledModels": [
-    "openai-codex/gpt-5.5",
-    "openai-codex/gpt-5.4",
+    "gpt-5.4",
     "gemini-3.1-pro-preview",
     "claude-sonnet-4.6",
     "gpt-5-mini"

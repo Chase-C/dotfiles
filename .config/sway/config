@@ -75,16 +75,16 @@ output DP-3 {
 }
 
 # Work Laptop Outputs
-#output eDP-1 {
-#    background ~/Pictures/Backgrounds/abstract_desert.jpg fit
-#    scale 2
-#}
+output eDP-1 {
+    background ~/Pictures/Backgrounds/abstract_desert.jpg fit
+    scale 2
+}
 
 # Home Laptop Outputs
-output eDP-1 {
-    background ~/Pictures/Backgrounds/neon-landscape.jpg fill
-    scale 1.75
-}
+#output eDP-1 {
+#    background ~/Pictures/Backgrounds/neon-landscape.jpg fill
+#    scale 1.75
+#}
 
 output DP-4 {
     #background ~/Pictures/Backgrounds/abstract_squares.jpg fill
