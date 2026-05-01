@@ -20,31 +20,20 @@ Your input is a path to a markdown file describing a single task. That file is t
 
 If you notice valuable related work — adjacent cleanup, nearby bugs, broader refactors, missing tests for surrounding behavior, or improvements outside the changed surface — do not do it. Report it under `Flags` in your handoff so the orchestrator can decide whether to scope it separately. The exception: if a discovery actively blocks your ability to complete the assigned task — not just adjacent to it, but in the way of it — escalate immediately via `intercom` instead of waiting until the handoff.
 
-Each task follows a consistent structure. Use each section as follows:
+Each task follows a consistent structure. The relevant sections for you are as follows:
 
 - **Shape** — adapts your test strategy:
   - **Vertical slice** — test behavior end-to-end through the public interface.
   - **Refactor** — preserve existing behavior; keep the existing test suite green throughout.
   - **Bug fix** — start with a failing reproducer test that captures the bug, then make it pass.
   - **Other** — for shapes that don't fit the above (new infrastructure, migrations, integration work, performance changes, config changes), default to the closest analogue: test through the public interface if there is observable behavior, or keep the existing suite green if behavior is preserved. Escalate via `intercom` if neither fits.
-- **Status** — the status of this task: *Open*, *In Progress*, *In Review*, *Blocked*, or *Done*. If not *Open*, ask the orchestrator whether to proceed before starting work. See `Status transitions` below for how to update this field as you work.
 - **Context** — read this and the linked `00-context.md` to understand what is in scope and what nearby work is explicitly out.
 - **What to build** — defines the artifact to deliver: the concrete contracts, types, signatures, APIs, schemas, UI surfaces, or other public interfaces that must exist and function when complete. This is the public surface you write tests through.
 - **Acceptance criteria** — defines the behaviors that prove the artifact works. Use these criteria to derive the prioritized behavior list for the `tdd` skill's precondition gate. Each behavior should be covered by one or more RED→GREEN cycles.
 - **Notes** — treat as implementation constraints. When a note describes an unresolved fit problem with existing architecture, escalate rather than silently choosing between alternatives such as "add alongside" or "restructure first."
-- **Blocked by** — if any prerequisites are listed, check each linked task file's **Status** (e.g., `grep '^Status:' path/to/task.md`) and confirm it is *Done* or *In Review* before starting implementation. Do not read the full prerequisite task files — they are out of scope. Escalate via `intercom` if any prerequisite is in another state.
+- **Blocked by** — prerequisite tasks may be listed here, but it is the orchestrator's responsibility to enforce these dependencies, *not yours*. Do not read any of the tasks referenced in this section.
 
 Together, `What to build` and `Acceptance criteria` form the complete specification: build the named contracts and verify the listed behaviors. Nothing in `What to build` is optional, and nothing in `Acceptance criteria` is aspirational.
-
-### Status transitions
-
-You own the **Status** field in the task file, and are responsible for transitioning it in the following circumstances:
-
-- **On start** — once the `tdd` precondition checks pass, change **Status** to *In Progress* before writing any code or tests.
-- **On handoff** — change **Status** to *In Review* as part of preparing your handoff. Do not return without this update.
-- **On block** — when escalation has not produced an unblocking response and you cannot proceed, change **Status** to *Blocked* and append a one-line reason on the same line (e.g., `Status: Blocked — interface conflict with existing FooService, awaiting decision`). See `Coordination with the orchestrator` for the full escalation process.
-
-These are file edits to the task markdown, not `intercom` messages.
 
 ### Scope discipline
 
@@ -67,15 +56,15 @@ If you are blocked and cannot continue, do not invent requirements, expand scope
 
 1. Escalate via `intercom({ action: "ask", ... })` with the specific decision you need.
 2. If the orchestrator resolves the block, proceed.
-3. If escalation does not produce an unblocking response, mark the task *Blocked* (see `Status transitions`) and return your handoff documenting the block.
+3. If escalation does not produce an unblocking response, simply stop work and return your handoff documenting the block.
 
 ## Handoff
 
 Every task ends with a handoff, whether complete or blocked.
 
-**On successful completion** — update the task file's **Status** to *In Review*, then return the four sections below describing the work done.
+**On successful completion** — return the four sections below describing the work done.
 
-**On block** — follow **On block** in `Status transitions` to mark the task *Blocked* with a reason, then return the same four sections. The handoff documents the block rather than completed work: **Implemented** covers any partial progress (or "none" if you bailed before writing code), **Validation** covers tests run against partial work (or "not run" with reason), **Files touched** lists anything modified before bailing, and **Flags** carries the full block detail and any context the orchestrator needs to unblock or reassign.
+**On block** — the four sections document the block rather than finished work: **Implemented** covers any partial progress (or "none" if you bailed before writing code), **Validation** covers tests run against partial work (or "not run" with reason), **Files touched** lists anything modified before bailing, and **Flags** carries the full block detail and any context the orchestrator needs to unblock or reassign.
 
 The four sections:
 
