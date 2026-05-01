@@ -1,5 +1,5 @@
 ---
-name: mo-review
+name: review
 description: Perform a pre-merge code review of the current git branch. Use when the user directly asks for a review, or when you have finished and committed a non-trivial unit of work and are about to report completion.
 ---
 
@@ -15,11 +15,7 @@ Run these checks before entering the review phases. Stop early if any blocking c
 
 1. **Uncommitted work.** Run `git status --porcelain -uno`. If there is uncommitted work, warn the user and ask whether to (a) proceed reviewing only the committed changes, or (b) wait. If the user chooses to wait, stop entirely. If they choose to proceed, continue normally — the diff commands below will naturally exclude uncommitted work, so no special handling is needed.
 
-2. **Base branch resolution.** Determine the base branch. If the user specified one as an argument, use that. Otherwise run:
-    ```
-    for b in develop master main; do if git rev-parse --verify "$b" >/dev/null 2>&1; then echo "$b"; break; fi; done
-    ```
-    If this prints nothing, ask the user which branch to diff against and stop until they answer.
+2. **Base resolution.** Determine the base to diff against — a branch name or a commit hash both work. If the user specified one as input, use that. Otherwise, check for `develop`, `master`, and `main` (in that order) and use the first one that exists. If none exist, run `git branch --format='%(refname:short)'`, show the list to the user, and ask which to use. Stop until they answer.
 
 3. **Branch and diff.** Run `git rev-parse --abbrev-ref HEAD` and `git merge-base HEAD <base>` to identify the current branch and merge-base. Then run `git diff --stat <merge-base>..HEAD`. If there are no changes between the branch and the base, tell the user there is nothing to review and stop.
 
@@ -40,7 +36,7 @@ The branch, merge-base, and diff stat are already available from the pre-checks.
 
 ### Phase 2 — Gather context
 
-Review each file one-by-one. Do not run git diff across the whole branch to gauge total size, and do not materialize diffs to files on disk. The per-file pattern below keeps each diff small enough to work with directly, even when the overall branch diff is large.
+Work through each file one-by-one. Do not run git diff across the whole branch to gauge total size, and do not materialize diffs to files on disk. The per-file pattern below keeps each diff small enough to work with directly, even when the overall branch diff is large.
 
 Start with `git --no-pager diff -U20 --no-ext-diff <merge-base>..HEAD -- <file>` to get the patch with generous surrounding context. That is usually enough.
 
@@ -53,19 +49,36 @@ On large diffs (>~20 changed files), prioritize files with the most complex chan
 
 ### Phase 3 — Evaluate
 
-Walk the checklist below and collect findings with precise file and line references. Do not format the report yet — that is Phase 4. You do not need to produce findings for every dimension; only note what you actually find.
+Phase 3 has two review passes and a deduplication step. The two passes use different techniques and tend to surface different defects; do both. Match review depth to change risk across both passes. A config-only change or a rename does not warrant the same scrutiny as a change to an auth path, a data migration, or a money-handling code path.
 
-- **Correctness:** logic errors, off-by-ones, null or undefined hazards, unhandled edge cases. Does the code accomplish what the commits suggest?
+#### Pass A — Categorical review
+
+Walk the checklist below and collect findings with precise file and line references. You do not need to produce findings for every dimension; only note what you actually find.
+
+- **Correctness:** logic errors, off-by-ones, incorrect control flow, mishandled boolean conditions. Does the code accomplish what the commits suggest?
 - **Error handling:** missing error paths, swallowed errors, resource cleanup, partial-failure behavior.
 - **Security:** injection vectors, auth and authorization gaps, secrets in code, input validation at trust boundaries.
 - **Performance:** unnecessary allocations, algorithmic complexity, N+1 queries, blocking calls in hot paths.
 - **API and contracts:** breaking changes to public interfaces, backward compatibility of schemas and protocols, missing migrations.
-- **Readability and style:** naming, function length, dead code, duplication, type safety gaps. Do the changes match existing conventions?
+- **Readability and style:** naming, function length, dead code, duplication, type safety gaps, unnecessary complexity or premature abstraction (only when you can name a concrete future cost), comment density appropriate to the code's audience. Do the changes match existing conventions?
 - **Testing:** are new code paths covered? Are existing tests broken, weakened, or made less meaningful?
 
-Match review depth to change risk. A config-only change or a rename does not warrant the same scrutiny as a change to an auth path, a data migration, or a money-handling code path.
+#### Pass B — Edge-case probing
 
-Before moving to Phase 4, deduplicate: if the same root-cause issue appears in multiple locations, consolidate it into a single finding that lists all affected file and line pairs.
+For the changed code, ask what input or state would make it fail. This is a generative, adversarial pass — do not just check whether the code "looks right," actively try to construct cases that break it. Prompts to consider:
+
+- Empty arrays, empty strings, zeroes, negative numbers
+- Missing optional fields, null or undefined values and properties
+- Rapid repeated calls, race conditions, concurrent access
+- State changes that happen mid-operation
+- Failure of dependencies (DB unavailable, network timeout, partial writes)
+- Idempotency and replay — what happens if this operation runs twice?
+
+Focus this pass on code paths where inputs cross a trust boundary, where state is mutated, or where failure has user-visible consequences. A pure refactor of internal helpers does not need the same edge-case scrutiny as a new request handler.
+
+#### Deduplication
+
+Before moving to Phase 4, deduplicate across both passes: if the same root-cause issue appears in multiple locations, or if Pass A and Pass B surfaced the same underlying defect from different angles, consolidate into a single finding that lists all affected file and line pairs.
 
 ### Phase 4 — Report
 
@@ -108,13 +121,20 @@ This applies only to follow-up verification within an ongoing review conversatio
 
 ### Do
 
-- **Calibrate to the project.** Infer the language, framework, and conventions from the codebase, and apply standards appropriate to that ecosystem. Distinguish real defects from stylistic preferences — preferences go in Nit.
-- **Ground every finding in code you read.** Cite exact lines, describe the fix, and justify severity when it isn't self-evident. When a finding depends on context outside the diff (a caller, a config, a deployment assumption), name that dependency so the author can verify it themselves.
-- **Read only what you need.** Start from the diff with surrounding context; escalate to reading more code only when the diff alone is ambiguous. In follow-up mode, stay scoped to the findings being re-checked plus any new issues the fix introduced.
+**Calibrate to the project.** Infer the language, framework, and conventions from the codebase, and apply standards appropriate to that ecosystem. Distinguish real defects from stylistic preferences — preferences go in Nit.
+
+**Ground every finding in code you read.** Cite exact lines, describe the fix, and justify severity when it isn't self-evident. When a finding depends on context outside the diff (a caller, a config, a deployment assumption), name that dependency so the author can verify it themselves.
+
+**Read only what you need, but think beyond what you read.** Start from the diff with surrounding context; escalate to reading more code only when the diff alone is ambiguous. Pass B's edge-case probing happens in your head, not by pulling in more files. In follow-up mode, stay scoped to the findings being re-checked plus any new issues the fix introduced.
 
 ### Do Not
 
-- **Do not modify files during the review.** No creates, edits, or deletes unless the user explicitly asks.
-- **Do not assume when you can verify.** When a finding depends on a caller's behavior, a type's definition, or a config value, go read it. The failure mode is confident claims backed by plausible inference rather than the actual code.
-- **Do not give generic advice.** Every finding must reference specific code in this change. "Consider adding tests" is not a finding; "the new retry() path in client.go:47 has no test coverage for the timeout branch" is.
-- **Do not review outside scope.** Pre-existing issues in untouched code, generated or binary files, and untouched code during follow-up mode are all out of scope. If the only changes on the branch are in skippable files, say so and return Ship it.
+**Do not modify files during the review.** No creates, edits, or deletes unless the user explicitly asks.
+
+**Do not assume when you can verify.** When a finding depends on a caller's behavior, a type's definition, or a config value, go read it. The failure mode is confident claims backed by plausible inference rather than the actual code.
+
+**Do not give generic advice.** Every finding must reference specific code in this change and name a concrete scenario. "Consider adding tests" is not a finding; "the new retry() path in client.ts:47 has no test coverage for the timeout branch" is. "This might have a race condition" is not a finding; "if two requests hit handler() simultaneously, both can pass the check at line 47 before either writes, double-charging the user" is.
+
+**Do not inflate severity to seem thorough.** If a finding's worst realistic consequence is mild reader confusion, it is a Nit, not a Should fix. Should fix requires a plausible path to a future bug or material maintenance cost. Must fix requires a concrete production failure mode.
+
+**Do not review outside scope.** Pre-existing issues in untouched code, generated or binary files, and untouched code during follow-up mode are all out of scope. If the only changes on the branch are in skippable files, say so and return Ship it.

@@ -153,7 +153,9 @@ The template's **Notes** section is optional — include it only when there's so
 ```markdown
 # <Issue title>
 
-**Shape:** <vertical slice / foundational / refactor / bug / infra / etc.> · **Type:** <HITL | AFK>
+**Status:** Open
+**Shape:** <vertical slice / foundational / refactor / bug / infra / etc.>
+**Type:** <HITL | AFK>
 
 ## Context
 Link to `00-context.md`. Say which parts of the larger plan apply here and which nearby parts explicitly don't.

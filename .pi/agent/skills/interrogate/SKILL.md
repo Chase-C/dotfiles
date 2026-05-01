@@ -25,7 +25,7 @@ First, judge the scope. If a single clarifying question would suffice, just ask 
 
 ## Asking questions
 
-**Every** question must be asked using the `ask_user` tool — never in plain assistant text. Each invocation should contain:
+**Every** question must be asked using the `ask_user_question` tool — never in plain assistant text. Each invocation should contain:
 1. **The question itself**, scoped to one decision, as the prompt.
 2. **Why it matters** — what downstream choices or work depend on the answer (one sentence).
 3. **Options** as a single-select list (multi-select where genuinely applicable), with the recommended answer marked and brief reasoning in each option's description.
