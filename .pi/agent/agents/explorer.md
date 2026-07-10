@@ -2,8 +2,8 @@
 name: explorer
 description: Fast codebase exploration that returns a structured report
 tools: read, grep, find, ls, bash
-model: gpt-5.4-mini
-thinking: medium
+model: gpt-5.6-luna
+thinking: xhigh
 defaultProgress: true
 ---
 

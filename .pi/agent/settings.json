@@ -1,36 +1,33 @@
 {
-  "lastChangelogVersion": "0.71.1",
+  "lastChangelogVersion": "0.80.6",
   "editorPaddingX": 2,
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "gpt-5.4",
-  "defaultThinkingLevel": "xhigh",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "medium",
   "enabledModels": [
-    "gpt-5.4",
-    "gemini-3.1-pro-preview",
-    "claude-sonnet-4.6",
-    "gpt-5-mini"
+    "openai-codex/gpt-5.6-sol"
   ],
   "packages": [
     "npm:pi-extension-manager",
-    "npm:pi-skills-manager",
-    "npm:@e9n/pi-context",
     "npm:@ifi/oh-pi-themes",
-    "npm:@marckrenn/pi-sub-bar",
     {
       "source": "npm:pi-mcp-adapter",
       "extensions": [
         "+index.ts"
       ]
     },
-    "npm:pi-subagents",
-    "npm:pi-prompt-template-model",
-    "npm:pi-intercom",
-    "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@juicesharp/rpiv-web-tools",
-    "npm:@howaboua/pi-vent"
+    "npm:@howaboua/pi-vent",
+    "../../Projects/pi9/packages/subagent",
+    "../../Projects/pi9-context-audit/packages/context",
+    "npm:pi-code-previews",
+    "npm:pi-codex-fast",
+    "npm:pi-spark",
+    "npm:pi-ask-user",
+    "npm:@yandy0725/pi-todo"
   ],
   "subagents": {
     "disableBuiltins": true

@@ -63,9 +63,10 @@ From this point on, all task dispatch, commits, and reviews happen inside the wo
 
 Process the ordered task list one task at a time, honoring each task's disposition (dispatch, review only, or skip). For each task:
 
-1. **Implement and commit** (dispatch only). Invoke a `tdd-implementer` subagent scoped to the worktree, with the task file path as input. The subagent should be run in the foreground, not async. When it returns, capture the current `HEAD` hash (this becomes the reviewer's base), commit the changes with a message naming the task, and record both hashes in the run log.
+1. **Implement** (dispatch only). Invoke a `tdd-implementer` subagent scoped to the worktree, with the task file path as input. The subagent should be run in the foreground, not async. When it returns, capture the current `HEAD` hash (this becomes the reviewer's base), commit the changes with a message naming the task, and record both hashes in the run log.
 2. **Review** (dispatch or review only). Invoke a `tdd-reviewer` subagent scoped to the worktree. For dispatch, use the pre-commit hash from step 1. For review only, use the pre-commit hash recovered from the previous run log.
-3. **Skip** (skip only). Record the skip in the run log and advance to the next task.
+3. **Fix** (dispatch or review only). If the review in the previous step produced any findings, invoke a `tdd-fixer` subagent scoped to the worktree. For each finding, include for the subagent: the finding ID, severity, file, line range, the issue, and the suggested fix from your Phase 4 report.
+4. **Skip** (skip only). Record the skip in the run log and advance to the next task.
 
 After each subagent returns, surface every non-empty `Flags` entry to the user verbatim — flags are signals for the user to decide whether to scope follow-up work, never licenses to silently expand scope. If the subagent reports failure (validation failed or skipped, blocked without resolution, or unresolved review findings), halt the loop and ask the user whether to retry, skip, or abort. Only advance once both applicable subagents have succeeded — partial completion does not count, and a task whose review never returned a clean verdict (or user-accepted findings) does not unlock its dependents.
 

@@ -2,7 +2,7 @@
 name: researcher
 description: Autonomous web researcher — search, evaluate, and synthesize a focused research brief
 tools: read, write, bash, web_search, web_fetch, intercom
-model: gpt-5.4
+model: gpt-5.6-luna
 thinking: xhigh
 systemPromptMode: replace
 inheritProjectContext: true
