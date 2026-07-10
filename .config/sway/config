@@ -60,6 +60,9 @@ exec /usr/bin/lxqt-policykit-agent
 exec mako &
 exec udiskie -f '' &
 
+# Start KDE Connect
+exec kdeconnectd &
+
 # Start monitoring pacman
 exec ~/bin/notifyupdates &
 
@@ -76,9 +79,16 @@ output DP-3 {
 
 # Work Laptop Outputs
 #output eDP-1 {
-#    background ~/Pictures/Backgrounds/abstract_desert.jpg fit
-#    scale 2
+    #background ~/Pictures/Backgrounds/abstract_desert.jpg fit
+    #scale 2
 #}
+
+# Work Laptop 2 Outputs
+output Virtual-1 {
+  resolution 1920x1080
+    #background ~/Pictures/Backgrounds/abstract_desert.jpg fit
+    #scale 2
+}
 
 # Home Laptop Outputs
 output eDP-1 {

@@ -4,14 +4,19 @@
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "medium",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5.6-terra",
+  "defaultThinkingLevel": "xhigh",
   "enabledModels": [
-    "openai-codex/gpt-5.6-sol"
+    "github-copilot/gpt-5.6-terra",
+    "github-copilot/gpt-5.6-luna",
+    "github-copilot/gemini-3.1-pro-preview",
+    "github-copilot/claude-sonnet-5",
+    "github-copilot/gemini-3.5-flash"
   ],
   "packages": [
     "npm:pi-extension-manager",
+    "npm:pi-skills-manager",
     "npm:@ifi/oh-pi-themes",
     {
       "source": "npm:pi-mcp-adapter",
@@ -21,13 +26,10 @@
     },
     "npm:@juicesharp/rpiv-web-tools",
     "npm:@howaboua/pi-vent",
-    "../../Projects/pi9/packages/subagent",
-    "../../Projects/pi9-context-audit/packages/context",
-    "npm:pi-code-previews",
-    "npm:pi-codex-fast",
-    "npm:pi-spark",
+    "npm:@juicesharp/rpiv-todo",
     "npm:pi-ask-user",
-    "npm:@yandy0725/pi-todo"
+    "npm:@pi9/subagent",
+    "npm:@pi9/context"
   ],
   "subagents": {
     "disableBuiltins": true

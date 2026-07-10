@@ -6,7 +6,8 @@ return {
     },
   },
   {
-    "nvzone/floaterm",
+    dir = "/home/chase/Projects/floaterm",
+    name = "floaterm",
     dependencies = "nvzone/volt",
     opts = {
       border = true,
