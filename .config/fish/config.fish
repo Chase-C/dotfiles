@@ -2,6 +2,9 @@ abbr -a q exit
 abbr -a e nvim
 abbr -a vim nvim
 
+# Delete one path component (rather than the entire argument) with Alt-Backspace.
+bind alt-backspace backward-kill-path-component
+
 abbr -a pac sudo pacman --color=auto
 abbr -a pacman sudo pacman --color=auto
 abbr -a yay yay --color=auto

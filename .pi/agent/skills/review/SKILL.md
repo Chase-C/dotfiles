@@ -60,7 +60,6 @@ Walk the checklist below and collect findings with precise file and line referen
 - **Security:** injection vectors, auth and authorization gaps, secrets in code, input validation at trust boundaries.
 - **Performance:** unnecessary allocations, algorithmic complexity, N+1 queries, blocking calls in hot paths.
 - **API and contracts:** breaking changes to public interfaces, backward compatibility of schemas and protocols, missing migrations.
-- **Structure and modularity:** files mixing unrelated responsibilities (clearer split) or tightly coupled logic fragmented across files (clearer combined) — only when you can name a concrete cost.
 - **Readability and style:** naming, function length, dead code, duplication, type safety gaps, unnecessary complexity or premature abstraction (only when you can name a concrete future cost), comment density appropriate to the code's audience. Do the changes match existing conventions?
 - **Testing:** are new code paths covered? Are existing tests broken, weakened, or made less meaningful?
 

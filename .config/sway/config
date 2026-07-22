@@ -86,13 +86,15 @@ output DP-3 {
 # Work Laptop 2 Outputs
 output Virtual-1 {
   resolution 1920x1080
+  background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
     #background ~/Pictures/Backgrounds/abstract_desert.jpg fit
     #scale 2
 }
 
 # Home Laptop Outputs
 output eDP-1 {
-    background ~/Pictures/Backgrounds/neon-landscape.jpg fill
+    background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
+    #background ~/Pictures/Backgrounds/neon-landscape.jpg fill
     scale 1.75
 }
 

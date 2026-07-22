@@ -1,12 +1,12 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.81.1",
   "editorPaddingX": 2,
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
   "defaultProvider": "github-copilot",
   "defaultModel": "gpt-5.6-terra",
-  "defaultThinkingLevel": "xhigh",
+  "defaultThinkingLevel": "high",
   "enabledModels": [
     "github-copilot/gpt-5.6-terra",
     "github-copilot/gpt-5.6-luna",
@@ -26,10 +26,15 @@
     },
     "npm:@juicesharp/rpiv-web-tools",
     "npm:@howaboua/pi-vent",
-    "npm:@juicesharp/rpiv-todo",
-    "npm:pi-ask-user",
+    "npm:pi-code-previews",
+    "npm:@pi9/ask",
+    "npm:@pi9/context",
     "npm:@pi9/subagent",
-    "npm:@pi9/context"
+    "npm:@pi9/todo",
+    "npm:@eiei114/pi-sub-bar",
+    {
+      "source": "/home/chase/.config/nono/packages/always-further/pi"
+    }
   ],
   "subagents": {
     "disableBuiltins": true

@@ -1,8 +1,8 @@
 ---
 name: tdd-reviewer
 description: Pre-merge review subagent. Runs the `review` skill against committed changes on a branch, dispatches actionable findings to the `tdd-fixer` subagent, and re-reviews until the branch is clean or the cycle cap is hit.
-model: gpt-5.6-sol
-thinking: high
+model: gpt-5.6-terra
+thinking: xhigh
 tools: intercom, subagent, vent, read, grep, find, ls, bash
 skill: review
 systemPromptMode: replace

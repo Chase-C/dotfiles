@@ -2,7 +2,7 @@
 name: curator
 description: Takes a plan or task description, explores the codebase, and produces a curated context brief covering files, signatures, relationships, conventions, prior art, and open questions — everything an implementer needs to start work, and nothing it doesn't.
 tools: read, grep, find, ls, bash, subagent
-model: gpt-5.6-sol
+model: gpt-5.6-terra
 thinking: medium
 output: curated-context.md
 ---
