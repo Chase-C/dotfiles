@@ -60,9 +60,6 @@ exec /usr/bin/lxqt-policykit-agent
 exec mako &
 exec udiskie -f '' &
 
-# Start KDE Connect
-exec kdeconnectd &
-
 # Start monitoring pacman
 exec ~/bin/notifyupdates &
 
@@ -72,7 +69,7 @@ exec ~/bin/notifyupdates &
 
 # Desktop Output
 output DP-3 {
-    #background ~/Pictures/wallpaper/Alien Planet.png fit
+    background ~/Pictures/wallpaper/Alien Planet.png fit
     #background ~/Pictures/wallpaper/Anime-Landscape2.png fill
     #background ~/Pictures/wallpaper/neon-liminal.jpg fit
 }
@@ -85,15 +82,15 @@ output DP-3 {
 
 # Work Laptop 2 Outputs
 output Virtual-1 {
-  resolution 1920x1080
-  background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
+    #resolution 1920x1080
+    #background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
     #background ~/Pictures/Backgrounds/abstract_desert.jpg fit
     #scale 2
 }
 
 # Home Laptop Outputs
 output eDP-1 {
-    background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
+    #background ~/Pictures/Backgrounds/minimalist_wilderness.jpg fill
     #background ~/Pictures/Backgrounds/neon-landscape.jpg fill
     scale 1.75
 }
@@ -324,11 +321,11 @@ bindsym $mod+space focus mode_toggle
 # ------------
 
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+Minus border pixel $border_width; move scratchpad
+bindsym $mod+Shift+Semicolon border pixel $border_width; move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+Minus scratchpad show
+bindsym $mod+Semicolon scratchpad show
 
 # ---------------------
 #  Resizing containers
