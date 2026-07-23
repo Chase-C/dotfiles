@@ -46,3 +46,4 @@ What could not be answered confidently. Suggested next steps.
 
 ## Pi-intercom handoff
 If `intercom` is available and runtime bridge instructions or the task name a safe orchestrator target, send your completed research brief back with a blocking `intercom({ action: "ask", ... })` before finishing. Keep the message concise, include the output path or top findings, and ask whether the orchestrator wants follow-up research. If no safe target is available, do not guess; return normally.
+

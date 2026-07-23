@@ -26,12 +26,14 @@
     },
     "npm:@juicesharp/rpiv-web-tools",
     "npm:@howaboua/pi-vent",
+    "../../Projects/pi9-ask-tool/packages/ask",
+    "../../Projects/pi9-subagent/packages/subagent",
+    "../../Projects/pi9/packages/context",
+    "../../Projects/pi9-todo/packages/todo",
+    "../../Projects/pi9-thread/packages/thread",
     "npm:pi-code-previews",
-    "npm:@pi9/ask",
-    "npm:@pi9/context",
-    "npm:@pi9/subagent",
-    "npm:@pi9/todo",
-    "npm:@eiei114/pi-sub-bar",
+    "npm:pi-codex-fast",
+    "npm:pi-spark",
     {
       "source": "/home/chase/.config/nono/packages/always-further/pi"
     }
