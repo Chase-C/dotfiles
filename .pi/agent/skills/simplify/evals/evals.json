@@ -1,0 +1,132 @@
+{
+  "skill_name": "simplify",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Simplify the repeated active-ticket logic in the supplied semantic-duplication fixture. Preserve behavior and run the existing tests before and after the change.",
+      "expected_output": "A bounded refactor that introduces one authoritative active-ticket rule, uses it from all three callers, preserves the tests, and reports the duplicated rule removed and verification performed.",
+      "files": [
+        "evals/files/semantic-duplication/tickets.py",
+        "evals/files/semantic-duplication/test_tickets.py"
+      ],
+      "assertions": [
+        "The existing unittest suite is run before editing and passes again after editing.",
+        "The final production code contains one authoritative active-ticket predicate used by all three operations rather than three copies of the status expression.",
+        "The behavioral assertions are not weakened or removed.",
+        "The report names the duplicated active-ticket rule as what disappeared from the mental model."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Audit the incidental-similarity fixture for conceptual simplifications. Do not edit any files. The two policies currently use the same threshold; tell me whether they should share one abstraction.",
+      "expected_output": "An audit that leaves the files untouched and rejects unifying the shipping and fraud thresholds because their ownership and reasons to change differ, despite their current textual similarity.",
+      "files": [
+        "evals/files/incidental-similarity/policies.py",
+        "evals/files/incidental-similarity/test_policies.py",
+        "evals/files/incidental-similarity/DOMAIN.md"
+      ],
+      "assertions": [
+        "No supplied file is modified.",
+        "The response identifies the fulfillment and fraud thresholds as separately owned policies that may change independently.",
+        "The response does not recommend one shared threshold or generic helper merely because both values are currently 100.",
+        "Any recommendation is grounded in domain ownership rather than textual duplication."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Audit the boundary-enforcement fixture. The password-length check appears twice; can one copy be removed? Do not edit the files.",
+      "expected_output": "An audit explaining that browser validation and API enforcement are intentional duplicate enforcement across a trust and deployment boundary, so the server check must remain even if policy synchronization could be improved separately.",
+      "files": [
+        "evals/files/boundary-enforcement/client_validation.py",
+        "evals/files/boundary-enforcement/server_registration.py",
+        "evals/files/boundary-enforcement/test_validation.py",
+        "evals/files/boundary-enforcement/ARCHITECTURE.md"
+      ],
+      "assertions": [
+        "No supplied file is modified.",
+        "The response recognizes that clients can bypass browser validation and that the API must enforce the rule independently.",
+        "The response does not recommend removing server-side validation or making the server call browser code.",
+        "The response distinguishes centralizing policy meaning from preserving enforcement at each trust boundary."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Simplify the meaningful-adapter fixture, especially any abstraction with only one production caller. Preserve all observable checkout behavior and run the tests.",
+      "expected_output": "A conservative result that retains PaymentGateway because it protects the vendor boundary, translates errors, and carries idempotency semantics. If no meaningful simplification remains, the agent should make no edit and say so.",
+      "files": [
+        "evals/files/meaningful-adapter/checkout.py",
+        "evals/files/meaningful-adapter/test_checkout.py"
+      ],
+      "assertions": [
+        "The PaymentGateway boundary remains present rather than being inlined solely because it has one production caller.",
+        "VendorTimeout is still translated to PaymentUnavailable with the same message.",
+        "The checkout ID is still passed as the vendor idempotency key.",
+        "The existing tests pass, and the response treats finding no worthwhile edit as an acceptable outcome."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "The is_draft value in the persisted-contract fixture duplicates status. Simplify the document serialization to remove that redundant concept.",
+      "expected_output": "The agent recognizes that removing is_draft changes a persisted and externally consumed contract, does not silently edit it, and asks for authorization or migration information before proceeding.",
+      "files": [
+        "evals/files/persisted-contract/documents.py",
+        "evals/files/persisted-contract/test_documents.py",
+        "evals/files/persisted-contract/CONTRACT.md"
+      ],
+      "assertions": [
+        "The serialized is_draft field and its behavioral test are not removed without explicit contract authorization.",
+        "The response identifies persistence and the external analytics consumer as compatibility constraints.",
+        "The response asks for a contract decision or migration evidence before making the requested breaking change.",
+        "The response does not weaken the exact-shape test merely to permit the refactor."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Please simplify the broad-scope fixture. This is intentionally broad: make the strongest safe improvement, run the tests, and tell me what else you deliberately left alone.",
+      "expected_output": "A broad-edit pass that centralizes the three lifecycle-owned active-ticket predicates as the strongest bounded candidate, preserves behavior, and reports the persisted is_closed field and marginal wrapper separately rather than expanding the change.",
+      "files": [
+        "evals/files/broad-scope/tickets.py",
+        "evals/files/broad-scope/test_tickets.py",
+        "evals/files/broad-scope/CONTRACT.md"
+      ],
+      "assertions": [
+        "The tests are run before and after the edit and pass.",
+        "Exactly one coherent improvement is implemented: the three active-ticket expressions gain one authoritative domain rule.",
+        "The persisted is_closed field and its contract assertion remain unchanged because removal requires a coordinated migration.",
+        "The report names the duplicated rule removed and lists the legacy field and any marginal wrapper cleanup as deliberately left alone or lower-priority candidates."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Simplify the dynamic-reference fixture by deleting handlers that appear unused. There are no direct callers of handle_legacy, so please clean it up.",
+      "expected_output": "No unsafe deletion. The agent discovers reflection and uncommitted deployment configuration as possible callers, explains that static search cannot establish deadness, and reports the evidence needed before removal.",
+      "files": [
+        "evals/files/dynamic-reference/plugin_host.py",
+        "evals/files/dynamic-reference/handlers.py",
+        "evals/files/dynamic-reference/DEPLOYMENT.md"
+      ],
+      "assertions": [
+        "handle_legacy is not deleted.",
+        "The response identifies getattr-based dispatch and external deployment configuration as dynamic references that defeat ordinary dead-code search.",
+        "The response reports the handler as uncertain dead code rather than asserting it is unused.",
+        "The response names a concrete prerequisite such as a deployment inventory, production telemetry, or characterization coverage before deletion."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Audit the divergent-rule fixture for simplification opportunities. Do not edit it. These two checks look like the same active-ticket rule; should they be unified?",
+      "expected_output": "An audit that notices the archived-ticket behavior divergence, treats its intent as unresolved, and separates confirming or fixing a possible bug from any later structural unification.",
+      "files": [
+        "evals/files/divergent-rule/tickets.py",
+        "evals/files/divergent-rule/test_tickets.py",
+        "evals/files/divergent-rule/DOMAIN.md"
+      ],
+      "assertions": [
+        "No supplied file is modified.",
+        "The response explicitly identifies that archived tickets are non-assignable but remain visible under the observed behavior.",
+        "The response does not recommend blindly replacing both checks with one predicate while the divergence is unexplained.",
+        "The response recommends resolving the behavioral ambiguity separately and visibly before structural unification."
+      ]
+    }
+  ]
+}
