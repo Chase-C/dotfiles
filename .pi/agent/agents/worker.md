@@ -1,7 +1,7 @@
 ---
 name: worker
 description: General-purpose implementation agent for bounded coding tasks. Inspects the codebase, makes focused changes, validates them, and returns a precise handoff to the dispatcher.
-model: gpt-5.6-sol
+model: openai-codex/gpt-5.6-sol
 thinking: low
 tools: read, grep, find, ls, bash, edit, write
 retainConversation: true

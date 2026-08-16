@@ -1,11 +1,11 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.84.2",
   "editorPaddingX": 2,
   "autocompleteMaxVisible": 15,
   "quietStartup": true,
   "doubleEscapeAction": "tree",
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-sol",
+  "defaultModel": "gpt-5.6-terra",
   "defaultThinkingLevel": "medium",
   "enabledModels": [
     "openai-codex/gpt-5.6-sol"
@@ -22,12 +22,12 @@
     },
     "npm:@juicesharp/rpiv-web-tools",
     "npm:@howaboua/pi-vent",
-    "../../Projects/pi9/packages/ask",
+    "../../Projects/pi9-ask/packages/ask",
     "../../Projects/pi9/packages/subagent",
     "../../Projects/pi9/packages/context",
     "../../Projects/pi9/packages/todo",
     "../../Projects/pi9/packages/thread",
-    "npm:pi-code-previews",
+    "../../Projects/pi9-persona/packages/persona",
     "npm:pi-codex-fast",
     "npm:pi-spark",
     {
@@ -38,5 +38,7 @@
     "disableBuiltins": true
   },
   "theme": "tokyo-night",
-  "hideThinkingBlock": false
+  "hideThinkingBlock": false,
+  "treeFilterMode": "all",
+  "tuiMode": "fullscreen"
 }

@@ -44,12 +44,16 @@ end, { desc = "Toggle comment in visual selection" })
 vim.keymap.del("n", "<leader>bb")
 vim.keymap.del("n", "<leader>bd")
 vim.keymap.del("n", "<leader>bo")
+vim.keymap.del("n", "<leader>bi")
 vim.keymap.del("n", "<leader>bD")
 
 vim.keymap.set("n", "<leader>Bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 vim.keymap.set("n", "<leader>Bd", function()
   Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
+vim.keymap.set("n", "<leader>Bi", function()
+  Snacks.bufdelete.invisible()
+end, { desc = "Delete invisible buffers" })
 vim.keymap.set("n", "<leader>BD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
 -- Swap <leader>sb and <leader>sB

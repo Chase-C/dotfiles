@@ -28,6 +28,7 @@ set -g -x XDG_CURRENT_DESKTOP sway
 set -g -x NPM_CREDS_USER npm-deploy
 set -g -x NPM_CREDS_PW UGFzc3dvcmQ3Jg==
 set -g -x DOCKER_BUILDKIT 1
+set -g -x N64_INST /usr
 
 if command -v bat > /dev/null
     abbr -a cat bat

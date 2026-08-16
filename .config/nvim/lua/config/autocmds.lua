@@ -6,6 +6,17 @@
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("c_indentation", { clear = true }),
+  pattern = "c",
+  callback = function()
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.softtabstop = 4
+    vim.bo.expandtab = true
+  end,
+})
+
 local function reset_floaterm_view()
   local state = package.loaded["floaterm.state"]
   if state and vim.api.nvim_get_current_win() == state.win and vim.bo.buftype == "terminal" then
